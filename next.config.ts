@@ -3,7 +3,8 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   experimental: {
     ppr: true,
-    clientSegmentCache: true,
+    // Disabled clientSegmentCache as it may cause localStorage issues during SSR
+    // clientSegmentCache: true,
     nodeMiddleware: true
   }
 };
