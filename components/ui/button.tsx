@@ -19,7 +19,11 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline"
+        link: "text-primary underline-offset-4 hover:underline",
+        sideshift:
+          "bg-[linear-gradient(135deg,var(--color-cta-dark-gradient-start),var(--color-cta-dark-gradient-end))] text-white shadow-[0_12px_28px_-14px_rgba(32,32,32,0.7)] hover:translate-y-[-1px] hover:shadow-[0_14px_32px_-12px_rgba(32,32,32,0.65)] focus-visible:ring-white/40 focus-visible:ring-[3px]",
+        sideshiftLight:
+          "bg-[linear-gradient(135deg,var(--color-cta-light-gradient-start),var(--color-cta-light-gradient-end))] text-[var(--color-text-dark)] border border-white/60 shadow-[0_10px_24px_-18px_rgba(16,24,40,0.35)] hover:bg-[linear-gradient(135deg,var(--color-cta-light-gradient-start),var(--color-cta-light-gradient-end))] hover:translate-y-[-1px] hover:shadow-[0_16px_32px_-18px_rgba(16,24,40,0.25)] focus-visible:ring-ring/40 focus-visible:ring-[3px]"
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
