@@ -7,3 +7,6 @@ export { TestimonialsSection } from './testimonials';
 export { MidCtaSection } from './cta';
 export { FAQSection } from './faq';
 export { LandingFooter } from './footer';
+export { CreatorHeroSection } from './creator/hero';
+export { CreatorFeatureSection } from './creator/features';
+export { CaseStudiesSection } from './case-studies';

@@ -1,30 +1,68 @@
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
 
-export function MidCtaSection() {
+type CtaLink = {
+  label: string;
+  href: string;
+  variant?: 'sideshift' | 'sideshiftLight' | 'default';
+};
+
+type MidCtaSectionProps = {
+  id?: string;
+  title?: string;
+  description?: string;
+  primaryCta?: CtaLink;
+  secondaryCta?: CtaLink;
+  highlightText?: string;
+};
+
+const defaultPrimaryCta: CtaLink = {
+  label: 'Join as a Brand',
+  href: '/sign-up',
+  variant: 'sideshift'
+};
+
+const defaultSecondaryCta: CtaLink = {
+  label: 'Talk to Sales',
+  href: '#contact',
+  variant: 'sideshiftLight'
+};
+
+export function MidCtaSection({
+  id = 'pricing',
+  title = 'Launch your UGC campaign today',
+  description = 'Partner with creators who already love your brand. SideShift handles the heavy lifting so you can focus on creative strategy and growth.',
+  primaryCta = defaultPrimaryCta,
+  secondaryCta = defaultSecondaryCta,
+  highlightText = 'Brief templates • Instant payouts • Hands-on onboarding'
+}: MidCtaSectionProps = {}) {
   return (
-    <section
-      id="pricing"
-      className="relative overflow-hidden bg-white py-24"
-    >
+    <section id={id} className="relative overflow-hidden bg-white py-24">
       <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-[radial-gradient(circle_at_bottom,rgba(224,245,255,0.65),rgba(255,255,255,0))]" />
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-4 text-center sm:px-6 lg:px-8">
         <h2 className="max-w-3xl text-3xl font-bold text-[var(--color-text-dark)] sm:text-4xl">
-          Launch your UGC campaign today
+          {title}
         </h2>
         <p className="max-w-2xl text-base text-[var(--color-text-muted)] sm:text-lg">
-          Partner with creators who already love your brand. SideShift handles
-          the heavy lifting so you can focus on creative strategy and growth.
+          {description}
         </p>
         <div className="flex w-full flex-col justify-center gap-4 sm:flex-row sm:gap-6">
-          <Button variant="sideshift" size="lg" className="w-full sm:w-auto">
-            Join as a Brand
-          </Button>
           <Button
-            variant="sideshiftLight"
+            variant={primaryCta.variant ?? 'sideshift'}
             size="lg"
             className="w-full sm:w-auto"
+            asChild
           >
-            Talk to Sales
+            <Link href={primaryCta.href}>{primaryCta.label}</Link>
+          </Button>
+          <Button
+            variant={secondaryCta.variant ?? 'sideshiftLight'}
+            size="lg"
+            className="w-full sm:w-auto"
+            asChild
+          >
+            <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
           </Button>
         </div>
         <div className="relative mt-12 w-full max-w-3xl">
@@ -33,7 +71,7 @@ export function MidCtaSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.6),rgba(224,245,255,0))]" />
             <div className="relative flex h-full items-center justify-center">
               <p className="text-sm font-semibold uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-                Brief templates • Instant payouts • Hands-on onboarding
+                {highlightText}
               </p>
             </div>
           </div>

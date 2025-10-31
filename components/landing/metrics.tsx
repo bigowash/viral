@@ -1,4 +1,16 @@
-const metrics = [
+type Metric = {
+  stat: string;
+  label: string;
+  description: string;
+};
+
+type MetricsSectionProps = {
+  title?: string;
+  metrics?: Metric[];
+  id?: string;
+};
+
+const defaultMetrics: Metric[] = [
   {
     stat: '500,000+',
     label: 'Creators',
@@ -21,13 +33,20 @@ const metrics = [
   }
 ];
 
-export function MetricsSection() {
+export function MetricsSection({
+  title = 'Numbers that power every campaign',
+  metrics = defaultMetrics,
+  id
+}: MetricsSectionProps = {}) {
   return (
-    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top,#E0F5FF_0%,#FFFFFF_60%)] py-24">
+    <section
+      className="relative overflow-hidden bg-[radial-gradient(circle_at_top,#E0F5FF_0%,#FFFFFF_60%)] py-24"
+      id={id}
+    >
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(224,245,255,0.75),rgba(255,255,255,0.8))]" />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold text-[var(--color-text-dark)] sm:text-4xl">
-          Numbers that power every campaign
+          {title}
         </h2>
         <div className="grid gap-6 sm:grid-cols-2">
           {metrics.map((metric) => (

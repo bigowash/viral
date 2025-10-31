@@ -1,74 +1,55 @@
 import {
-  BarChart3,
-  Sparkles,
-  Users2,
-  Wallet2
+  Compass,
+  PackageCheck,
+  TrendingUp,
+  Wallet
 } from 'lucide-react';
 
-type FeatureItem = {
-  icon: typeof Sparkles;
-  title: string;
-  description: string;
-};
-
-type FeatureSectionProps = {
-  id?: string;
-  eyebrow?: string;
-  title?: string;
-  description?: string;
-  features?: FeatureItem[];
-};
-
-const defaultFeatures: FeatureItem[] = [
+const creatorFeatures = [
   {
-    icon: Sparkles,
-    title: 'Source Creators',
-    description: 'Reach thousands of creators instantly with precision filters.'
+    icon: Compass,
+    title: 'Centralised Opportunities',
+    description: 'Find & apply to campaigns from top brands.'
   },
   {
-    icon: BarChart3,
+    icon: Wallet,
+    title: 'Payments Built-In',
+    description: 'Track earnings and receive payouts automatically.'
+  },
+  {
+    icon: TrendingUp,
     title: 'Track Performance',
-    description:
-      'See content, views, engagement, and conversions in real-time dashboards.'
+    description: 'See views, clicks, and engagement from your content.'
   },
   {
-    icon: Wallet2,
-    title: 'Automate Payments',
-    description:
-      'Handle payouts, invoices, and tax paperwork without manual effort.'
-  },
-  {
-    icon: Users2,
-    title: 'Manage Creators',
-    description:
-      'Organize your roster, collaborate securely, and scale campaigns seamlessly.'
+    icon: PackageCheck,
+    title: 'Easy Delivery',
+    description: 'Manage briefs, approvals and payments in one platform.'
   }
 ];
 
-export function FeatureSection({
-  id = 'case-studies',
-  eyebrow = 'One Platform',
-  title = 'One platform for all your UGC campaigns',
-  description = 'Every workflow in one place—source, brief, collaborate, approve, and pay creators without spreadsheets or backlog.',
-  features = defaultFeatures
-}: FeatureSectionProps = {}) {
+export function CreatorFeatureSection() {
   return (
-    <section id={id} className="bg-white py-24">
+    <section
+      id="features"
+      className="bg-white py-24"
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-            {eyebrow}
+            How it works
           </span>
           <h2 className="text-3xl font-bold text-[var(--color-text-dark)] sm:text-4xl">
-            {title}
+            Everything Creators Need in One Dashboard
           </h2>
           <p className="max-w-2xl text-base text-[var(--color-text-muted)] sm:text-lg">
-            {description}
+            Your briefs, deliverables, and payouts live together, so you can spend
+            more time creating and less time chasing admin.
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
-          {features.map((feature) => {
+          {creatorFeatures.map((feature) => {
             const Icon = feature.icon;
             return (
               <article

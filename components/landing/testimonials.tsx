@@ -1,4 +1,18 @@
-const testimonials = [
+type Testimonial = {
+  name: string;
+  role: string;
+  quote: string;
+};
+
+type TestimonialsSectionProps = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  testimonials?: Testimonial[];
+  id?: string;
+};
+
+const defaultTestimonials: Testimonial[] = [
   {
     name: 'Amelia Stone',
     role: 'Head of Growth, Northwind',
@@ -31,8 +45,6 @@ const testimonials = [
   }
 ];
 
-const duplicatedTestimonials = [...testimonials, ...testimonials];
-
 function initials(name: string) {
   return name
     .split(' ')
@@ -42,24 +54,31 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-export function TestimonialsSection() {
+export function TestimonialsSection({
+  eyebrow = 'Testimonials',
+  title = 'Loved by modern growth teams',
+  description = 'Hear how SideShift powers scaled creator collaborations for growing brands and agencies.',
+  testimonials = defaultTestimonials,
+  id
+}: TestimonialsSectionProps = {}) {
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
+
   return (
     <section
-      id="testimonials"
+      id={id ?? 'testimonials'}
       className="relative overflow-hidden bg-[linear-gradient(180deg,#F0FAFF_0%,#FFFFFF_60%)] py-24"
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(224,245,255,0.7),rgba(240,250,255,0.1))]" />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-            Testimonials
+            {eyebrow}
           </span>
           <h2 className="text-3xl font-bold text-[var(--color-text-dark)] sm:text-4xl">
-            Loved by modern growth teams
+            {title}
           </h2>
           <p className="max-w-2xl text-base text-[var(--color-text-muted)] sm:text-lg">
-            Hear how SideShift powers scaled creator collaborations for growing
-            brands and agencies.
+            {description}
           </p>
         </div>
 

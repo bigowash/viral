@@ -1,28 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 
-const toggleOptions = ['Creators', 'Brands'] as const;
+const toggleOptions = ['Brands', 'Creators'] as const;
 
 export function HeroSection() {
-  const [activeIndex, setActiveIndex] = useState<0 | 1>(0);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 4000);
-
-    return () => window.clearInterval(interval);
-  }, []);
+  const router = useRouter();
+  const [activeOption, setActiveOption] =
+    useState<(typeof toggleOptions)[number]>('Brands');
 
   const indicatorTransform = useMemo(
     () => ({
-      transform: `translateX(${activeIndex * 100}%)`
+      transform: `translateX(${activeOption === 'Brands' ? 0 : 100}%)`
     }),
-    [activeIndex]
+    [activeOption]
   );
+
+  function handleToggle(option: (typeof toggleOptions)[number]) {
+    if (option === activeOption) {
+      return;
+    }
+
+    setActiveOption(option);
+    if (option === 'Creators') {
+      router.push('/creators');
+    }
+  }
 
   return (
     <section className="relative overflow-hidden bg-white pb-24 pt-20 sm:pt-28">
@@ -36,22 +43,21 @@ export function HeroSection() {
               <span className="inline-flex size-2 rounded-full bg-emerald-400" />
               New in 2025
             </div>
-            <h1 className="text-4xl font-bold leading-tight text-[var(--color-text-dark)] sm:text-5xl lg:text-6xl xl:text-7xl">
-              The Growth Engine for{' '}
-              <span className="relative inline-flex shrink-0 items-center rounded-full border border-white/60 bg-[var(--color-bg-light)] p-1 text-base font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+            <div className="flex flex-col gap-4">
+              <div className="relative inline-flex max-w-max items-center gap-2 rounded-full border border-white/60 bg-[var(--color-bg-light)] p-1 text-base font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 <span
                   className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-white shadow-[0_14px_30px_-18px_rgba(16,24,40,0.45)] transition-transform duration-300 ease-out"
                   aria-hidden
                   style={indicatorTransform}
                 />
-                {toggleOptions.map((option, index) => (
+                {toggleOptions.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    onClick={() => setActiveIndex(index === 0 ? 0 : 1)}
-                    aria-pressed={activeIndex === index}
+                    onClick={() => handleToggle(option)}
+                    aria-pressed={activeOption === option}
                     className={`relative z-10 inline-flex min-w-[120px] items-center justify-center px-5 py-2 transition-colors ${
-                      activeIndex === index
+                      activeOption === option
                         ? 'text-[var(--color-text-dark)]'
                         : ''
                     }`}
@@ -59,12 +65,14 @@ export function HeroSection() {
                     {option}
                   </button>
                 ))}
-              </span>
-            </h1>
+              </div>
+              <h1 className="text-4xl font-bold leading-tight text-[var(--color-text-dark)] sm:text-5xl lg:text-6xl xl:text-7xl">
+                The Growth Engine for Creators
+              </h1>
+            </div>
             <p className="max-w-xl text-lg text-[var(--color-text-muted)] sm:text-xl">
               Work with the top creators at scale, while SideShift handles
-              vetting, contracts, and payouts for you. Launch campaigns in
-              days—not months.
+              vetting, contracts, and payouts for you. Launch campaigns in days—not months.
             </p>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -72,40 +80,42 @@ export function HeroSection() {
               variant="sideshift"
               size="lg"
               className="w-full sm:w-auto"
+              asChild
             >
-              Join as a Brand
+              <Link href="/sign-up">Join as a Brand</Link>
             </Button>
             <Button
               variant="sideshiftLight"
               size="lg"
               className="w-full sm:w-auto"
+              asChild
             >
-              Case Studies
+              <Link href="/case-studies">Case Studies</Link>
             </Button>
           </div>
           <dl className="grid max-w-lg grid-cols-2 gap-6 pt-6 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-text-muted)] sm:grid-cols-4">
             <div>
-              <dt className="text-[11px]">Campaigns Launched</dt>
+              <dt className="text-[11px]">Creators</dt>
               <dd className="mt-1 text-lg text-[var(--color-text-dark)]">
-                3,200+
+                500,000+
               </dd>
             </div>
             <div>
-              <dt className="text-[11px]">Creator Countries</dt>
+              <dt className="text-[11px]">Brands</dt>
               <dd className="mt-1 text-lg text-[var(--color-text-dark)]">
-                42
+                1,000+
               </dd>
             </div>
             <div>
-              <dt className="text-[11px]">Avg. ROI</dt>
+              <dt className="text-[11px]">Views</dt>
               <dd className="mt-1 text-lg text-[var(--color-text-dark)]">
-                5.1x
+                5B+
               </dd>
             </div>
             <div>
-              <dt className="text-[11px]">Fulfillment Rate</dt>
+              <dt className="text-[11px]">Paid Out</dt>
               <dd className="mt-1 text-lg text-[var(--color-text-dark)]">
-                99.4%
+                $100M+
               </dd>
             </div>
           </dl>

@@ -3,7 +3,19 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const faqs = [
+type FAQItem = {
+  question: string;
+  answer: string;
+};
+
+type FAQSectionProps = {
+  items?: FAQItem[];
+  eyebrow?: string;
+  title?: string;
+  id?: string;
+};
+
+const defaultFaqs: FAQItem[] = [
   {
     question: 'How do I get started?',
     answer:
@@ -26,26 +38,31 @@ const faqs = [
   }
 ];
 
-export function FAQSection() {
+export function FAQSection({
+  items = defaultFaqs,
+  eyebrow = 'FAQs',
+  title = 'All your questions answered',
+  id
+}: FAQSectionProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section
-      id="faq"
+      id={id ?? 'faq'}
       className="bg-white py-24"
     >
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-            FAQs
+            {eyebrow}
           </span>
           <h2 className="text-3xl font-bold text-[var(--color-text-dark)] sm:text-4xl">
-            All your questions answered
+            {title}
           </h2>
         </div>
 
         <div className="flex flex-col gap-4">
-          {faqs.map((faq, index) => {
+          {items.map((faq, index) => {
             const open = openIndex === index;
             return (
               <div

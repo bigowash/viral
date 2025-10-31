@@ -6,15 +6,42 @@ import { Menu, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-const navItems = [
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+type LandingHeaderProps = {
+  navItems?: NavItem[];
+  secondaryLink?: NavItem;
+  primaryCta?: NavItem & { variant?: 'sideshift' | 'sideshiftLight' | 'default' };
+};
+
+const defaultNavItems: NavItem[] = [
+  { label: 'For Creators', href: '/creators' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Case Studies', href: '#case-studies' },
-  { label: 'Blog', href: '#testimonials' },
-  { label: 'Docs', href: '#faq' },
-  { label: 'Contact', href: '#contact' }
+  { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Contact', href: '/contact' }
 ];
 
-export function LandingHeader() {
+const defaultSecondaryLink: NavItem = {
+  label: 'Sign in',
+  href: '/sign-in'
+};
+
+const defaultPrimaryCta: NonNullable<LandingHeaderProps['primaryCta']> = {
+  label: 'Join Now',
+  href: '/sign-up',
+  variant: 'sideshift'
+};
+
+export function LandingHeader({
+  navItems = defaultNavItems,
+  secondaryLink = defaultSecondaryLink,
+  primaryCta = defaultPrimaryCta
+}: LandingHeaderProps = {}) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -57,13 +84,17 @@ export function LandingHeader() {
 
         <div className="hidden items-center gap-4 lg:flex">
           <Link
-            href="/sign-in"
+            href={secondaryLink.href}
             className="text-sm font-semibold text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-dark)]"
           >
-            Sign in
+            {secondaryLink.label}
           </Link>
-          <Button variant="sideshift" size="lg" asChild>
-            <Link href="/sign-up">Join Now</Link>
+          <Button
+            variant={primaryCta.variant ?? 'sideshift'}
+            size="lg"
+            asChild
+          >
+            <Link href={primaryCta.href}>{primaryCta.label}</Link>
           </Button>
         </div>
 
@@ -94,20 +125,20 @@ export function LandingHeader() {
           ))}
           <div className="flex flex-col gap-3 border-t border-white/80 pt-4">
             <Link
-              href="/sign-in"
+              href={secondaryLink.href}
               className="text-sm font-semibold text-[var(--color-text-dark)]"
               onClick={() => setOpen(false)}
             >
-              Sign in
+              {secondaryLink.label}
             </Link>
             <Button
-              variant="sideshift"
+              variant={primaryCta.variant ?? 'sideshift'}
               size="lg"
               className="w-full"
               asChild
             >
-              <Link href="/sign-up" onClick={() => setOpen(false)}>
-                Join Now
+              <Link href={primaryCta.href} onClick={() => setOpen(false)}>
+                {primaryCta.label}
               </Link>
             </Button>
           </div>

@@ -1,4 +1,10 @@
-const logos = [
+type LogoMarqueeProps = {
+  title?: string;
+  logos?: string[];
+  id?: string;
+};
+
+const defaultLogos = [
   'Acme Studios',
   'Northwind',
   'Arcade',
@@ -11,14 +17,18 @@ const logos = [
   'Waveform'
 ];
 
-const repeatedLogos = [...logos, ...logos];
+export function LogoMarquee({
+  title = 'Trusted by brands',
+  logos = defaultLogos,
+  id
+}: LogoMarqueeProps = {}) {
+  const repeatedLogos = [...logos, ...logos];
 
-export function LogoMarquee() {
   return (
-    <section className="bg-white py-16">
+    <section className="bg-white py-16" id={id}>
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-          Trusted by brands
+          {title}
         </h2>
         <div className="relative overflow-hidden">
           <div className="animate-[marquee_28s_linear_infinite] whitespace-nowrap">

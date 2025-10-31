@@ -1,26 +1,42 @@
 import Link from 'next/link';
 
-const footerNav = [
+type FooterLink = {
+  label: string;
+  href: string;
+};
+
+type LandingFooterProps = {
+  navItems?: FooterLink[];
+  socialItems?: FooterLink[];
+  legalItems?: FooterLink[];
+};
+
+const defaultNavItems: FooterLink[] = [
+  { label: 'For Creators', href: '/creators' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Blog', href: '#testimonials' },
-  { label: 'Case Studies', href: '#case-studies' },
-  { label: 'Docs', href: '#faq' },
-  { label: 'Contact', href: '#contact' }
+  { label: 'Blog', href: '/blog' },
+  { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Contact', href: '/contact' }
 ];
 
-const socials = [
+const defaultSocialItems: FooterLink[] = [
   { label: 'Twitter / X', href: 'https://x.com' },
   { label: 'LinkedIn', href: 'https://linkedin.com' },
   { label: 'Instagram', href: 'https://instagram.com' },
   { label: 'TikTok', href: 'https://tiktok.com' }
 ];
 
-const legal = [
+const defaultLegalItems: FooterLink[] = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Terms of Service', href: '/terms' }
 ];
 
-export function LandingFooter() {
+export function LandingFooter({
+  navItems = defaultNavItems,
+  socialItems = defaultSocialItems,
+  legalItems = defaultLegalItems
+}: LandingFooterProps = {}) {
   return (
     <footer
       id="contact"
@@ -47,7 +63,7 @@ export function LandingFooter() {
             Explore
           </h3>
           <div className="grid gap-3 text-sm text-[var(--color-text-muted)]">
-            {footerNav.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
@@ -63,7 +79,7 @@ export function LandingFooter() {
             Connect
           </h3>
           <div className="grid gap-3 text-sm text-[var(--color-text-muted)]">
-            {socials.map((item) => (
+            {socialItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
@@ -76,7 +92,7 @@ export function LandingFooter() {
             ))}
           </div>
           <div className="mt-4 grid gap-3 text-sm text-[var(--color-text-muted)]">
-            {legal.map((item) => (
+            {legalItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
