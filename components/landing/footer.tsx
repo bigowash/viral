@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 const footerNav = [
-  { label: 'Pricing', href: '#pricing' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Blog', href: '#testimonials' },
   { label: 'Case Studies', href: '#case-studies' },
   { label: 'Docs', href: '#faq' },

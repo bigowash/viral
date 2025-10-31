@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { label: 'Pricing', href: '#pricing' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Case Studies', href: '#case-studies' },
   { label: 'Blog', href: '#testimonials' },
   { label: 'Docs', href: '#faq' },
@@ -57,13 +57,13 @@ export function LandingHeader() {
 
         <div className="hidden items-center gap-4 lg:flex">
           <Link
-            href="/app"
+            href="/sign-in"
             className="text-sm font-semibold text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-dark)]"
           >
             Sign in
           </Link>
-          <Button variant="sideshift" size="lg">
-            Join Now
+          <Button variant="sideshift" size="lg" asChild>
+            <Link href="/sign-up">Join Now</Link>
           </Button>
         </div>
 
@@ -94,7 +94,7 @@ export function LandingHeader() {
           ))}
           <div className="flex flex-col gap-3 border-t border-white/80 pt-4">
             <Link
-              href="/app"
+              href="/sign-in"
               className="text-sm font-semibold text-[var(--color-text-dark)]"
               onClick={() => setOpen(false)}
             >
@@ -104,9 +104,11 @@ export function LandingHeader() {
               variant="sideshift"
               size="lg"
               className="w-full"
-              onClick={() => setOpen(false)}
+              asChild
             >
-              Join Now
+              <Link href="/sign-up" onClick={() => setOpen(false)}>
+                Join Now
+              </Link>
             </Button>
           </div>
         </div>
