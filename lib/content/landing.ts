@@ -51,7 +51,7 @@ export const landingContent = {
         trailing: 'Join thousands of creators earning money by creating authentic content for top brands.'
       },
       description:
-        'Apply to campaigns that match your style, create videos you're proud of, and get paid quickly. SideShift connects you with brands who value your creativity.',
+        "Apply to campaigns that match your style, create videos you're proud of, and get paid quickly. SideShift connects you with brands who value your creativity.",
       primaryCta: { label: 'Join as a creator', href: '/sign-up?type=creator' },
       secondaryCta: { label: 'View creator stories', href: '/case-studies' },
       stats: [
@@ -207,7 +207,7 @@ export const landingContent = {
       quotes: [
         {
           quote:
-            'I've earned over $10k in my first month. The campaigns are legit and pay on time. This is the best platform for creators.',
+            "I've earned over $10k in my first month. The campaigns are legit and pay on time. This is the best platform for creators.",
           name: 'Sarah Chen',
           role: 'Lifestyle Creator, 250K followers'
         },
