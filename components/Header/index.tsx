@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
@@ -320,8 +321,6 @@ function HeaderContent() {
           <div className="flex min-w-[96px] flex-1 items-center justify-start">
             <Link
               href={`/${locale}`}
-              className="text-2xl uppercase tracking-[0.24em]"
-              style={{ color: palette.textPrimary }}
               onClick={() => {
                 posthog?.capture(PostHogEvents.LINK_CLICKED, {
                   link_destination: `/${locale}`,
@@ -331,7 +330,13 @@ function HeaderContent() {
                 });
               }}
             >
-              8x
+              <Image
+                src="/assets/brand/8x_logo.svg"
+                alt="8x Logo"
+                width={48}
+                height={48}
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
           {isHomePage ? (
@@ -367,8 +372,6 @@ function HeaderContent() {
         <div className={`${navFont.className} flex w-full items-center gap-3 md:hidden`}>
           <Link
             href={`/${locale}`}
-            className="text-2xl uppercase tracking-[0.24em]"
-            style={{ color: palette.textPrimary }}
             onClick={() => {
               posthog?.capture(PostHogEvents.LINK_CLICKED, {
                 link_destination: `/${locale}`,
@@ -378,7 +381,13 @@ function HeaderContent() {
               });
             }}
           >
-            8x
+            <Image
+              src="/assets/brand/8x_logo.svg"
+              alt="8x Logo"
+              width={40}
+              height={40}
+              className="h-10 w-auto"
+            />
           </Link>
           {isHomePage ? (
             <div className="flex flex-1 justify-center">{renderToggle()}</div>
