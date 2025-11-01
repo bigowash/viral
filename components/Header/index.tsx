@@ -15,7 +15,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from '@/app/[locale]/(login)/actions';
-import { User } from '@/lib/db/schema';
+import { Database } from '@/types/supabase';
+
+type User = Database['public']['Tables']['profiles']['Row'];
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
@@ -123,14 +125,16 @@ function UserMenu() {
     <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger>
         <Avatar className="cursor-pointer size-9">
-          <AvatarImage alt={user.name || ''} />
+          <AvatarImage alt={user.display_name || ''} />
           <AvatarFallback>
-            {user.email
-              ? user.email
-                  .split(' ')
+            {user.primary_email
+              ? user.primary_email
+                  .split('@')[0]
+                  .split(/[._-]/)
                   .map((n) => n?.[0] || '')
                   .filter(Boolean)
-                  .join('') || user.email[0]?.toUpperCase() || 'U'
+                  .join('')
+                  .toUpperCase() || user.primary_email[0]?.toUpperCase() || 'U'
               : 'U'}
           </AvatarFallback>
         </Avatar>

@@ -1,130 +1,267 @@
-import { desc, and, eq, isNull } from 'drizzle-orm';
-import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
-import { cookies } from 'next/headers';
-import { verifyToken } from '@/lib/auth/session';
+import { createServerSupabaseClient } from './supabase';
+import { Database } from '@/types/supabase';
+import { ActivityType } from '@/lib/constants/activity';
 
+type Profile = Database['public']['Tables']['profiles']['Row'];
+type Team = Database['public']['Tables']['teams']['Row'];
+type TeamMember = Database['public']['Tables']['team_members']['Row'];
+type ActivityLog = Database['public']['Tables']['activity_logs']['Row'];
+
+/**
+ * Get the current authenticated user's profile.
+ * Returns null if no valid session exists.
+ */
 export async function getUser() {
-  const sessionCookie = (await cookies()).get('session');
-  if (!sessionCookie || !sessionCookie.value) {
+  const supabase = await createServerSupabaseClient();
+  
+  const {
+    data: { user: authUser },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !authUser) {
     return null;
   }
 
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (
-    !sessionData ||
-    !sessionData.user ||
-    typeof sessionData.user.id !== 'number'
-  ) {
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', authUser.id)
+    .single();
+
+  if (error || !profile) {
     return null;
   }
 
-  if (new Date(sessionData.expires) < new Date()) {
-    return null;
-  }
-
-  const user = await db
-    .select()
-    .from(users)
-    .where(and(eq(users.id, sessionData.user.id), isNull(users.deletedAt)))
-    .limit(1);
-
-  if (user.length === 0) {
-    return null;
-  }
-
-  return user[0];
+  return profile;
 }
 
+/**
+ * Get team by Stripe customer ID.
+ */
 export async function getTeamByStripeCustomerId(customerId: string) {
-  const result = await db
-    .select()
-    .from(teams)
-    .where(eq(teams.stripeCustomerId, customerId))
-    .limit(1);
+  const supabase = await createServerSupabaseClient();
 
-  return result.length > 0 ? result[0] : null;
+  const { data, error } = await supabase
+    .from('teams')
+    .select('*')
+    .eq('stripe_customer_id', customerId)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data;
 }
 
+/**
+ * Update team subscription information.
+ */
 export async function updateTeamSubscription(
-  teamId: number,
+  teamId: string,
   subscriptionData: {
     stripeSubscriptionId: string | null;
-    stripeProductId: string | null;
+    stripeProductId?: string | null;
     planName: string | null;
     subscriptionStatus: string;
   }
 ) {
-  await db
-    .update(teams)
-    .set({
-      ...subscriptionData,
-      updatedAt: new Date()
+  const supabase = await createServerSupabaseClient();
+
+  const { error } = await supabase
+    .from('teams')
+    .update({
+      stripe_subscription_id: subscriptionData.stripeSubscriptionId,
+      plan_name: subscriptionData.planName,
+      subscription_status: subscriptionData.subscriptionStatus,
+      updated_at: new Date().toISOString(),
     })
-    .where(eq(teams.id, teamId));
+    .eq('id', teamId);
+
+  if (error) {
+    throw new Error(`Failed to update team subscription: ${error.message}`);
+  }
 }
 
-export async function getUserWithTeam(userId: number) {
-  const result = await db
-    .select({
-      user: users,
-      teamId: teamMembers.teamId
-    })
-    .from(users)
-    .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    .where(eq(users.id, userId))
-    .limit(1);
+/**
+ * Get user with their team information.
+ */
+export async function getUserWithTeam(userId: string) {
+  const supabase = await createServerSupabaseClient();
 
-  return result[0];
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  if (profileError || !profile) {
+    return null;
+  }
+
+  const { data: teamMember } = await supabase
+    .from('team_members')
+    .select('team_id')
+    .eq('profile_id', userId)
+    .limit(1)
+    .single();
+
+  return {
+    user: profile,
+    teamId: teamMember?.team_id || null,
+  };
 }
 
+/**
+ * Get activity logs for the current user.
+ */
 export async function getActivityLogs() {
   const user = await getUser();
   if (!user) {
     throw new Error('User not authenticated');
   }
 
-  return await db
-    .select({
-      id: activityLogs.id,
-      action: activityLogs.action,
-      timestamp: activityLogs.timestamp,
-      ipAddress: activityLogs.ipAddress,
-      userName: users.name
-    })
-    .from(activityLogs)
-    .leftJoin(users, eq(activityLogs.userId, users.id))
-    .where(eq(activityLogs.userId, user.id))
-    .orderBy(desc(activityLogs.timestamp))
+  const supabase = await createServerSupabaseClient();
+
+  // Get user's teams
+  const { data: teamMembers } = await supabase
+    .from('team_members')
+    .select('team_id')
+    .eq('profile_id', user.id);
+
+  if (!teamMembers || teamMembers.length === 0) {
+    return [];
+  }
+
+  const teamIds = teamMembers.map((tm) => tm.team_id);
+
+  // Get activity logs for user's teams
+  const { data: logs, error } = await supabase
+    .from('activity_logs')
+    .select(
+      `
+      id,
+      action,
+      created_at,
+      metadata,
+      actor_profile_id,
+      profiles!activity_logs_actor_profile_id_fkey (
+        display_name,
+        primary_email
+      )
+      `
+    )
+    .in('team_id', teamIds)
+    .eq('actor_profile_id', user.id)
+    .order('created_at', { ascending: false })
     .limit(10);
+
+  if (error) {
+    throw new Error(`Failed to fetch activity logs: ${error.message}`);
+  }
+
+  return (logs || []).map((log) => ({
+    id: log.id,
+    action: log.action,
+    timestamp: log.created_at,
+    metadata: log.metadata,
+    ipAddress: log.metadata && typeof log.metadata === 'object' && 'ipAddress' in log.metadata
+      ? String(log.metadata.ipAddress)
+      : undefined,
+    userName: 
+      log.profiles && !Array.isArray(log.profiles)
+        ? log.profiles.display_name || log.profiles.primary_email
+        : null,
+  }));
 }
 
+/**
+ * Get team for the current user with all members.
+ */
 export async function getTeamForUser() {
   const user = await getUser();
   if (!user) {
     return null;
   }
 
-  const result = await db.query.teamMembers.findFirst({
-    where: eq(teamMembers.userId, user.id),
-    with: {
-      team: {
-        with: {
-          teamMembers: {
-            with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  email: true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+  const supabase = await createServerSupabaseClient();
+
+  // Get user's team membership
+  const { data: membership, error: membershipError } = await supabase
+    .from('team_members')
+    .select('team_id')
+    .eq('profile_id', user.id)
+    .limit(1)
+    .single();
+
+  if (membershipError || !membership) {
+    return null;
+  }
+
+  // Get team with all members
+  const { data: team, error: teamError } = await supabase
+    .from('teams')
+    .select(
+      `
+      *,
+      team_members (
+        id,
+        role,
+        joined_at,
+        profile_id,
+        profiles!team_members_profile_id_fkey (
+          id,
+          display_name,
+          primary_email
+        )
+      )
+      `
+    )
+    .eq('id', membership.team_id)
+    .single();
+
+  if (teamError || !team) {
+    return null;
+  }
+
+  // Transform to match expected format
+  return {
+    ...team,
+    teamMembers: (team.team_members || []).map((tm: any) => ({
+      ...tm,
+      user: tm.profiles && !Array.isArray(tm.profiles) ? {
+        id: tm.profiles.id,
+        name: tm.profiles.display_name,
+        email: tm.profiles.primary_email,
+      } : null,
+    })),
+  };
+}
+
+/**
+ * Log an activity for a team.
+ */
+export async function logActivity(
+  teamId: string | null | undefined,
+  actorProfileId: string,
+  action: ActivityType,
+  metadata?: Record<string, any>
+) {
+  if (!teamId) {
+    return;
+  }
+
+  const supabase = await createServerSupabaseClient();
+
+  const { error } = await supabase.from('activity_logs').insert({
+    team_id: teamId,
+    actor_profile_id: actorProfileId,
+    action: action,
+    metadata: metadata || null,
   });
 
-  return result?.team || null;
+  if (error) {
+    console.error('Failed to log activity:', error);
+  }
 }

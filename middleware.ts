@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { signToken, verifyToken } from '@/lib/auth/session';
+import { createServerClient } from '@supabase/ssr';
 import { locales, defaultLocale, domainLocales } from './i18n';
 
 const protectedRoutes = '/dashboard';
@@ -25,14 +25,41 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Create Supabase client for middleware
+  let supabaseResponse = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            request.cookies.set(name, value)
+          );
+          supabaseResponse = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
   // Handle locale routing (rewrite URLs without locale prefix)
-  let response: NextResponse;
   if (!pathnameHasLocale && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
     const newUrl = new URL(`/${locale}${pathname}`, request.url);
     newUrl.search = request.nextUrl.search;
-    response = NextResponse.rewrite(newUrl);
-  } else {
-    response = NextResponse.next();
+    supabaseResponse = NextResponse.rewrite(newUrl);
   }
 
   // Auth logic - check for protected routes
@@ -40,43 +67,19 @@ export async function middleware(request: NextRequest) {
     ? pathname.replace(/^\/[^\/]+/, '') 
     : pathname;
   const isProtectedRoute = pathnameWithoutLocale.startsWith(protectedRoutes);
-  const sessionCookie = request.cookies.get('session');
 
-  if (isProtectedRoute && !sessionCookie) {
+  // Check authentication
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (isProtectedRoute && !user) {
     const signInUrl = new URL(`/${locale}/sign-in`, request.url);
     signInUrl.search = request.nextUrl.search;
     return NextResponse.redirect(signInUrl);
   }
 
-  // Refresh session token
-  if (sessionCookie && request.method === 'GET') {
-    try {
-      const parsed = await verifyToken(sessionCookie.value);
-      const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-      response.cookies.set({
-        name: 'session',
-        value: await signToken({
-          ...parsed,
-          expires: expiresInOneDay.toISOString()
-        }),
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        expires: expiresInOneDay
-      });
-    } catch (error) {
-      console.error('Error updating session:', error);
-      response.cookies.delete('session');
-      if (isProtectedRoute) {
-        const signInUrl = new URL(`/${locale}/sign-in`, request.url);
-        signInUrl.search = request.nextUrl.search;
-        return NextResponse.redirect(signInUrl);
-      }
-    }
-  }
-
-  return response;
+  return supabaseResponse;
 }
 
 export const config = {

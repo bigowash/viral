@@ -11,7 +11,10 @@ import {
 } from '@/components/ui/card';
 import { customerPortalAction } from '@/lib/payments/actions';
 import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { Database } from '@/types/supabase';
+import { TeamDataWithMembers } from '@/lib/auth/middleware';
+
+type User = Database['public']['Tables']['profiles']['Row'];
 import { removeTeamMember, inviteTeamMember } from '@/app/[locale]/(login)/actions';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
@@ -90,12 +93,12 @@ function ManageSubscription() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="mb-4 sm:mb-0">
               <p className="font-medium">
-                Current Plan: {teamData?.planName || 'Free'}
+                Current Plan: {teamData?.plan_name || 'Free'}
               </p>
               <p className="text-sm text-muted-foreground">
-                {teamData?.subscriptionStatus === 'active'
+                {teamData?.subscription_status === 'active'
                   ? 'Billed monthly'
-                  : teamData?.subscriptionStatus === 'trialing'
+                  : teamData?.subscription_status === 'trialing'
                   ? 'Trial period'
                   : 'No active subscription'}
               </p>
@@ -148,8 +151,9 @@ function TeamMembers() {
     FormData
   >(removeTeamMember, {});
 
-  const getUserDisplayName = (user: Pick<User, 'id' | 'name' | 'email'>) => {
-    return user.name || user.email || 'Unknown User';
+  const getUserDisplayName = (user: Pick<User, 'id' | 'display_name' | 'primary_email'> | null) => {
+    if (!user) return 'Unknown User';
+    return user.display_name || user.primary_email || 'Unknown User';
   };
 
   if (!teamData?.teamMembers?.length) {
@@ -245,7 +249,17 @@ function InviteTeamMember() {
     refetchOnMount: false,
     // initialData is set by QueryProvider from server-side prefetching
   });
-  const isOwner = user?.role === 'owner';
+  // Check if user is owner by checking their team member role
+  const { data: teamData } = useQuery<TeamDataWithMembers | null>({
+    queryKey: TEAM_QUERY_KEY,
+    queryFn: fetchTeam,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+  
+  const currentMember = teamData?.teamMembers?.find(m => m.profile_id === user?.id);
+  const isOwner = currentMember?.role === 'owner' || currentMember?.role === 'admin';
   const [inviteState, inviteAction, isInvitePending] = useActionState<
     ActionState,
     FormData
