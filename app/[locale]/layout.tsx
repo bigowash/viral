@@ -69,14 +69,18 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // Await promises for SWR fallback - SWR expects resolved values, not promises
+  const [userData, teamData] = await Promise.all([
+    getUser().catch(() => null),
+    getTeamForUser().catch(() => null)
+  ]);
+
   return (
     <NextIntlClientProvider locale={locale} messages={{}}>
       <SWRProvider
         fallback={{
-          // We do NOT await here
-          // Only components that read this data will suspend
-          '/api/user': getUser(),
-          '/api/team': getTeamForUser()
+          '/api/user': userData,
+          '/api/team': teamData
         }}
       >
         {children}

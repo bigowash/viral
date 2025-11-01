@@ -20,10 +20,28 @@ import useSWR, { mutate } from 'swr';
 import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string): Promise<User | null> => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return null;
+    }
+    const data = await res.json();
+    // Ensure we return a proper object or null, never undefined
+    // Also ensure data is not an array or other non-object type
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      return data as User;
+    }
+    return null;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+};
 
-const { brand } = landingContent;
+const { brand } = landingContent || { brand: { toggle: [], secondaryLinks: [] } };
 const { palette } = theme;
 
 const navFont = Inter({
@@ -43,10 +61,25 @@ interface HeaderTranslations {
 
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: user } = useSWR<User>('/api/user', fetcher);
+  const locale = useLocale() || 'en';
   const router = useRouter();
-  const locale = useLocale();
   const t = useComponentTranslations<HeaderTranslations>('Header');
+  
+  // SWR key should be consistent across locale changes - user data is locale-independent
+  // Use a stable key that doesn't change with locale
+  const swrKey = '/api/user';
+  const { data: user, error, isLoading } = useSWR<User | null>(
+    swrKey,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      keepPreviousData: true,
+      fallbackData: null,
+      shouldRetryOnError: false,
+      dedupingInterval: 5000,
+    }
+  );
 
   async function handleSignOut() {
     await signOut();
@@ -56,7 +89,11 @@ function UserMenu() {
 
   if (!t) return null;
 
-  if (!user) {
+  // During language switch, isLoading might be true, but we should show UI anyway
+  // user will be null if not logged in, or a User object if logged in
+  // Don't check for undefined explicitly - treat null as "not logged in"
+  
+  if (!user || error) {
     return (
       <>
         <Link
@@ -83,9 +120,12 @@ function UserMenu() {
           <AvatarImage alt={user.name || ''} />
           <AvatarFallback>
             {user.email
-              .split(' ')
-              .map((n) => n[0])
-              .join('')}
+              ? user.email
+                  .split(' ')
+                  .map((n) => n?.[0] || '')
+                  .filter(Boolean)
+                  .join('') || user.email[0]?.toUpperCase() || 'U'
+              : 'U'}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -119,17 +159,20 @@ function UserMenu() {
 function Header() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const locale = useLocale();
+  const locale = useLocale() || 'en';
   const view = searchParams.get('view') || 'brand';
   const isCreatorView = view === 'creator';
   const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
   const t = useComponentTranslations<HeaderTranslations>('Header');
 
-  const pricingLink = brand.secondaryLinks.find(
+  const pricingLink = brand?.secondaryLinks?.find(
     (link) => link.label.toLowerCase() === 'pricing'
   );
 
   if (!t) return null;
+  
+  // Ensure brand.toggle exists before rendering
+  if (!brand?.toggle) return null;
 
   return (
     <header
@@ -189,6 +232,7 @@ function Header() {
                 {t.pricing}
               </Link>
             ) : null}
+            <LanguageSwitcher />
             <Suspense fallback={<div className="h-9" />}>
               <UserMenu />
             </Suspense>

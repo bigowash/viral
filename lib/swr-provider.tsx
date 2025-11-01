@@ -25,12 +25,16 @@ export function SWRProvider({
 }) {
   const config = useMemo<SWRConfiguration>(
     () => ({
-      fallback,
+      fallback: fallback || {},
       provider: getCacheProvider,
       // Explicitly disable revalidation on mount to avoid any localStorage checks
       revalidateOnMount: false,
       // Disable focus revalidation which might trigger localStorage access
-      revalidateOnFocus: false
+      revalidateOnFocus: false,
+      // Ensure fallback values are properly handled
+      onError: (error) => {
+        console.error('SWR error:', error);
+      }
     }),
     [fallback]
   );
