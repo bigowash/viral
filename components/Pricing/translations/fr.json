@@ -12,6 +12,7 @@
     "name": "Pour les créateurs",
     "price": "Gratuit",
     "period": "Pour toujours",
+    "cta": "Commencer",
     "features": {
       "freeForever": "Gratuit pour toujours",
       "postContent": "Publiez votre contenu",
@@ -24,6 +25,7 @@
     "price": "Essai gratuit",
     "subtitle": "Commencez par un essai gratuit",
     "description": "Puis payez par publication et par impression",
+    "cta": "Commencer",
     "features": {
       "freeTrial": "Essai gratuit disponible",
       "payPerPost": "Payer par publication",

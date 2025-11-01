@@ -12,6 +12,7 @@
     "name": "Za ustvarjalce",
     "price": "Brezplačno",
     "period": "Za vedno",
+    "cta": "Začnite",
     "features": {
       "freeForever": "Za vedno brezplačno",
       "postContent": "Objavljajte svojo vsebino",
@@ -24,6 +25,7 @@
     "price": "Brezplačni preizkus",
     "subtitle": "Začnite z brezplačnim preizkusom",
     "description": "Nato plačajte po objavi in vtisih",
+    "cta": "Začnite",
     "features": {
       "freeTrial": "Na voljo brezplačni preizkus",
       "payPerPost": "Plačilo po objavi",

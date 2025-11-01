@@ -5,6 +5,9 @@ import { Check } from 'lucide-react';
 import { theme } from '@/lib/theme';
 import { SubmitButton } from '@/app/[locale]/(dashboard)/pricing/submit-button';
 import { checkoutAction } from '@/lib/payments/actions';
+import { Link } from '@/i18n/routing';
+import { useLocale } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 const { palette, gradients } = theme;
 
@@ -20,6 +23,7 @@ interface PricingTranslations {
     name: string;
     price: string;
     period: string;
+    cta: string;
     features: {
       freeForever: string;
       postContent: string;
@@ -32,6 +36,7 @@ interface PricingTranslations {
     price: string;
     subtitle: string;
     description: string;
+    cta: string;
     features: {
       freeTrial: string;
       payPerPost: string;
@@ -44,6 +49,7 @@ interface PricingTranslations {
 
 export function Pricing() {
   const t = useComponentTranslations<PricingTranslations>('Pricing');
+  const locale = useLocale();
 
   if (!t) return null;
 
@@ -90,6 +96,8 @@ export function Pricing() {
               price={t.creators.price}
               period={t.creators.period}
               isFree={true}
+              ctaText={t.creators.cta}
+              ctaHref={`/${locale}/sign-up?type=creator`}
               features={[
                 t.creators.features.freeForever,
                 t.creators.features.postContent,
@@ -103,6 +111,8 @@ export function Pricing() {
               subtitle={t.brands.subtitle}
               description={t.brands.description}
               isFreeTrial={true}
+              ctaText={t.brands.cta}
+              ctaHref={`/${locale}/sign-up?type=brand`}
               features={[
                 t.brands.features.freeTrial,
                 t.brands.features.payPerPost,
@@ -135,6 +145,8 @@ function PricingCard({
   isFreeTrial,
   features,
   priceId,
+  ctaText,
+  ctaHref,
 }: {
   name: string;
   price: string;
@@ -145,6 +157,8 @@ function PricingCard({
   isFreeTrial?: boolean;
   features: string[];
   priceId?: string;
+  ctaText?: string;
+  ctaHref?: string;
 }) {
   return (
     <div
@@ -204,12 +218,25 @@ function PricingCard({
         ))}
       </ul>
 
-      {priceId && (
-        <form action={checkoutAction} className="mt-auto">
-          <input type="hidden" name="priceId" value={priceId} />
-          <SubmitButton />
-        </form>
-      )}
+      <div className="mt-auto">
+        {priceId ? (
+          <form action={checkoutAction}>
+            <input type="hidden" name="priceId" value={priceId} />
+            <SubmitButton />
+          </form>
+        ) : ctaText && ctaHref ? (
+          <Button
+            asChild
+            className="w-full rounded-full font-heading uppercase tracking-[0.18em] text-sm"
+            style={{
+              backgroundColor: palette.accent,
+              color: palette.textOnAccent,
+            }}
+          >
+            <Link href={ctaHref}>{ctaText}</Link>
+          </Button>
+        ) : null}
+      </div>
     </div>
   );
 }

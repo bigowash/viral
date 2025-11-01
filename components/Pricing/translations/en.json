@@ -12,6 +12,7 @@
     "name": "For Creators",
     "price": "Free",
     "period": "Forever",
+    "cta": "Get Started",
     "features": {
       "freeForever": "Free Forever",
       "postContent": "Post your content",
@@ -24,6 +25,7 @@
     "price": "Free Trial",
     "subtitle": "Start with a free trial",
     "description": "Then pay per post & impression",
+    "cta": "Get Started",
     "features": {
       "freeTrial": "Free Trial Available",
       "payPerPost": "Pay per post",
