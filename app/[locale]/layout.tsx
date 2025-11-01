@@ -70,19 +70,21 @@ export default async function LocaleLayout({
   }
 
   // Await promises for SWR fallback - SWR expects resolved values, not promises
+  // Ensure values are never undefined - use null instead
   const [userData, teamData] = await Promise.all([
     getUser().catch(() => null),
     getTeamForUser().catch(() => null)
   ]);
 
+  // Ensure fallback values are explicitly defined (never undefined)
+  const fallback = {
+    '/api/user': userData ?? null,
+    '/api/team': teamData ?? null
+  };
+
   return (
     <NextIntlClientProvider locale={locale} messages={{}}>
-      <SWRProvider
-        fallback={{
-          '/api/user': userData,
-          '/api/team': teamData
-        }}
-      >
+      <SWRProvider fallback={fallback}>
         {children}
       </SWRProvider>
     </NextIntlClientProvider>

@@ -12,7 +12,7 @@ import {
 import { customerPortalAction } from '@/lib/payments/actions';
 import { useActionState } from 'react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
-import { removeTeamMember, inviteTeamMember } from '@/app/(login)/actions';
+import { removeTeamMember, inviteTeamMember } from '@/app/[locale]/(login)/actions';
 import useSWR from 'swr';
 import { Suspense } from 'react';
 import { Input } from '@/components/ui/input';
@@ -25,7 +25,24 @@ type ActionState = {
   success?: string;
 };
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// Shared fetcher with proper error handling
+const fetcher = async <T,>(url: string): Promise<T | null> => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return null;
+    }
+    const data = await res.json();
+    // Ensure we return a proper object or null, never undefined
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      return data as T;
+    }
+    return null;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+};
 
 function SubscriptionSkeleton() {
   return (

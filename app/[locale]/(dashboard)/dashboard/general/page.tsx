@@ -6,12 +6,28 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
-import { updateAccount } from '@/app/(login)/actions';
+import { updateAccount } from '@/app/[locale]/(login)/actions';
 import { User } from '@/lib/db/schema';
 import useSWR from 'swr';
 import { Suspense } from 'react';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string): Promise<User | null> => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return null;
+    }
+    const data = await res.json();
+    // Ensure we return a proper object or null, never undefined
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      return data as User;
+    }
+    return null;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+};
 
 type ActionState = {
   name?: string;

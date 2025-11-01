@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useMemo } from 'react';
 import Link from 'next/link';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { signOut } from '@/app/(login)/actions';
+import { signOut } from '@/app/[locale]/(login)/actions';
 import { User } from '@/lib/db/schema';
 import useSWR, { mutate } from 'swr';
 import { landingContent } from '@/lib/content/landing';
@@ -22,24 +22,7 @@ import { theme } from '@/lib/theme';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
-const fetcher = async (url: string): Promise<User | null> => {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      return null;
-    }
-    const data = await res.json();
-    // Ensure we return a proper object or null, never undefined
-    // Also ensure data is not an array or other non-object type
-    if (data && typeof data === 'object' && !Array.isArray(data)) {
-      return data as User;
-    }
-    return null;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    return null;
-  }
-};
+// Fetcher removed - now defined inline in UserMenu to ensure stability
 
 const { brand } = landingContent || { brand: { toggle: [], secondaryLinks: [] } };
 const { palette } = theme;
@@ -65,21 +48,51 @@ function UserMenu() {
   const router = useRouter();
   const t = useComponentTranslations<HeaderTranslations>('Header');
   
-  // SWR key should be consistent across locale changes - user data is locale-independent
-  // Use a stable key that doesn't change with locale
-  const swrKey = '/api/user';
-  const { data: user, error, isLoading } = useSWR<User | null>(
-    swrKey,
-    fetcher,
-    {
+  // SWR key - MUST be a constant string, never undefined or changing
+  // This key is locale-independent since user data doesn't change with locale
+  const SWR_KEY = '/api/user';
+  
+  // Stable fetcher function - memoized to prevent recreation
+  // This ensures SWR always receives a defined function
+  const stableFetcher = useMemo(
+    () => async (url: string): Promise<User | null> => {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          return data as User;
+        }
+        return null;
+      } catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+      }
+    },
+    []
+  );
+  
+  // SWR options - all values explicitly defined to prevent undefined iteration
+  const swrOptions = useMemo(
+    () => ({
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      keepPreviousData: true,
-      fallbackData: null,
+      fallbackData: null as User | null,
       shouldRetryOnError: false,
       dedupingInterval: 5000,
-    }
+      revalidateOnMount: false,
+    }),
+    []
   );
+  
+  // Call useSWR - hooks must be called unconditionally
+  // All arguments are guaranteed to be defined (string key, function fetcher, object options)
+  const swrResult = useSWR<User | null>(SWR_KEY, stableFetcher, swrOptions);
+  
+  // Safely extract values - use nullish coalescing to ensure never undefined
+  // Handle case where swrResult itself might be undefined during edge cases
+  const user = swrResult?.data ?? null;
+  const error = swrResult?.error ?? null;
 
   async function handleSignOut() {
     await signOut();
