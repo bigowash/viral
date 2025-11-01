@@ -19,9 +19,11 @@ This is a starter template for building a SaaS application using **Next.js** wit
 ## Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
+- **Database**: Postgres (migrating to Supabase-managed Postgres)
+- **Data Access**: Currently Drizzle ORM (scheduled to be replaced by Supabase clients + SQL migrations)
+- **Auth**: Transitioning from custom JWT cookies to Supabase Auth
 - **Payments**: [Stripe](https://stripe.com/)
+- **Analytics**: PostHog (planned)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 
 ## Getting Started
@@ -105,8 +107,29 @@ In your Vercel project settings (or during deployment), add all the necessary en
 1. `BASE_URL`: Set this to your production domain.
 2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
 3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
+4. `POSTGRES_URL`: Set this to your production database URL (until Supabase migration lands).
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+6. `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (new stack; add once the Supabase project is ready).
+
+## Roadmap: Supabase-First Stack
+
+We are actively migrating from the starter stack to a Supabase-first architecture (see `PLANNING.md` for detailed tasks). High-level milestones:
+
+1. **Bootstrapping Supabase**
+   - Initialise Supabase locally/remote, configure env vars for local dev and Vercel.
+   - Add CLI scripts (`supabase db push`, `supabase gen types`) and update docs.
+2. **Schema & Type Sync**
+   - Rebuild app tables (UUID PK/FK) in Supabase migrations and enable RLS.
+   - Create a `profiles` table linked to `auth.users`, generate TypeScript types automatically.
+3. **Auth & App Logic Migration**
+   - Replace custom auth/session code with Supabase Auth in server actions, middleware, and data helpers.
+   - Remove Drizzle once Supabase clients power all queries.
+4. **Stripe & Integrations**
+   - Update checkout/webhook handlers to use Supabase service clients and adapt to UUID IDs.
+5. **Analytics**
+   - Install/configure PostHog in `app/layout.tsx`, instrument core product events.
+
+Track progress and detailed checklists in `PLANNING.md`.
 
 ## Other Templates
 
