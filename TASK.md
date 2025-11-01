@@ -1,8 +1,8 @@
 # Task Backlog
 
 ## Immediate
-- [ ] Initialise Supabase project locally (`supabase init`, `supabase start`) and add secrets to `.env.local`.
-- [ ] Add Supabase CLI scripts to `package.json` (`supabase db push`, `supabase gen types`) and document workflow in README.
+- [x] Initialise Supabase project locally (`supabase init`, `supabase start`) and add secrets to `.env.local`.
+- [x] Add Supabase CLI scripts to `package.json` (`supabase db push`, `supabase gen types`) and document workflow in README.
 - [ ] Create migration SQL to rebuild `teams`, `team_members`, `activity_logs`, `invitations`, and new `profiles` table with UUID keys.
 - [ ] Wire Supabase type generation to output `types/supabase.ts`; add script to CI/local dev flow.
 

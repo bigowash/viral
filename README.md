@@ -76,6 +76,53 @@ You can listen for Stripe webhooks locally through their CLI to handle subscript
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
+## Supabase Workflow
+
+If you're working with Supabase (see [Roadmap](#roadmap-supabase-first-stack) for migration status), use the following commands:
+
+### Start Supabase locally
+
+Ensure Supabase is running locally:
+
+```bash
+supabase start
+```
+
+This will start all Supabase services (Postgres, Auth, Storage, etc.) and print connection details.
+
+### Push database migrations
+
+After creating or modifying migration files in `supabase/migrations/`, push them to your local Supabase instance:
+
+```bash
+pnpm db:push
+```
+
+This applies pending migrations to the local database. For production/remote databases, use `supabase db push --linked` after linking your project with `supabase link --project-ref <project-ref>`.
+
+### Generate TypeScript types
+
+After schema changes, generate TypeScript types from your Supabase database:
+
+```bash
+pnpm types:generate
+```
+
+This creates/updates `types/supabase.ts` with type definitions for all tables, functions, and other database objects. The types are generated from your local Supabase instance by default.
+
+**For production/remote types**, use:
+```bash
+supabase gen types typescript --project-id <project-id> > types/supabase.ts
+```
+
+### Development workflow
+
+1. Start Supabase locally: `supabase start`
+2. Create/edit migrations in `supabase/migrations/`
+3. Push migrations: `pnpm db:push`
+4. Generate types: `pnpm types:generate`
+5. Restart your Next.js dev server to pick up type changes: `pnpm dev`
+
 ## Testing Payments
 
 To test Stripe payments, use the following test card details:

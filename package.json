@@ -8,7 +8,9 @@
     "db:seed": "npx tsx lib/db/seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:push": "supabase db push",
+    "types:generate": "supabase gen types typescript --local > types/supabase.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.1.7",
