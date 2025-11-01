@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
-import { Home, LogOut } from 'lucide-react';
+import { Home, LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -164,6 +164,11 @@ function Header() {
   const isCreatorView = view === 'creator';
   const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
   const t = useComponentTranslations<HeaderTranslations>('Header');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   const pricingLink = brand?.secondaryLinks?.find(
     (link) => link.label.toLowerCase() === 'pricing'
@@ -174,15 +179,46 @@ function Header() {
   // Ensure brand.toggle exists before rendering
   if (!brand?.toggle) return null;
 
+  const renderToggle = () => (
+    <div
+      className="flex items-center gap-1 rounded-full border px-1 py-1"
+      style={{
+        borderColor: palette.border,
+        backgroundColor: palette.surfaceMuted
+      }}
+    >
+      {brand.toggle.map((option) => {
+        const isActive =
+          (option.href.includes('view=creator') && isCreatorView) ||
+          (option.href.includes('view=brand') && !isCreatorView);
+        return (
+          <Link
+            key={option.label}
+            href={`/${locale}${option.href.replace(/^\//, '')}`}
+            className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.18em] transition-all"
+            style={{
+              color: isActive ? palette.textOnAccent : palette.textSecondary,
+              backgroundColor: isActive ? palette.accent : 'transparent'
+            }}
+          >
+            {option.label === 'Brands'
+              ? t.brands
+              : option.label === 'Creators'
+                ? t.creators
+                : option.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+
   return (
     <header
       className="border-b"
       style={{ borderColor: palette.border, backgroundColor: palette.surface }}
     >
       <div className="max-w-7xl mx-auto w-full px-4 py-4 sm:px-6 lg:px-8">
-        <div
-          className={`${navFont.className} flex w-full flex-wrap items-center gap-4 md:flex-nowrap md:gap-6`}
-        >
+        <div className={`${navFont.className} hidden w-full items-center gap-6 md:flex`}>
           <div className="flex min-w-[96px] flex-1 items-center justify-start">
             <Link
               href={`/${locale}`}
@@ -192,36 +228,11 @@ function Header() {
               8x
             </Link>
           </div>
-          {isHomePage && (
-            <div className="flex flex-1 justify-center">
-              <div
-                className="flex items-center gap-1 rounded-full border px-1 py-1"
-                style={{
-                  borderColor: palette.border,
-                  backgroundColor: palette.surfaceMuted
-                }}
-              >
-                {brand.toggle.map((option) => {
-                  const isActive = (option.href.includes('view=creator') && isCreatorView) ||
-                                   (option.href.includes('view=brand') && !isCreatorView);
-                  return (
-                    <Link
-                      key={option.label}
-                      href={`/${locale}${option.href.replace(/^\//, '')}`}
-                      className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.18em] transition-all"
-                      style={{
-                        color: isActive ? palette.textOnAccent : palette.textSecondary,
-                        backgroundColor: isActive ? palette.accent : 'transparent'
-                      }}
-                    >
-                      {option.label === 'Brands' ? t.brands : option.label === 'Creators' ? t.creators : option.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+          {isHomePage ? (
+            <div className="flex flex-1 justify-center">{renderToggle()}</div>
+          ) : (
+            <div className="flex flex-1 justify-center" />
           )}
-          {!isHomePage && <div className="flex flex-1 justify-center" />}
           <div className="flex min-w-[204px] flex-1 items-center justify-end gap-4">
             {pricingLink ? (
               <Link
@@ -232,12 +243,62 @@ function Header() {
                 {t.pricing}
               </Link>
             ) : null}
-            <LanguageSwitcher />
             <Suspense fallback={<div className="h-9" />}>
               <UserMenu />
             </Suspense>
+            <LanguageSwitcher />
           </div>
         </div>
+
+        <div className={`${navFont.className} flex w-full items-center gap-3 md:hidden`}>
+          <Link
+            href={`/${locale}`}
+            className="text-2xl uppercase tracking-[0.24em]"
+            style={{ color: palette.textPrimary }}
+          >
+            8x
+          </Link>
+          {isHomePage ? (
+            <div className="flex flex-1 justify-center">{renderToggle()}</div>
+          ) : (
+            <div className="flex flex-1 justify-center" />
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            <Menu className="size-5" />
+          </Button>
+        </div>
+
+        {isMobileMenuOpen && (
+          <div
+            className="mt-4 flex flex-col gap-4 rounded-lg border px-4 py-4 md:hidden"
+            style={{ borderColor: palette.border, backgroundColor: palette.surfaceMuted }}
+          >
+            {pricingLink ? (
+              <Link
+                href={`/${locale}/pricing`}
+                className="text-sm uppercase tracking-[0.18em]"
+                style={{ color: palette.textSecondary }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t.pricing}
+              </Link>
+            ) : null}
+            <div className="flex flex-col gap-3">
+              <Suspense fallback={<div className="h-9" />}>
+                <UserMenu />
+              </Suspense>
+            </div>
+            <div className="flex justify-start">
+              <LanguageSwitcher />
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );
