@@ -133,34 +133,65 @@ To test Stripe payments, use the following test card details:
 
 ## Going to Production
 
-When you're ready to deploy your SaaS application to production, follow these steps:
+Follow the steps below to deploy the Supabase-powered stack to Vercel.
 
-### Set up a production Stripe webhook
+### 1. Provision Supabase
 
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
+1. Create a new project in [Supabase](https://supabase.com/). Pick a region close to Vercel.
+2. Copy your **Project Reference** (Settings → General) and API credentials (Settings → API).
+3. Update the site's redirect settings in Supabase (Authentication → URL configuration) so `site_url` and `redirect_urls` include your production domain, e.g. `https://your-app.vercel.app`.
 
-### Deploy to Vercel
+#### Link the CLI & push migrations
 
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
+```bash
+supabase login
+supabase link --project-ref <project-ref>
+supabase db push --linked          # Apply migrations in supabase/migrations
+supabase gen types typescript \
+  --project-id <project-ref> > types/supabase.ts
+```
 
-### Add environment variables
+The last command keeps the generated types in sync with the production database. Commit any changes.
 
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
+### 2. Configure Stripe
 
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL (until Supabase migration lands).
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-6. `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (new stack; add once the Supabase project is ready).
-7. `NEXT_PUBLIC_POSTHOG_KEY`: Your PostHog project API key.
-8. `NEXT_PUBLIC_POSTHOG_HOST`: Your PostHog host (defaults to `https://us.i.posthog.com`).
-9. `POSTHOG_KEY`: Optional - for server-side tracking (can use `NEXT_PUBLIC_POSTHOG_KEY`).
-10. `POSTHOG_HOST`: Optional - for server-side tracking (can use `NEXT_PUBLIC_POSTHOG_HOST`).
+1. Switch to your live Stripe mode (top left toggle in the dashboard).
+2. Create the products/prices that match the IDs used by the app.
+3. Create a production webhook (Developers → Webhooks) pointing to `https://your-domain.com/api/stripe/webhook`.
+4. Record the webhook signing secret and live secret key for environment variables.
+
+### 3. Deploy to Vercel
+
+1. Push this repository to GitHub/GitLab/Bitbucket.
+2. Import the project in [Vercel](https://vercel.com/import) and pick the root of this workspace.
+3. Leave the default build command (`next build`) and output directory (`.next`).
+4. Trigger the first deployment after you finish adding the environment variables below.
+
+### 4. Add environment variables in Vercel
+
+Add these keys in Vercel → Project → Settings → Environment Variables. Mark server-only values as **Encrypted**. Apply them to both Production and Preview environments so previews work the same way.
+
+| Variable | Required | Value |
+| --- | --- | --- |
+| `BASE_URL` | ✅ | `https://your-domain.com` (used for Stripe redirects) |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Supabase Project URL (`https://<ref>.supabase.co`) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase anon key from Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Supabase service role key (never expose client-side) |
+| `STRIPE_SECRET_KEY` | ✅ | Live Stripe secret key |
+| `STRIPE_WEBHOOK_SECRET` | ✅ | Signing secret for the production webhook |
+| `AUTH_SECRET` | ✅ | Random 32+ byte string (`openssl rand -hex 32`) |
+| `NEXT_PUBLIC_POSTHOG_KEY` | ✅ | PostHog project API key |
+| `NEXT_PUBLIC_POSTHOG_HOST` | ⚠️ | PostHog host (`https://us.i.posthog.com` or EU host) |
+| `POSTHOG_KEY` | ⚠️ | Optional – set to the same value as `NEXT_PUBLIC_POSTHOG_KEY` for server events |
+| `POSTHOG_HOST` | ⚠️ | Optional – match the host used above |
+
+> Tip: if you keep a local `.env.local`, you can run `vercel env pull` to stay in sync.
+
+### 5. Final checks
+
+- Redeploy on Vercel after updating the variables.
+- Verify Supabase Auth emails and redirects use the production domain.
+- From the live site, run through sign-up → checkout to confirm Supabase, Stripe, and PostHog events are flowing.
 
 ## Roadmap: Supabase-First Stack
 
