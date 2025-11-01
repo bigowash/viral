@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Globe } from 'lucide-react';
@@ -31,7 +32,7 @@ interface LanguageSwitcherTranslations {
   slovenian: string;
 }
 
-export function LanguageSwitcher() {
+function LanguageSwitcherContent() {
   const locale = useLocale() as Locale;
   const router = useRouter();
   const pathname = usePathname();
@@ -116,5 +117,13 @@ export function LanguageSwitcher() {
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function LanguageSwitcher() {
+  return (
+    <Suspense fallback={<div className="h-9 w-9" />}>
+      <LanguageSwitcherContent />
+    </Suspense>
   );
 }

@@ -19,7 +19,7 @@ import { Database } from '@/types/supabase';
 
 type User = Database['public']['Tables']['profiles']['Row'];
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { landingContent } from '@/lib/content/landing';
+import { landingContent, type LandingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
@@ -28,7 +28,7 @@ import { PostHogEvents } from '@/lib/analytics/events';
 
 // Fetcher removed - now defined inline in UserMenu to ensure stability
 
-const { brand } = landingContent || { brand: { toggle: [], secondaryLinks: [] } };
+const brand: LandingContent['brand'] = landingContent.brand;
 const { palette } = theme;
 
 const navFont = Inter({
@@ -240,7 +240,7 @@ function UserMenu() {
   );
 }
 
-function Header() {
+function HeaderContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const locale = useLocale() || 'en';
@@ -248,6 +248,7 @@ function Header() {
   const isCreatorView = view === 'creator';
   const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
   const t = useComponentTranslations<HeaderTranslations>('Header');
+  const posthog = usePostHogClient();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -271,7 +272,7 @@ function Header() {
         backgroundColor: palette.surfaceMuted
       }}
     >
-      {brand.toggle.map((option) => {
+      {brand.toggle.map((option: { label: string; href: string; active?: boolean }) => {
         const isActive =
           (option.href.includes('view=creator') && isCreatorView) ||
           (option.href.includes('view=brand') && !isCreatorView);
@@ -433,12 +434,18 @@ function Header() {
   );
 }
 
+function Header() {
+  return (
+    <Suspense fallback={<div className="h-16 border-b" style={{ borderColor: theme.palette.border, backgroundColor: theme.palette.surface }} />}>
+      <HeaderContent />
+    </Suspense>
+  );
+}
+
 export function HeaderLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className="flex flex-col min-h-screen">
-      <Suspense fallback={<div className="h-16 border-b" style={{ borderColor: theme.palette.border, backgroundColor: theme.palette.surface }} />}>
-        <Header />
-      </Suspense>
+      <Header />
       {children}
     </section>
   );

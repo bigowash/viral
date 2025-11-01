@@ -19,3 +19,9 @@
 ## Stripe & Analytics
 - [x] Adjust Stripe checkout/webhook handlers to write/read Supabase UUID IDs and respect RLS.
 - [x] Install and initialise PostHog in `app/[locale]/layout.tsx`; instrument sign-in, sign-up, checkout flows.
+
+## Supabase MCP Integration
+- [x] Link project to Supabase remote project via MCP (Project ID: xigkfywncesdbjivdpqi)
+- [x] Apply all database migrations to remote Supabase project
+- [x] Generate TypeScript types from remote database schema
+- [x] Fix security advisor warnings (function search_path)

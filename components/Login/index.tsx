@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -31,7 +31,7 @@ interface LoginTranslations {
   signInToExisting: string;
 }
 
-export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
+function LoginContent({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
   const locale = useLocale();
   const posthog = usePostHogClient();
@@ -186,5 +186,13 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         </div>
       </div>
     </div>
+  );
+}
+
+export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
+  return (
+    <Suspense fallback={<div className="min-h-[100dvh] flex flex-col justify-center bg-gray-50" />}>
+      <LoginContent mode={mode} />
+    </Suspense>
   );
 }

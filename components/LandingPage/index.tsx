@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
@@ -149,7 +150,7 @@ interface LandingPageTranslations {
   };
 }
 
-export function LandingPage() {
+function LandingPageContent() {
   const searchParams = useSearchParams();
   const locale = useLocale();
   const view = searchParams.get('view') || 'brand';
@@ -576,5 +577,13 @@ export function LandingPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export function LandingPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: palette.background }} />}>
+      <LandingPageContent />
+    </Suspense>
   );
 }
