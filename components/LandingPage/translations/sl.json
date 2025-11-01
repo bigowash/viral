@@ -1,0 +1,206 @@
+{
+  "hero": {
+    "brand": {
+      "eyebrow": "UGC, KI DELUJE",
+      "headline": {
+        "leading": "Motor rasti za",
+        "accent": "Ustvarjalce in Blagovne znamke.",
+        "trailing": "Sodelujte z najboljšimi ustvarjalci v velikem obsegu, medtem ko SideShift upravlja preverjanje, pogodbe in izplačila."
+      },
+      "description": "Pridružite se kampanjam, ki resnično spreminjajo. Mi poiščemo, upravljamo in plačujemo ustvarjalce, tako da vaša ekipa dostavlja bolj pristen vsebinski material brez dodatnega osebja.",
+      "primaryCta": "Pridružite se kot blagovna znamka",
+      "secondaryCta": "Oglejte si študije primerov",
+      "stats": {
+        "creatorsOnboarded": "ustvarjalcev že vključenih",
+        "brandsHiring": "blagovnih znamk, ki aktivno zaposlujejo",
+        "organicViews": "organskih ogledov v zadnjih 90 dneh",
+        "paidOut": "izplačanih ustvarjalcem"
+      }
+    },
+    "creator": {
+      "eyebrow": "BODITE PLAČANI ZA VAŠO VSEBINO",
+      "headline": {
+        "leading": "Želite objavljati videoposnetke",
+        "accent": "in biti plačani?",
+        "trailing": "Pridružite se tisočem ustvarjalcev, ki zaslužijo z ustvarjanjem pristne vsebine za vodilne blagovne znamke."
+      },
+      "description": "Prijavite se na kampanje, ki se ujemajo z vašim stilom, ustvarite videoposnetke, na katere ste ponosni, in hitro prejmite plačilo. SideShift vas povezuje z blagovnimi znamkami, ki cenijo vašo ustvarjalnost.",
+      "primaryCta": "Pridružite se kot ustvarjalec",
+      "secondaryCta": "Oglejte si zgodbe ustvarjalcev",
+      "stats": {
+        "activeCreators": "aktivnih ustvarjalcev",
+        "paidToCreators": "izplačanih ustvarjalcem",
+        "viewsGenerated": "generiranih ogledov",
+        "newCampaigns": "novih kampanj tedensko"
+      }
+    }
+  },
+  "platform": {
+    "brand": {
+      "eyebrow": "ENA PLATFORMA, NESKONČNE KAMPANJE",
+      "title": "Ena platforma za vsako kampanjo UGC",
+      "description": "SideShift centralizira delovne procese, ki ohranjajo kampanje v gibanju—od prijav do odobritev do poročanja o uspešnosti.",
+      "features": {
+        "sourceCreators": {
+          "title": "Poiščite Ustvarjalce",
+          "description": "Takoj dosežite tisoče preverjenih, relevantnih ustvarjalcev s filtri za nišo, platformo in uspešnost."
+        },
+        "trackPerformance": {
+          "title": "Spremljajte Uspešnost",
+          "description": "Spremljajte oglede vsebine, angažiranje in konverzije v realnem času, tako da natančno veste, kaj deluje."
+        },
+        "automatePayments": {
+          "title": "Avtomatizirajte Plačila",
+          "description": "Upravljajte izplačila, pogodbe in davčno dokumentacijo brez preglednic ali ročnega sledenja."
+        },
+        "manageCreators": {
+          "title": "Upravljajte Ustvarjalce",
+          "description": "Organizirajte ekipe, delite načrte in sodelujte pri izdelkih v eni skupni nadzorni plošči."
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "VSE, KAR POTREBUJETE ZA USPEH",
+      "title": "Vaš komplet orodij za ustvarjanje plačane vsebine",
+      "description": "Od iskanja pravih kampanj do hitrega plačila, SideShift daje ustvarjalcem vse, kar potrebujejo za pretvorbo vsebine v dohodek.",
+      "features": {
+        "findCampaigns": {
+          "title": "Poiščite Kampanje",
+          "description": "Prebrskajte stotine kampanj vodilnih blagovnih znamk, ki iščejo ustvarjalce, kot ste vi. Filtrirajte po niši, platformi in znesku izplačila."
+        },
+        "postVideos": {
+          "title": "Objavite Videoposnetke",
+          "description": "Ustvarite in naložite svoje videoposnetke neposredno na SideShift. Naša platforma olajša oddajo vašega najboljšega dela in hitro odobritev."
+        },
+        "getPaidFast": {
+          "title": "Hitro Prejmite Plačilo",
+          "description": "Prejemajte plačila hitro in varno. Mi upravljamo vso dokumentacijo, tako da se lahko osredotočite na ustvarjanje odlične vsebine."
+        },
+        "trackEarnings": {
+          "title": "Spremljajte Zaslužke",
+          "description": "Spremljajte svoje zaslužke, oglejte si uspešnost kampanj in ugotovite, katere vrste vsebine se najbolj plačujejo v vaši nadzorni plošči."
+        }
+      }
+    }
+  },
+  "workflow": {
+    "brand": {
+      "eyebrow": "KAKO DELUJE",
+      "title": "Zaženite vašo naslednjo kampanjo v treh korakih",
+      "description": "SideShift ohranja sodelovanje v gibanju s strukturiranimi načrti, na voljo producenti in orodja za deljenje, zgrajena za kratko vsebino.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Objavite načrt",
+          "description": "Ustvarite priložnost SideShift in takoj dosežite ustvarjalce UGC Gen Z, ki se ujemajo z vašim glasom in proračunom."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Pregledajte in odobrite",
+          "description": "Sodelujte pri konceptih, seznamih posnetkov in osnutkih s producenti SideShift, ki vodijo vsak korak."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Objavite in povečajte",
+          "description": "Prejmite montaže, pripravljene za objavo, jih objavite prek vseh kanalov in samodejno zajemite vpoglede o uspešnosti."
+        }
+      },
+      "supportingCta": "Pokličite ekipo"
+    },
+    "creator": {
+      "eyebrow": "KAKO DELUJE",
+      "title": "Začnite zasluževati v treh preprostih korakih",
+      "description": "Od prijave do plačila, SideShift olajša ustvarjalcem pretvorbo njihove strasti v profit.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Prijavite se na kampanje",
+          "description": "Prebrskajte razpoložljive kampanje in prijavite se na tiste, ki se ujemajo z vašim stilom in nišo. Pokažite blagovnim znamkam, kaj naredi vašo vsebino posebno."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Ustvarite in objavite videoposnetke",
+          "description": "Ko boste odobreni, ustvarite pristne videoposnetke, ki prikazujejo blagovno znamko. Naložite svojo vsebino neposredno prek naše platforme in hitro prejmite povratne informacije."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Prejmite plačilo",
+          "description": "Ko bo vaša vsebina odobrena in objavljena, prejmite plačila hitro in varno. Sledite vsem svojim zaslužkom na enem mestu."
+        }
+      },
+      "supportingCta": "Oglejte si razpoložljive kampanje"
+    }
+  },
+  "testimonials": {
+    "brand": {
+      "eyebrow": "BLAGOVNE ZNAMKE OBOŽUJEJO SIDESHIFT",
+      "title": "Zaupanja vredno pri ekipah, ki dostavljajo vsebino Gen Z",
+      "quotes": {
+        "quote1": {
+          "quote": "Kandidati so bili izjemno visoke kakovosti—za razliko od katerekoli platforme, ki sem jo uporabljal v preteklosti.",
+          "name": "Luis Ocampo",
+          "role": "Ustanovna ekipa, Partiful"
+        },
+        "quote2": {
+          "quote": "Uspeli smo zapolniti 100% naših potreb po zaposlovanju ustvarjalcev v samo nekaj tednih. SideShift je postal naša stalna izbira, kadar koli potrebujemo ustvarjalce.",
+          "name": "Edward Tian",
+          "role": "Ustanovitelj, GPTZero"
+        },
+        "quote3": {
+          "quote": "SideShift je pomagal odkleniti novo plast rasti, ki je tradicionalni plačljivi kanali nikoli niso mogli doseči.",
+          "name": "Henrique Dubugras",
+          "role": "Ustanovni direktor @ Brex"
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "USTVARJALCI OBOŽUJEJO SIDESHIFT",
+      "title": "Pridružite se ustvarjalcem, ki zaslužujejo s svojo vsebino",
+      "quotes": {
+        "quote1": {
+          "quote": "V prvem mesecu sem zaslužil več kot 10.000 $. Kampanje so legitimne in plačujejo pravočasno. To je najboljša platforma za ustvarjalce.",
+          "name": "Sarah Chen",
+          "role": "Ustvarjalka lifestyle, 250K sledilcev"
+        },
+        "quote2": {
+          "quote": "SideShift tako olajša iskanje kampanj in objavljanje videoposnetkov. Lahko se osredotočim na ustvarjanje namesto na sledenje plačilom.",
+          "name": "Marcus Johnson",
+          "role": "Tehnični ustvarjalec, 180K sledilcev"
+        },
+        "quote3": {
+          "quote": "Raznovrstnost kampanj je neverjetna. Lahko izberem projekte, ki se resnično ujemajo z mojo blagovno znamko in moja publika jih obožuje.",
+          "name": "Emma Rodriguez",
+          "role": "Modna ustvarjalka, 320K sledilcev"
+        }
+      }
+    }
+  },
+  "backers": {
+    "title": "Podprto s strani investitorjev, znanstvenikov in inženirjev iz"
+  },
+  "callToAction": {
+    "brand": {
+      "title": "Zaženite svojo kampanjo UGC še danes",
+      "description": "Ustvarite brezplačen račun SideShift, objavite svojo prvo priložnost in začnite sodelovati z najboljšimi ustvarjalci v nekaj minutah.",
+      "primaryCta": "Pridružite se kot blagovna znamka",
+      "secondaryCta": "Pridružite se kot ustvarjalec"
+    },
+    "creator": {
+      "title": "Začnite zasluževati s svojo vsebino še danes",
+      "description": "Ustvarite brezplačen račun ustvarjalca, prebrskajte razpoložljive kampanje in začnite objavljati videoposnetke, ki so plačani. Pridružite se tisočem ustvarjalcev, ki že zaslužujejo.",
+      "primaryCta": "Pridružite se kot ustvarjalec",
+      "secondaryCta": "Izvedite več"
+    }
+  },
+  "terminal": {
+    "label": "Kontrolna soba kampanje",
+    "steps": {
+      "step1": "Blagovna znamka · \"Načrt objavljen — vabilo lifestyle ustvarjalcem s CTR 5%+.\"",
+      "step2": "Producent SideShift · \"42 kandidatov pregledanih in 9 najboljših izbranih.\"",
+      "step3": "Ustvarjalec · \"Konceptualni paket naložen s priključki in osnutki scenarijev.\"",
+      "step4": "Producent SideShift · \"Montaže odobrene, dostava finalnih različic + napisi.\"",
+      "step5": "Blagovna znamka · \"Objavljanje materialov in usmerjanje na plačljive + organske kanale.\"",
+      "step6": "Producent SideShift · \"Nadzorna plošča uspešnosti posodobljena s povečanjem ROAS.\""
+    }
+  }
+}

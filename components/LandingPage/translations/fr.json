@@ -1,0 +1,206 @@
+{
+  "hero": {
+    "brand": {
+      "eyebrow": "UGC QUI PERFORM",
+      "headline": {
+        "leading": "Le Moteur de Croissance pour",
+        "accent": "Créateurs & Marques.",
+        "trailing": "Travaillez avec les meilleurs créateurs à grande échelle pendant que SideShift gère le recrutement, les contrats et les paiements."
+      },
+      "description": "Rejoignez des campagnes qui convertissent vraiment. Nous trouvons, gérons et payons les créateurs pour que votre équipe produise plus de contenu authentique sans personnel supplémentaire.",
+      "primaryCta": "Rejoindre en tant que marque",
+      "secondaryCta": "Voir les études de cas",
+      "stats": {
+        "creatorsOnboarded": "créateurs déjà recrutés",
+        "brandsHiring": "marques qui recrutent activement",
+        "organicViews": "vues organiques sur 90 jours",
+        "paidOut": "versés aux créateurs"
+      }
+    },
+    "creator": {
+      "eyebrow": "SOYEZ PAYÉ POUR VOTRE CONTENU",
+      "headline": {
+        "leading": "Vous voulez publier des vidéos",
+        "accent": "et être payé ?",
+        "trailing": "Rejoignez des milliers de créateurs qui gagnent de l'argent en créant du contenu authentique pour les meilleures marques."
+      },
+      "description": "Postulez à des campagnes qui correspondent à votre style, créez des vidéos dont vous êtes fier et soyez payé rapidement. SideShift vous connecte avec des marques qui valorisent votre créativité.",
+      "primaryCta": "Rejoindre en tant que créateur",
+      "secondaryCta": "Voir les histoires de créateurs",
+      "stats": {
+        "activeCreators": "créateurs actifs",
+        "paidToCreators": "versés aux créateurs",
+        "viewsGenerated": "vues générées",
+        "newCampaigns": "nouvelles campagnes hebdomadaires"
+      }
+    }
+  },
+  "platform": {
+    "brand": {
+      "eyebrow": "UNE PLATEFORME, DES CAMPAGNES INFINIES",
+      "title": "Une plateforme pour chaque campagne UGC",
+      "description": "SideShift centralise les workflows qui maintiennent les campagnes en mouvement—des candidatures aux approbations en passant par le reporting de performance.",
+      "features": {
+        "sourceCreators": {
+          "title": "Trouver des Créateurs",
+          "description": "Contactez instantanément des milliers de créateurs vérifiés et pertinents avec des filtres pour la niche, la plateforme et les performances."
+        },
+        "trackPerformance": {
+          "title": "Suivre les Performances",
+          "description": "Surveillez les vues de contenu, l'engagement et les conversions en temps réel pour savoir exactement ce qui fonctionne."
+        },
+        "automatePayments": {
+          "title": "Automatiser les Paiements",
+          "description": "Gérez les paiements, les contrats et la paperasserie fiscale sans tableurs ou suivi manuel."
+        },
+        "manageCreators": {
+          "title": "Gérer les Créateurs",
+          "description": "Organisez les équipes, partagez les briefs et collaborez sur les livrables dans un tableau de bord partagé."
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "TOUT CE DONT VOUS AVEZ BESOIN POUR RÉUSSIR",
+      "title": "Votre boîte à outils pour créer du contenu rémunéré",
+      "description": "De la recherche des bonnes campagnes au paiement rapide, SideShift donne aux créateurs tout ce qu'il faut pour transformer le contenu en revenu.",
+      "features": {
+        "findCampaigns": {
+          "title": "Trouver des Campagnes",
+          "description": "Parcourez des centaines de campagnes de grandes marques qui recherchent des créateurs comme vous. Filtrez par niche, plateforme et montant de rémunération."
+        },
+        "postVideos": {
+          "title": "Publier des Vidéos",
+          "description": "Créez et téléversez vos vidéos directement sur SideShift. Notre plateforme facilite la soumission de vos meilleurs travaux et l'approbation rapide."
+        },
+        "getPaidFast": {
+          "title": "Être Payé Rapidement",
+          "description": "Recevez des paiements rapidement et en toute sécurité. Nous gérons toute la paperasserie pour que vous puissiez vous concentrer sur la création de contenu de qualité."
+        },
+        "trackEarnings": {
+          "title": "Suivre les Gains",
+          "description": "Surveillez vos gains, consultez les performances des campagnes et voyez quels types de contenu paient le plus dans votre tableau de bord."
+        }
+      }
+    }
+  },
+  "workflow": {
+    "brand": {
+      "eyebrow": "COMMENT ÇA MARCHE",
+      "title": "Lancez votre prochaine campagne en trois étapes",
+      "description": "SideShift maintient les collaborations en mouvement avec des briefs structurés, des producteurs disponibles et des outils de partage conçus pour le contenu court.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Publier un brief",
+          "description": "Créez une opportunité SideShift et contactez instantanément des créateurs UGC Gen Z qui correspondent à votre voix et votre budget."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Réviser et approuver",
+          "description": "Collaborez sur les concepts, les listes de plans et les ébauches avec des producteurs SideShift qui guident chaque étape."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Publier et amplifier",
+          "description": "Recevez des montages prêts à publier, diffusez-les sur tous les canaux et capturez automatiquement les insights de performance."
+        }
+      },
+      "supportingCta": "Parler à l'équipe"
+    },
+    "creator": {
+      "eyebrow": "COMMENT ÇA MARCHE",
+      "title": "Commencez à gagner en trois étapes simples",
+      "description": "De la candidature au paiement, SideShift facilite la transformation de la passion des créateurs en profit.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Postuler aux campagnes",
+          "description": "Parcourez les campagnes disponibles et postulez à celles qui correspondent à votre style et votre niche. Montrez aux marques ce qui rend votre contenu spécial."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Créer et publier des vidéos",
+          "description": "Une fois approuvé, créez des vidéos authentiques qui mettent en valeur la marque. Téléversez votre contenu directement via notre plateforme et obtenez des commentaires rapidement."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Être payé",
+          "description": "Une fois votre contenu approuvé et publié, recevez des paiements rapidement et en toute sécurité. Suivez tous vos gains au même endroit."
+        }
+      },
+      "supportingCta": "Voir les campagnes disponibles"
+    }
+  },
+  "testimonials": {
+    "brand": {
+      "eyebrow": "LES MARQUES ADORENT SIDESHIFT",
+      "title": "Fait confiance par les équipes qui produisent du contenu Gen Z",
+      "quotes": {
+        "quote1": {
+          "quote": "Les candidats ont été d'une qualité exceptionnelle—contrairement à toute plateforme que j'ai utilisée auparavant.",
+          "name": "Luis Ocampo",
+          "role": "Équipe Fondatrice, Partiful"
+        },
+        "quote2": {
+          "quote": "Nous avons pu combler 100% de nos besoins de recrutement de créateurs en quelques semaines seulement. SideShift est devenu notre référence à chaque fois que nous avons besoin de créateurs.",
+          "name": "Edward Tian",
+          "role": "Fondateur, GPTZero"
+        },
+        "quote3": {
+          "quote": "SideShift a permis de débloquer une nouvelle couche de croissance que les canaux payants traditionnels n'ont jamais pu atteindre.",
+          "name": "Henrique Dubugras",
+          "role": "PDG Fondateur @ Brex"
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "LES CRÉATEURS ADORENT SIDESHIFT",
+      "title": "Rejoignez les créateurs qui gagnent avec leur contenu",
+      "quotes": {
+        "quote1": {
+          "quote": "J'ai gagné plus de 10 000 $ au cours de mon premier mois. Les campagnes sont légitimes et paient à temps. C'est la meilleure plateforme pour les créateurs.",
+          "name": "Sarah Chen",
+          "role": "Créatrice Lifestyle, 250K abonnés"
+        },
+        "quote2": {
+          "quote": "SideShift facilite tellement la recherche de campagnes et la publication de vidéos. Je peux me concentrer sur la création au lieu de courir après les paiements.",
+          "name": "Marcus Johnson",
+          "role": "Créateur Tech, 180K abonnés"
+        },
+        "quote3": {
+          "quote": "La variété des campagnes est incroyable. Je peux choisir des projets qui s'alignent vraiment avec ma marque et mon public adore.",
+          "name": "Emma Rodriguez",
+          "role": "Créatrice Mode, 320K abonnés"
+        }
+      }
+    }
+  },
+  "backers": {
+    "title": "Soutenu par des investisseurs, scientifiques et ingénieurs de"
+  },
+  "callToAction": {
+    "brand": {
+      "title": "Lancez votre campagne UGC dès aujourd'hui",
+      "description": "Créez un compte SideShift gratuit, publiez votre première opportunité et commencez à collaborer avec les meilleurs créateurs en quelques minutes.",
+      "primaryCta": "Rejoindre en tant que marque",
+      "secondaryCta": "Rejoindre en tant que créateur"
+    },
+    "creator": {
+      "title": "Commencez à gagner avec votre contenu dès aujourd'hui",
+      "description": "Créez un compte créateur gratuit, parcourez les campagnes disponibles et commencez à publier des vidéos rémunérées. Rejoignez des milliers de créateurs qui gagnent déjà.",
+      "primaryCta": "Rejoindre en tant que créateur",
+      "secondaryCta": "En savoir plus"
+    }
+  },
+  "terminal": {
+    "label": "Salle de contrôle des campagnes",
+    "steps": {
+      "step1": "Marque · \"Brief publié — invitation de créateurs lifestyle avec CTR de 5%+.\"",
+      "step2": "Producteur SideShift · \"42 candidats examinés et 9 meilleurs profils présélectionnés.\"",
+      "step3": "Créateur · \"Dossier conceptuel téléversé avec accroches et scripts de brouillon.\"",
+      "step4": "Producteur SideShift · \"Montages approuvés, livraison des versions finales + légendes.\"",
+      "step5": "Marque · \"Publication des assets et routage vers canaux payants + organiques.\"",
+      "step6": "Producteur SideShift · \"Tableau de bord de performance mis à jour avec augmentation du ROAS.\""
+    }
+  }
+}

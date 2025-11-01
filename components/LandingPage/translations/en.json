@@ -1,0 +1,206 @@
+{
+  "hero": {
+    "brand": {
+      "eyebrow": "UGC THAT PERFORMS",
+      "headline": {
+        "leading": "The Growth Engine for",
+        "accent": "Creators & Brands.",
+        "trailing": "Work with top creators at scale while SideShift handles vetting, contracts, and payouts."
+      },
+      "description": "Join campaigns that actually convert. We source, manage, and pay creators so your team ships more authentic content without extra headcount.",
+      "primaryCta": "Join as a brand",
+      "secondaryCta": "View case studies",
+      "stats": {
+        "creatorsOnboarded": "creators already onboarded",
+        "brandsHiring": "brands actively hiring",
+        "organicViews": "organic views last 90 days",
+        "paidOut": "paid out to creators"
+      }
+    },
+    "creator": {
+      "eyebrow": "GET PAID FOR YOUR CONTENT",
+      "headline": {
+        "leading": "Want to post videos",
+        "accent": "and get paid?",
+        "trailing": "Join thousands of creators earning money by creating authentic content for top brands."
+      },
+      "description": "Apply to campaigns that match your style, create videos you're proud of, and get paid quickly. SideShift connects you with brands who value your creativity.",
+      "primaryCta": "Join as a creator",
+      "secondaryCta": "View creator stories",
+      "stats": {
+        "activeCreators": "active creators",
+        "paidToCreators": "paid to creators",
+        "viewsGenerated": "views generated",
+        "newCampaigns": "new campaigns weekly"
+      }
+    }
+  },
+  "platform": {
+    "brand": {
+      "eyebrow": "ONE PLATFORM, ENDLESS CAMPAIGNS",
+      "title": "One platform for every UGC campaign",
+      "description": "SideShift centralises the workflows that keep campaigns moving—from applications to approvals to performance reporting.",
+      "features": {
+        "sourceCreators": {
+          "title": "Source Creators",
+          "description": "Reach thousands of vetted, on-brief creators instantly with filters for niche, platform, and performance."
+        },
+        "trackPerformance": {
+          "title": "Track Performance",
+          "description": "Monitor content views, engagement, and conversions in real time so you know exactly what is resonating."
+        },
+        "automatePayments": {
+          "title": "Automate Payments",
+          "description": "Handle payouts, contracts, and tax paperwork without spreadsheets or manual chasing."
+        },
+        "manageCreators": {
+          "title": "Manage Creators",
+          "description": "Organise rosters, share briefs, and collaborate on deliverables inside one shared dashboard."
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "EVERYTHING YOU NEED TO SUCCEED",
+      "title": "Your toolkit for creating content that gets paid",
+      "description": "From finding the right campaigns to getting paid fast, SideShift gives creators everything needed to turn content into income.",
+      "features": {
+        "findCampaigns": {
+          "title": "Find Campaigns",
+          "description": "Browse hundreds of campaigns from top brands looking for creators like you. Filter by niche, platform, and payout amount."
+        },
+        "postVideos": {
+          "title": "Post Videos",
+          "description": "Create and upload your videos directly on SideShift. Our platform makes it easy to submit your best work and get approved fast."
+        },
+        "getPaidFast": {
+          "title": "Get Paid Fast",
+          "description": "Receive payments quickly and securely. We handle all the paperwork so you can focus on creating great content."
+        },
+        "trackEarnings": {
+          "title": "Track Earnings",
+          "description": "Monitor your earnings, view campaign performance, and see which content types pay the most in your dashboard."
+        }
+      }
+    }
+  },
+  "workflow": {
+    "brand": {
+      "eyebrow": "HOW IT WORKS",
+      "title": "Launch your next campaign in three moves",
+      "description": "SideShift keeps collaborations moving with structured briefs, on-call producers, and sharing tools built for short-form content.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Post a brief",
+          "description": "Create a SideShift opportunity and instantly reach Gen Z UGC creators who match your voice and budget."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Review & approve",
+          "description": "Collaborate on concepts, shot lists, and drafts with SideShift producers guiding every step."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Publish & scale",
+          "description": "Receive ready-to-post edits, push them live across channels, and capture performance insights automatically."
+        }
+      },
+      "supportingCta": "Talk to the team"
+    },
+    "creator": {
+      "eyebrow": "HOW IT WORKS",
+      "title": "Start earning in three simple steps",
+      "description": "From applying to getting paid, SideShift makes it easy for creators to turn their passion into profit.",
+      "steps": {
+        "step1": {
+          "label": "01",
+          "title": "Apply to campaigns",
+          "description": "Browse available campaigns and apply to ones that match your style and niche. Show brands what makes your content special."
+        },
+        "step2": {
+          "label": "02",
+          "title": "Create & post videos",
+          "description": "Once approved, create authentic videos that showcase the brand. Upload your content directly through our platform and get feedback fast."
+        },
+        "step3": {
+          "label": "03",
+          "title": "Get paid",
+          "description": "After your content is approved and published, receive payments quickly and securely. Track all your earnings in one place."
+        }
+      },
+      "supportingCta": "View available campaigns"
+    }
+  },
+  "testimonials": {
+    "brand": {
+      "eyebrow": "BRANDS LOVE SIDESHIFT",
+      "title": "Trusted by teams shipping Gen Z content",
+      "quotes": {
+        "quote1": {
+          "quote": "The applicants have been super high quality—unlike any platform I have used in the past.",
+          "name": "Luis Ocampo",
+          "role": "Founding Team, Partiful"
+        },
+        "quote2": {
+          "quote": "We were able to fill 100% of our creator hiring needs in just a few weeks. SideShift is a cemented go-to whenever we need creators.",
+          "name": "Edward Tian",
+          "role": "Founder, GPTZero"
+        },
+        "quote3": {
+          "quote": "SideShift helped unlock a new layer of growth that traditional paid channels never could.",
+          "name": "Henrique Dubugras",
+          "role": "Founding CEO @ Brex"
+        }
+      }
+    },
+    "creator": {
+      "eyebrow": "CREATORS LOVE SIDESHIFT",
+      "title": "Join creators earning with their content",
+      "quotes": {
+        "quote1": {
+          "quote": "I've earned over $10k in my first month. The campaigns are legit and pay on time. This is the best platform for creators.",
+          "name": "Sarah Chen",
+          "role": "Lifestyle Creator, 250K followers"
+        },
+        "quote2": {
+          "quote": "SideShift makes it so easy to find campaigns and post videos. I can focus on creating instead of chasing payments.",
+          "name": "Marcus Johnson",
+          "role": "Tech Creator, 180K followers"
+        },
+        "quote3": {
+          "quote": "The variety of campaigns is amazing. I can pick projects that actually align with my brand and my audience loves.",
+          "name": "Emma Rodriguez",
+          "role": "Fashion Creator, 320K followers"
+        }
+      }
+    }
+  },
+  "backers": {
+    "title": "Backed by investors, scientists, and engineers from"
+  },
+  "callToAction": {
+    "brand": {
+      "title": "Launch your UGC campaign today",
+      "description": "Create a free SideShift account, post your first opportunity, and start collaborating with top-tier creators within minutes.",
+      "primaryCta": "Join as a brand",
+      "secondaryCta": "Join as a creator"
+    },
+    "creator": {
+      "title": "Start earning with your content today",
+      "description": "Create a free creator account, browse available campaigns, and start posting videos that get paid. Join thousands of creators already earning.",
+      "primaryCta": "Join as a creator",
+      "secondaryCta": "Learn more"
+    }
+  },
+  "terminal": {
+    "label": "Campaign control room",
+    "steps": {
+      "step1": "Brand · \"Brief published — inviting lifestyle creators with 5%+ CTR.\"",
+      "step2": "SideShift Producer · \"Screened 42 applicants and shortlisted 9 top fits.\"",
+      "step3": "Creator · \"Concept deck uploaded with hooks and draft scripts.\"",
+      "step4": "SideShift Producer · \"Edits approved, delivering final cuts + captions.\"",
+      "step5": "Brand · \"Publishing assets and routing to paid + organic channels.\"",
+      "step6": "SideShift Producer · \"Performance dashboard updated with ROAS lift.\""
+    }
+  }
+}
