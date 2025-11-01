@@ -1,8 +1,6 @@
 import './globals.css';
 import '@/lib/localStorage-polyfill';
 import type { Metadata, Viewport } from 'next';
-import { getUser, getTeamForUser } from '@/lib/db/queries';
-import { SWRProvider } from '@/lib/swr-provider';
 import { fontTheme } from '@/lib/theme/fonts';
 
 const { heading, body, accent } = fontTheme;
@@ -28,16 +26,7 @@ export default function RootLayout({
       className={`${heading.variable} ${body.variable} ${accent.variable} bg-white dark:bg-gray-950 text-black dark:text-white`}
     >
       <body className={`min-h-[100dvh] bg-background ${body.className}`}>
-        <SWRProvider
-          fallback={{
-            // We do NOT await here
-            // Only components that read this data will suspend
-            '/api/user': getUser(),
-            '/api/team': getTeamForUser()
-          }}
-        >
-          {children}
-        </SWRProvider>
+        {children}
       </body>
     </html>
   );

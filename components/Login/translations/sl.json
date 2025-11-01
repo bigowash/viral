@@ -1,0 +1,15 @@
+{
+  "signInTitle": "Prijavite se v vaš račun",
+  "signUpTitle": "Ustvarite račun",
+  "email": "E-pošta",
+  "password": "Geslo",
+  "emailPlaceholder": "Vnesite vašo e-pošto",
+  "passwordPlaceholder": "Vnesite vaše geslo",
+  "signInButton": "Prijavi se",
+  "signUpButton": "Registriraj se",
+  "loading": "Nalaganje...",
+  "newToPlatform": "Ste novi na naši platformi?",
+  "alreadyHaveAccount": "Imate že račun?",
+  "createAccount": "Ustvari račun",
+  "signInToExisting": "Prijavi se v obstoječi račun"
+}

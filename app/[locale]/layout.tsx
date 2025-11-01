@@ -1,0 +1,83 @@
+import { notFound } from 'next/navigation';
+import { NextIntlClientProvider } from 'next-intl';
+import { locales } from '@/i18n';
+import './globals.css';
+import '@/lib/localStorage-polyfill';
+import type { Metadata, Viewport } from 'next';
+import { getUser, getTeamForUser } from '@/lib/db/queries';
+import { SWRProvider } from '@/lib/swr-provider';
+import { fontTheme } from '@/lib/theme/fonts';
+
+const { heading, body, accent } = fontTheme;
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params: { locale }
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const titles: Record<string, string> = {
+    en: 'Jack & Jill AI — The AI Recruiters',
+    fr: 'Jack & Jill AI — Les Recruteurs IA',
+    sl: 'Jack & Jill AI — Umetna Inteligenca za Zaposlovanje'
+  };
+
+  const descriptions: Record<string, string> = {
+    en: 'Meet Jack & Jill AI, the recruiting duo that scouts, nurtures, and closes exceptional talent with personalised conversations.',
+    fr: 'Découvrez Jack & Jill AI, le duo de recrutement qui repère, cultive et recrute des talents exceptionnels avec des conversations personnalisées.',
+    sl: 'Spoznajte Jack & Jill AI, recruterski par, ki išče, vzgaja in zaposluje izjemne talente s personaliziranimi pogovori.'
+  };
+
+  const localeToDomain: Record<string, string> = {
+    en: 'https://example.com',
+    fr: 'https://example.fr',
+    sl: 'https://example.si'
+  };
+
+  return {
+    title: titles[locale] || titles.en,
+    description: descriptions[locale] || descriptions.en,
+    alternates: {
+      canonical: localeToDomain[locale] || localeToDomain.en,
+      languages: {
+        'en': localeToDomain.en,
+        'fr': localeToDomain.fr,
+        'sl': localeToDomain.sl,
+      }
+    }
+  };
+}
+
+export const viewport: Viewport = {
+  maximumScale: 1
+};
+
+export default async function LocaleLayout({
+  children,
+  params: { locale }
+}: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
+  if (!locales.includes(locale as any)) {
+    notFound();
+  }
+
+  return (
+    <NextIntlClientProvider locale={locale} messages={{}}>
+      <SWRProvider
+        fallback={{
+          // We do NOT await here
+          // Only components that read this data will suspend
+          '/api/user': getUser(),
+          '/api/team': getTeamForUser()
+        }}
+      >
+        {children}
+      </SWRProvider>
+    </NextIntlClientProvider>
+  );
+}

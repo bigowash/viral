@@ -2,7 +2,8 @@
 
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
 import { Home, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,11 +15,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from '@/app/(login)/actions';
-import { useRouter } from 'next/navigation';
 import { User } from '@/lib/db/schema';
 import useSWR, { mutate } from 'swr';
 import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
+import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -30,32 +31,46 @@ const navFont = Inter({
   weight: ['400', '500', '600', '700']
 });
 
+interface HeaderTranslations {
+  signIn: string;
+  signUp: string;
+  dashboard: string;
+  signOut: string;
+  pricing: string;
+  brands: string;
+  creators: string;
+}
+
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: user } = useSWR<User>('/api/user', fetcher);
   const router = useRouter();
+  const locale = useLocale();
+  const t = useComponentTranslations<HeaderTranslations>('Header');
 
   async function handleSignOut() {
     await signOut();
     mutate('/api/user');
-    router.push('/');
+    router.push(`/${locale}`);
   }
+
+  if (!t) return null;
 
   if (!user) {
     return (
       <>
         <Link
-          href="/sign-in"
+          href={`/${locale}/sign-in`}
           className={`${navFont.className} text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75`}
           style={{ color: palette.textSecondary }}
         >
-          Sign in
+          {t.signIn}
         </Link>
         <Button
           asChild
           className={`${navFont.className} rounded-full px-5 text-sm uppercase tracking-[0.18em]`}
         >
-          <Link href="/sign-up">Sign up</Link>
+          <Link href={`/${locale}/sign-up`}>{t.signUp}</Link>
         </Button>
       </>
     );
@@ -77,12 +92,12 @@ function UserMenu() {
       <DropdownMenuContent align="end" className="flex flex-col gap-1">
         <DropdownMenuItem className={`${navFont.className} cursor-pointer`}>
           <Link
-            href="/dashboard"
+            href={`/${locale}/dashboard`}
             className="flex w-full items-center gap-2 text-sm uppercase tracking-[0.12em]"
             style={{ color: palette.textSecondary }}
           >
             <Home className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
+            <span>{t.dashboard}</span>
           </Link>
         </DropdownMenuItem>
         <form action={handleSignOut} className="w-full">
@@ -92,7 +107,7 @@ function UserMenu() {
               style={{ color: palette.textSecondary }}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign out</span>
+              <span>{t.signOut}</span>
             </DropdownMenuItem>
           </button>
         </form>
@@ -104,13 +119,17 @@ function UserMenu() {
 function Header() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const locale = useLocale();
   const view = searchParams.get('view') || 'brand';
   const isCreatorView = view === 'creator';
-  const isHomePage = pathname === '/';
+  const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
+  const t = useComponentTranslations<HeaderTranslations>('Header');
 
   const pricingLink = brand.secondaryLinks.find(
     (link) => link.label.toLowerCase() === 'pricing'
   );
+
+  if (!t) return null;
 
   return (
     <header
@@ -123,7 +142,7 @@ function Header() {
         >
           <div className="flex min-w-[96px] flex-1 items-center justify-start">
             <Link
-              href="/"
+              href={`/${locale}`}
               className="text-2xl uppercase tracking-[0.24em]"
               style={{ color: palette.textPrimary }}
             >
@@ -145,14 +164,14 @@ function Header() {
                   return (
                     <Link
                       key={option.label}
-                      href={option.href}
+                      href={`/${locale}${option.href.replace(/^\//, '')}`}
                       className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.18em] transition-all"
                       style={{
                         color: isActive ? palette.textOnAccent : palette.textSecondary,
                         backgroundColor: isActive ? palette.accent : 'transparent'
                       }}
                     >
-                      {option.label}
+                      {option.label === 'Brands' ? t.brands : option.label === 'Creators' ? t.creators : option.label}
                     </Link>
                   );
                 })}
@@ -163,11 +182,11 @@ function Header() {
           <div className="flex min-w-[204px] flex-1 items-center justify-end gap-4">
             {pricingLink ? (
               <Link
-                href={pricingLink.href}
+                href={`/${locale}/pricing`}
                 className="text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textSecondary }}
               >
-                {pricingLink.label}
+                {t.pricing}
               </Link>
             ) : null}
             <Suspense fallback={<div className="h-9" />}>
@@ -180,10 +199,10 @@ function Header() {
   );
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export function HeaderLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className="flex flex-col min-h-screen">
-      <Suspense fallback={<div className="h-16 border-b" style={{ borderColor: palette.border, backgroundColor: palette.surface }} />}>
+      <Suspense fallback={<div className="h-16 border-b" style={{ borderColor: theme.palette.border, backgroundColor: theme.palette.surface }} />}>
         <Header />
       </Suspense>
       {children}

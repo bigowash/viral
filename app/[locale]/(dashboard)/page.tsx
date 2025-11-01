@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
@@ -9,11 +10,13 @@ import { Button } from '@/components/ui/button';
 import { Terminal } from './terminal';
 import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
+import { withLocale } from '@/lib/i18n/locale-link';
 
 const { palette, gradients } = theme;
 
 export default function HomePage() {
   const searchParams = useSearchParams();
+  const locale = useLocale();
   const view = searchParams.get('view') || 'brand';
   const isCreatorView = view === 'creator';
 
@@ -68,10 +71,10 @@ export default function HomePage() {
                 size="lg"
                 className="rounded-full px-10 py-3 text-sm font-heading font-semibold uppercase tracking-[0.2em]"
               >
-                <Link href={hero.primaryCta.href}>{hero.primaryCta.label}</Link>
+                <Link href={withLocale(hero.primaryCta.href, locale as any)}>{hero.primaryCta.label}</Link>
               </Button>
               <Link
-                href={hero.secondaryCta.href}
+                href={withLocale(hero.secondaryCta.href, locale as any)}
                 className="flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >
@@ -193,7 +196,7 @@ export default function HomePage() {
             </p>
             {workflow.supportingCta && (
               <Link
-                href={workflow.supportingCta.href}
+                href={withLocale(workflow.supportingCta.href, locale as any)}
                 className="inline-flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >
@@ -359,12 +362,12 @@ export default function HomePage() {
                 size="lg"
                 className="rounded-full px-8 py-3 text-sm font-heading font-semibold uppercase tracking-[0.2em]"
               >
-                <Link href={callToAction.primaryCta.href}>
+                <Link href={withLocale(callToAction.primaryCta.href, locale as any)}>
                   {callToAction.primaryCta.label}
                 </Link>
               </Button>
               <Link
-                href={callToAction.secondaryCta.href}
+                href={withLocale(callToAction.secondaryCta.href, locale as any)}
                 className="flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >
