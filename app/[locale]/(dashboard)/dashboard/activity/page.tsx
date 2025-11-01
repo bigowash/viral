@@ -13,6 +13,30 @@ import {
 } from 'lucide-react';
 import { ActivityType } from '@/lib/constants/activity';
 import { getActivityLogs } from '@/lib/db/queries';
+import { getComponentTranslations } from '@/lib/i18n/getComponentTranslations';
+import { getLocale } from 'next-intl/server';
+
+interface DashboardTranslations {
+  activity: {
+    title: string;
+    recentActivity: string;
+    noActivity: string;
+    noActivityDescription: string;
+    actions: {
+      signedUp: string;
+      signedIn: string;
+      signedOut: string;
+      changedPassword: string;
+      deletedAccount: string;
+      updatedAccount: string;
+      createdTeam: string;
+      removedTeamMember: string;
+      invitedTeamMember: string;
+      acceptedInvitation: string;
+      unknown: string;
+    };
+  };
+}
 
 const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.SIGN_UP]: UserPlus,
@@ -41,44 +65,46 @@ function getRelativeTime(date: Date) {
   return date.toLocaleDateString();
 }
 
-function formatAction(action: ActivityType): string {
+function formatAction(action: ActivityType, t: DashboardTranslations['activity']['actions']): string {
   switch (action) {
     case ActivityType.SIGN_UP:
-      return 'You signed up';
+      return t.signedUp;
     case ActivityType.SIGN_IN:
-      return 'You signed in';
+      return t.signedIn;
     case ActivityType.SIGN_OUT:
-      return 'You signed out';
+      return t.signedOut;
     case ActivityType.UPDATE_PASSWORD:
-      return 'You changed your password';
+      return t.changedPassword;
     case ActivityType.DELETE_ACCOUNT:
-      return 'You deleted your account';
+      return t.deletedAccount;
     case ActivityType.UPDATE_ACCOUNT:
-      return 'You updated your account';
+      return t.updatedAccount;
     case ActivityType.CREATE_TEAM:
-      return 'You created a new team';
+      return t.createdTeam;
     case ActivityType.REMOVE_TEAM_MEMBER:
-      return 'You removed a team member';
+      return t.removedTeamMember;
     case ActivityType.INVITE_TEAM_MEMBER:
-      return 'You invited a team member';
+      return t.invitedTeamMember;
     case ActivityType.ACCEPT_INVITATION:
-      return 'You accepted an invitation';
+      return t.acceptedInvitation;
     default:
-      return 'Unknown action occurred';
+      return t.unknown;
   }
 }
 
 export default async function ActivityPage() {
+  const locale = await getLocale();
+  const t = await getComponentTranslations<DashboardTranslations>('Dashboard', locale);
   const logs = await getActivityLogs();
 
   return (
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
-        Activity Log
+        {t.activity.title}
       </h1>
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
+          <CardTitle>{t.activity.recentActivity}</CardTitle>
         </CardHeader>
         <CardContent>
           {logs.length > 0 ? (
@@ -86,7 +112,8 @@ export default async function ActivityPage() {
               {logs.map((log) => {
                 const Icon = iconMap[log.action as ActivityType] || Settings;
                 const formattedAction = formatAction(
-                  log.action as ActivityType
+                  log.action as ActivityType,
+                  t.activity.actions
                 );
 
                 return (
@@ -113,11 +140,10 @@ export default async function ActivityPage() {
             <div className="flex flex-col items-center justify-center text-center py-12">
               <AlertCircle className="h-12 w-12 text-orange-500 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                No activity yet
+                {t.activity.noActivity}
               </h3>
               <p className="text-sm text-gray-500 max-w-sm">
-                When you perform actions like signing in or updating your
-                account, they'll appear here.
+                {t.activity.noActivityDescription}
               </p>
             </div>
           )}

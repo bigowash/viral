@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "team": "Ekipa",
+    "general": "Splošno",
+    "activity": "Dejavnost",
+    "security": "Varnost",
+    "settings": "Nastavitve"
+  },
+  "teamSettings": {
+    "title": "Nastavitve ekipe",
+    "subscription": {
+      "title": "Naročnina ekipe",
+      "currentPlan": "Trenutni načrt",
+      "free": "Brezplačno",
+      "billedMonthly": "Zaračunano mesečno",
+      "trialPeriod": "Preskusno obdobje",
+      "noActiveSubscription": "Ni aktivne naročnine",
+      "manageSubscription": "Upravljaj naročnino"
+    },
+    "teamMembers": {
+      "title": "Člani ekipe",
+      "noMembers": "Ni članov ekipe.",
+      "remove": "Odstrani",
+      "removing": "Odstranjevanje...",
+      "unknownUser": "Neznan uporabnik"
+    },
+    "inviteMember": {
+      "title": "Povabi člana ekipe",
+      "email": "E-pošta",
+      "emailPlaceholder": "Vnesite e-pošto",
+      "role": "Vloga",
+      "member": "Član",
+      "owner": "Lastnik",
+      "inviteButton": "Povabi člana",
+      "inviting": "Vabilo...",
+      "mustBeOwner": "Morate biti lastnik ekipe, da lahko povabite nove člane."
+    }
+  },
+  "generalSettings": {
+    "title": "Splošne nastavitve",
+    "accountInformation": "Podatki računa",
+    "name": "Ime",
+    "email": "E-pošta",
+    "namePlaceholder": "Vnesite vaše ime",
+    "emailPlaceholder": "Vnesite vašo e-pošto",
+    "saveChanges": "Shrani spremembe",
+    "saving": "Shranjevanje..."
+  },
+  "securitySettings": {
+    "title": "Varnostne nastavitve",
+    "password": {
+      "title": "Geslo",
+      "currentPassword": "Trenutno geslo",
+      "newPassword": "Novo geslo",
+      "confirmPassword": "Potrdite novo geslo",
+      "updateButton": "Posodobi geslo",
+      "updating": "Posodabljanje..."
+    },
+    "deleteAccount": {
+      "title": "Izbriši račun",
+      "warning": "Brisanje računa je nepovratno. Nadaljujte previdno.",
+      "confirmPassword": "Potrdite geslo",
+      "deleteButton": "Izbriši račun",
+      "deleting": "Brisanje..."
+    }
+  },
+  "activity": {
+    "title": "Dnevnik dejavnosti",
+    "recentActivity": "Nedavna dejavnost",
+    "noActivity": "Ni dejavnosti",
+    "noActivityDescription": "Ko izvajate dejanja, kot so prijava ali posodobitev računa, se bodo pojavila tukaj.",
+    "actions": {
+      "signedUp": "Registrirali ste se",
+      "signedIn": "Prijavili ste se",
+      "signedOut": "Odjavili ste se",
+      "changedPassword": "Spremenili ste geslo",
+      "deletedAccount": "Izbrisali ste račun",
+      "updatedAccount": "Posodobili ste račun",
+      "createdTeam": "Ustvarili ste novo ekipo",
+      "removedTeamMember": "Odstranili ste člana ekipe",
+      "invitedTeamMember": "Povabili ste člana ekipe",
+      "acceptedInvitation": "Sprejeli ste povabilo",
+      "unknown": "Neznana akcija"
+    }
+  }
+}
+

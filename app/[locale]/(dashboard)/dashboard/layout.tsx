@@ -3,8 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Users, Settings, Shield, Activity, Menu } from 'lucide-react';
+import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
+
+interface DashboardTranslations {
+  nav: {
+    team: string;
+    general: string;
+    activity: string;
+    security: string;
+    settings: string;
+  };
+}
 
 export default function DashboardLayout({
   children
@@ -12,13 +24,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const locale = useLocale();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const t = useComponentTranslations<DashboardTranslations>('Dashboard');
 
   const navItems = [
-    { href: '/dashboard', icon: Users, label: 'Team' },
-    { href: '/dashboard/general', icon: Settings, label: 'General' },
-    { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
-    { href: '/dashboard/security', icon: Shield, label: 'Security' }
+    { href: `/${locale}/dashboard`, icon: Users, label: t?.nav.team || 'Team' },
+    { href: `/${locale}/dashboard/general`, icon: Settings, label: t?.nav.general || 'General' },
+    { href: `/${locale}/dashboard/activity`, icon: Activity, label: t?.nav.activity || 'Activity' },
+    { href: `/${locale}/dashboard/security`, icon: Shield, label: t?.nav.security || 'Security' }
   ];
 
   return (
@@ -26,7 +40,7 @@ export default function DashboardLayout({
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between bg-white border-b border-gray-200 p-4">
         <div className="flex items-center">
-          <span className="font-medium">Settings</span>
+          <span className="font-medium">{t?.nav.settings || 'Settings'}</span>
         </div>
         <Button
           className="-mr-3"

@@ -12,6 +12,20 @@ import { Database } from '@/types/supabase';
 type User = Database['public']['Tables']['profiles']['Row'];
 import { useQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
+
+interface DashboardTranslations {
+  generalSettings: {
+    title: string;
+    accountInformation: string;
+    name: string;
+    email: string;
+    namePlaceholder: string;
+    emailPlaceholder: string;
+    saveChanges: string;
+    saving: string;
+  };
+}
 
 const QUERY_KEY = ['/api/user'] as const;
 
@@ -48,31 +62,32 @@ type AccountFormProps = {
 function AccountForm({
   state,
   nameValue = '',
-  emailValue = ''
-}: AccountFormProps) {
+  emailValue = '',
+  t
+}: AccountFormProps & { t: DashboardTranslations['generalSettings'] | null }) {
   return (
     <>
       <div>
         <Label htmlFor="name" className="mb-2">
-          Name
+          {t?.name || 'Name'}
         </Label>
         <Input
           id="name"
           name="name"
-          placeholder="Enter your name"
+          placeholder={t?.namePlaceholder || 'Enter your name'}
           defaultValue={state.name || nameValue}
           required
         />
       </div>
       <div>
         <Label htmlFor="email" className="mb-2">
-          Email
+          {t?.email || 'Email'}
         </Label>
         <Input
           id="email"
           name="email"
           type="email"
-          placeholder="Enter your email"
+          placeholder={t?.emailPlaceholder || 'Enter your email'}
           defaultValue={emailValue}
           required
         />
@@ -81,7 +96,7 @@ function AccountForm({
   );
 }
 
-function AccountFormWithData({ state }: { state: ActionState }) {
+function AccountFormWithData({ state, t }: { state: ActionState; t: DashboardTranslations['generalSettings'] | null }) {
   const { data: user } = useQuery<User | null>({
     queryKey: QUERY_KEY,
     queryFn: fetcher,
@@ -97,11 +112,13 @@ function AccountFormWithData({ state }: { state: ActionState }) {
       state={state}
       nameValue={user?.display_name ?? ''}
       emailValue={user?.primary_email ?? ''}
+      t={t}
     />
   );
 }
 
 export default function GeneralPage() {
+  const t = useComponentTranslations<DashboardTranslations>('Dashboard');
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(
     updateAccount,
     {}
@@ -110,17 +127,17 @@ export default function GeneralPage() {
   return (
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
-        General Settings
+        {t?.generalSettings.title || 'General Settings'}
       </h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Account Information</CardTitle>
+          <CardTitle>{t?.generalSettings.accountInformation || 'Account Information'}</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" action={formAction}>
-            <Suspense fallback={<AccountForm state={state} />}>
-              <AccountFormWithData state={state} />
+            <Suspense fallback={<AccountForm state={state} t={t?.generalSettings || null} />}>
+              <AccountFormWithData state={state} t={t?.generalSettings || null} />
             </Suspense>
             {state.error && (
               <p className="text-red-500 text-sm">{state.error}</p>
@@ -136,10 +153,10 @@ export default function GeneralPage() {
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t?.generalSettings.saving || 'Saving...'}
                 </>
               ) : (
-                'Save Changes'
+                t?.generalSettings.saveChanges || 'Save Changes'
               )}
             </Button>
           </form>
