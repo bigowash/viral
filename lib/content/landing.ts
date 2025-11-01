@@ -1,77 +1,145 @@
 export const landingContent = {
   brand: {
-    name: 'Jack & Jill AI',
-    tagline: 'The AI recruiters',
+    name: 'SideShift',
+    tagline: 'The growth engine for creators & brands',
     nav: [
-      { label: 'Product', href: '#feature-grid' },
-      { label: 'Playbooks', href: '#workflow' },
-      { label: 'Pricing', href: '/pricing' }
+      { label: 'Overview', href: '#hero' },
+      { label: 'Metrics', href: '#metrics' },
+      { label: 'Platform', href: '#platform' },
+      { label: 'Stories', href: '#testimonials' }
     ],
     ctas: {
-      primary: { label: 'Book a session', href: '/sign-up' },
-      secondary: { label: 'View pricing', href: '/pricing' }
-    }
-  },
-  hero: {
-    eyebrow: 'AI RECRUITERS ON DEMAND',
-    headline: {
-      leading: "Let Jack scout and Jill close",
-      accent: 'unmissable talent',
-      trailing: 'before your competition even replies.'
+      primary: { label: 'Join as a brand', href: '/sign-up?type=brand' },
+      secondary: { label: 'Join as a creator', href: '/sign-up?type=creator' }
     },
-    description:
-      'Jack analyses every incoming profile, Jill nurtures the right people, and your team steps in only when a human touch is needed.',
-    primaryCta: { label: 'Meet Jack & Jill', href: '/sign-up' },
-    secondaryCta: { label: 'See how it works', href: '#feature-grid' },
-    stats: [
-      { value: '85%', label: 'faster time-to-shortlist' },
-      { value: '3×', label: 'higher candidate engagement' },
-      { value: '24/7', label: 'conversation coverage' }
+    toggle: [
+      { label: 'Brands', href: '/sign-up?type=brand', active: true },
+      { label: 'Creators', href: '/sign-up?type=creator', active: false }
+    ],
+    secondaryLinks: [
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Case Studies', href: '/casestudies' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Docs', href: '/docs' },
+      { label: 'Contact', href: '/contact' }
     ]
   },
-  features: [
-    {
-      title: 'Conversational screening that feels human',
-      description:
-        'Jack conducts structured, friendly interviews and captures role-ready scorecards while candidates feel like they are texting a teammate.'
+  hero: {
+    eyebrow: 'UGC THAT PERFORMS',
+    headline: {
+      leading: 'The Growth Engine for',
+      accent: 'Creators & Brands.',
+      trailing: 'Work with top creators at scale while SideShift handles vetting, contracts, and payouts.'
     },
-    {
-      title: 'Deeply personalised outreach',
-      description:
-        'Jill writes outreach and follow-ups in your tone of voice, nudging both candidates and hiring managers forward automatically.'
-    },
-    {
-      title: 'One shared recruiting cockpit',
-      description:
-        'Pipeline progress, transcripts, and insights live in a single workspace so you know exactly when to jump in and close the loop.'
-    }
-  ],
-  workflow: {
-    title: 'Talent ops superpowers',
     description:
-      'Automate sourcing, screening, and scheduling while still delivering the high-touch candidate experience your brand is known for.',
-    bullets: [
-      'Syncs with your ATS and calendar in minutes',
-      'Understands every job description you publish',
-      'Keeps candidates warm with personalised nudges'
+      'Join campaigns that actually convert. We source, manage, and pay creators so your team ships more authentic content without extra headcount.',
+    primaryCta: { label: 'Join as a brand', href: '/sign-up?type=brand' },
+    secondaryCta: { label: 'View case studies', href: '/case-studies' },
+    stats: [
+      { value: '500,000+', label: 'creators already onboarded' },
+      { value: '1,000+', label: 'brands actively hiring' },
+      { value: '5B+', label: 'organic views last 90 days' },
+      { value: '$100M+', label: 'paid out to creators' }
+    ]
+  },
+  platform: {
+    eyebrow: 'ONE PLATFORM, ENDLESS CAMPAIGNS',
+    title: 'One platform for every UGC campaign',
+    description:
+      'SideShift centralises the workflows that keep campaigns moving—from applications to approvals to performance reporting.',
+    features: [
+      {
+        title: 'Source Creators',
+        description:
+          'Reach thousands of vetted, on-brief creators instantly with filters for niche, platform, and performance.'
+      },
+      {
+        title: 'Track Performance',
+        description:
+          'Monitor content views, engagement, and conversions in real time so you know exactly what is resonating.'
+      },
+      {
+        title: 'Automate Payments',
+        description:
+          'Handle payouts, contracts, and tax paperwork without spreadsheets or manual chasing.'
+      },
+      {
+        title: 'Manage Creators',
+        description:
+          'Organise rosters, share briefs, and collaborate on deliverables inside one shared dashboard.'
+      }
+    ]
+  },
+  workflow: {
+    eyebrow: 'HOW IT WORKS',
+    title: 'Launch your next campaign in three moves',
+    description:
+      'SideShift keeps collaborations moving with structured briefs, on-call producers, and sharing tools built for short-form content.',
+    steps: [
+      {
+        label: '01',
+        title: 'Post a brief',
+        description:
+          'Create a SideShift opportunity and instantly reach Gen Z UGC creators who match your voice and budget.'
+      },
+      {
+        label: '02',
+        title: 'Review & approve',
+        description:
+          'Collaborate on concepts, shot lists, and drafts with SideShift producers guiding every step.'
+      },
+      {
+        label: '03',
+        title: 'Publish & scale',
+        description:
+          'Receive ready-to-post edits, push them live across channels, and capture performance insights automatically.'
+      }
+    ],
+    supportingCta: { label: 'Talk to the team', href: '/contact' }
+  },
+  testimonials: {
+    eyebrow: 'BRANDS LOVE SIDESHIFT',
+    title: 'Trusted by teams shipping Gen Z content',
+    quotes: [
+      {
+        quote:
+          'The applicants have been super high quality—unlike any platform I have used in the past.',
+        name: 'Luis Ocampo',
+        role: 'Founding Team, Partiful'
+      },
+      {
+        quote:
+          'We were able to fill 100% of our creator hiring needs in just a few weeks. SideShift is a cemented go-to whenever we need creators.',
+        name: 'Edward Tian',
+        role: 'Founder, GPTZero'
+      },
+      {
+        quote:
+          'SideShift helped unlock a new layer of growth that traditional paid channels never could.',
+        name: 'Henrique Dubugras',
+        role: 'Founding CEO @ Brex'
+      }
     ]
   },
   callToAction: {
-    title: 'Ready to hire smarter?',
+    title: 'Launch your UGC campaign today',
     description:
-      'Bring Jack & Jill AI into your talent stack and watch your recruiting team stay lean, fast, and personal.',
-    primaryCta: { label: 'Book a session', href: '/sign-up' },
-    secondaryCta: { label: 'Chat with Jack', href: '#hero-chat' }
+      'Create a free SideShift account, post your first opportunity, and start collaborating with top-tier creators within minutes.',
+    primaryCta: { label: 'Join as a brand', href: '/sign-up?type=brand' },
+    secondaryCta: {
+      label: 'Join as a creator',
+      href: '/sign-up?type=creator'
+    }
   },
   terminal: {
-    label: 'Jack & Jill in action',
+    label: 'Campaign control room',
     steps: [
-      'Jack · “Scanning inbound applications for growth engineering role…”',
-      'Jack · “Shortlisted 14 profiles that match experience + compensation bands.”',
-      'Jill · “Drafting personalised outreach for top 5 candidates.”',
-      'Jill · “Coordinating availability and sending scheduling links.”',
-      'Jack · “Summarising interviews into hiring manager digest.”',
-      'Jill · “Nurturing silver medalists for the next opening.”'
+      'Brand · “Brief published — inviting lifestyle creators with 5%+ CTR.”',
+      'SideShift Producer · “Screened 42 applicants and shortlisted 9 top fits.”',
+      'Creator · “Concept deck uploaded with hooks and draft scripts.”',
+      'SideShift Producer · “Edits approved, delivering final cuts + captions.”',
+      'Brand · “Publishing assets and routing to paid + organic channels.”',
+      'SideShift Producer · “Performance dashboard updated with ROAS lift.”'
     ]
   }
 } as const;

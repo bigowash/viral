@@ -20,6 +20,9 @@ import { theme } from '@/lib/theme';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+const { brand } = landingContent;
+const { palette } = theme;
+
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: user } = useSWR<User>('/api/user', fetcher);
@@ -35,13 +38,17 @@ function UserMenu() {
     return (
       <>
         <Link
-          href="/pricing"
-          className="text-sm font-medium text-gray-700 hover:text-gray-900"
+          href={brand.ctas.secondary.href}
+          className="text-sm font-heading uppercase tracking-[0.18em] transition-opacity hover:opacity-75"
+          style={{ color: palette.textSecondary }}
         >
-          Pricing
+          {brand.ctas.secondary.label}
         </Link>
-        <Button asChild className="rounded-full">
-          <Link href="/sign-up">Sign Up</Link>
+        <Button
+          asChild
+          className="rounded-full px-5 text-sm font-heading uppercase tracking-[0.18em]"
+        >
+          <Link href={brand.ctas.primary.href}>{brand.ctas.primary.label}</Link>
         </Button>
       </>
     );
@@ -80,42 +87,25 @@ function UserMenu() {
   );
 }
 
-const { brand } = landingContent;
-const { palette } = theme;
-
 function Header() {
   return (
     <header
       className="border-b"
       style={{ borderColor: palette.border, backgroundColor: palette.surface }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-3">
-          <span
-            className="size-10 rounded-full flex items-center justify-center text-sm font-semibold uppercase tracking-[0.25em]"
-            style={{
-              backgroundImage: theme.gradients.accent,
-              color: palette.textPrimary
-            }}
-          >
-            JJ
+          <span className="text-2xl font-accent italic" style={{ color: palette.textPrimary }}>
+            {brand.name}
           </span>
-          <div className="flex flex-col">
-            <span
-              className="text-xl font-heading font-semibold"
-              style={{ color: palette.textPrimary }}
-            >
-              {brand.name}
-            </span>
-            <span
-              className="text-xs uppercase tracking-[0.25em]"
-              style={{ color: palette.textSecondary }}
-            >
-              {brand.tagline}
-            </span>
-          </div>
+          <span
+            className="hidden text-xs uppercase tracking-[0.24em] text-gray-500 sm:inline-block"
+            style={{ color: palette.textSecondary }}
+          >
+            {brand.tagline}
+          </span>
         </Link>
-        <nav className="flex flex-1 items-center justify-start gap-6 text-sm md:justify-center">
+        <nav className="hidden flex-1 items-center justify-center gap-6 text-sm md:flex">
           {brand.nav.map((item) => (
             <Link
               key={item.label}
@@ -127,23 +117,42 @@ function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3 md:justify-end md:flex-1">
-          <Link
-            href={brand.ctas.secondary.href}
-            className="hidden text-sm font-heading uppercase tracking-[0.18em] md:inline-flex"
+        <div className="flex items-center gap-4 md:justify-end md:flex-1">
+          <div
+            className="hidden items-center gap-4 text-sm md:flex"
             style={{ color: palette.textSecondary }}
           >
-            {brand.ctas.secondary.label}
-          </Link>
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full px-5 text-sm font-semibold uppercase tracking-[0.18em]"
+            {brand.secondaryLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="font-heading tracking-tight transition-opacity hover:opacity-70"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div
+            className="flex items-center gap-1 rounded-full border px-1 py-1"
+            style={{
+              borderColor: palette.border,
+              backgroundColor: palette.surfaceMuted
+            }}
           >
-            <Link href={brand.ctas.primary.href}>
-              {brand.ctas.primary.label}
-            </Link>
-          </Button>
+            {brand.toggle.map((option) => (
+              <Link
+                key={option.label}
+                href={option.href}
+                className="rounded-full px-4 py-1 text-xs font-heading uppercase tracking-[0.18em] transition-all"
+                style={{
+                  color: option.active ? palette.textOnAccent : palette.textSecondary,
+                  backgroundColor: option.active ? palette.accent : 'transparent'
+                }}
+              >
+                {option.label}
+              </Link>
+            ))}
+          </div>
           <Suspense fallback={<div className="h-9" />}>
             <UserMenu />
           </Suspense>

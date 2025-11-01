@@ -1,15 +1,15 @@
 export const palette = {
-  background: '#fcfcf7',
+  background: '#fef6f0',
   surface: '#ffffff',
-  surfaceMuted: '#fff6fe',
-  overlay: '#ddeaec',
+  surfaceMuted: '#fbeee5',
+  overlay: '#f2ded0',
   accent: '#ff6d4d',
   accentMuted: '#ffe1d7',
-  textPrimary: '#191919',
-  textSecondary: '#758696',
+  textPrimary: '#1f130c',
+  textSecondary: '#7c6f67',
   textOnAccent: '#ffffff',
-  border: '#ddeaec',
-  borderStrong: '#c8c8c8',
+  border: '#f2ded0',
+  borderStrong: '#d5c4ba',
   shadow: '0 40px 80px rgba(25, 25, 25, 0.08)'
 } as const;
 
