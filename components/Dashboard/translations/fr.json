@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "team": "Équipe",
+    "general": "Général",
+    "activity": "Activité",
+    "security": "Sécurité",
+    "settings": "Paramètres"
+  },
+  "teamSettings": {
+    "title": "Paramètres d'équipe",
+    "subscription": {
+      "title": "Abonnement d'équipe",
+      "currentPlan": "Plan actuel",
+      "free": "Gratuit",
+      "billedMonthly": "Facturé mensuellement",
+      "trialPeriod": "Période d'essai",
+      "noActiveSubscription": "Aucun abonnement actif",
+      "manageSubscription": "Gérer l'abonnement"
+    },
+    "teamMembers": {
+      "title": "Membres de l'équipe",
+      "noMembers": "Aucun membre d'équipe pour le moment.",
+      "remove": "Retirer",
+      "removing": "Suppression...",
+      "unknownUser": "Utilisateur inconnu"
+    },
+    "inviteMember": {
+      "title": "Inviter un membre d'équipe",
+      "email": "E-mail",
+      "emailPlaceholder": "Entrez l'e-mail",
+      "role": "Rôle",
+      "member": "Membre",
+      "owner": "Propriétaire",
+      "inviteButton": "Inviter un membre",
+      "inviting": "Invitation...",
+      "mustBeOwner": "Vous devez être propriétaire d'équipe pour inviter de nouveaux membres."
+    }
+  },
+  "generalSettings": {
+    "title": "Paramètres généraux",
+    "accountInformation": "Informations du compte",
+    "name": "Nom",
+    "email": "E-mail",
+    "namePlaceholder": "Entrez votre nom",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "saveChanges": "Enregistrer les modifications",
+    "saving": "Enregistrement..."
+  },
+  "securitySettings": {
+    "title": "Paramètres de sécurité",
+    "password": {
+      "title": "Mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "updateButton": "Mettre à jour le mot de passe",
+      "updating": "Mise à jour..."
+    },
+    "deleteAccount": {
+      "title": "Supprimer le compte",
+      "warning": "La suppression du compte est irréversible. Veuillez procéder avec prudence.",
+      "confirmPassword": "Confirmer le mot de passe",
+      "deleteButton": "Supprimer le compte",
+      "deleting": "Suppression..."
+    }
+  },
+  "activity": {
+    "title": "Journal d'activité",
+    "recentActivity": "Activité récente",
+    "noActivity": "Aucune activité pour le moment",
+    "noActivityDescription": "Lorsque vous effectuez des actions comme vous connecter ou mettre à jour votre compte, elles apparaîtront ici.",
+    "actions": {
+      "signedUp": "Vous vous êtes inscrit",
+      "signedIn": "Vous vous êtes connecté",
+      "signedOut": "Vous vous êtes déconnecté",
+      "changedPassword": "Vous avez changé votre mot de passe",
+      "deletedAccount": "Vous avez supprimé votre compte",
+      "updatedAccount": "Vous avez mis à jour votre compte",
+      "createdTeam": "Vous avez créé une nouvelle équipe",
+      "removedTeamMember": "Vous avez retiré un membre de l'équipe",
+      "invitedTeamMember": "Vous avez invité un membre de l'équipe",
+      "acceptedInvitation": "Vous avez accepté une invitation",
+      "unknown": "Action inconnue"
+    }
+  }
+}
+

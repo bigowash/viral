@@ -1,10 +1,8 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@/lib/db/drizzle';
-import { users, teams, teamMembers } from '@/lib/db/schema';
-import { setSession } from '@/lib/auth/session';
+import { createServiceRoleClient } from '@/lib/db/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/payments/stripe';
 import Stripe from 'stripe';
+import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -54,41 +52,65 @@ export async function GET(request: NextRequest) {
       throw new Error("No user ID found in session's client_reference_id.");
     }
 
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(userId)))
-      .limit(1);
+    const supabase = createServiceRoleClient();
 
-    if (user.length === 0) {
+    // Get user's profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (!profile) {
       throw new Error('User not found in database.');
     }
 
-    const userTeam = await db
-      .select({
-        teamId: teamMembers.teamId,
-      })
-      .from(teamMembers)
-      .where(eq(teamMembers.userId, user[0].id))
-      .limit(1);
+    // Get user's team
+    const { data: membership } = await supabase
+      .from('team_members')
+      .select('team_id')
+      .eq('profile_id', userId)
+      .limit(1)
+      .single();
 
-    if (userTeam.length === 0) {
+    if (!membership) {
       throw new Error('User is not associated with any team.');
     }
 
-    await db
-      .update(teams)
-      .set({
-        stripeCustomerId: customerId,
-        stripeSubscriptionId: subscriptionId,
-        stripeProductId: productId,
-        planName: (plan.product as Stripe.Product).name,
-        subscriptionStatus: subscription.status,
-        updatedAt: new Date(),
+    // Update team with Stripe subscription info
+    const { error: updateError } = await supabase
+      .from('teams')
+      .update({
+        stripe_customer_id: customerId,
+        stripe_subscription_id: subscriptionId,
+        plan_name: (plan.product as Stripe.Product).name,
+        subscription_status: subscription.status,
+        updated_at: new Date().toISOString(),
       })
-      .where(eq(teams.id, userTeam[0].teamId));
+      .eq('id', membership.team_id);
 
-    await setSession(user[0]);
+    if (updateError) {
+      throw new Error(`Failed to update team: ${updateError.message}`);
+    }
+
+    // Track checkout completed event (don't fail if this fails)
+    try {
+      trackPostHogEvent(userId, 'checkout_completed', {
+        team_id: membership.team_id,
+        customer_id: customerId,
+        subscription_id: subscriptionId,
+        plan_name: (plan.product as Stripe.Product).name,
+        subscription_status: subscription.status,
+        price_id: plan.id,
+        amount: plan.unit_amount,
+        currency: plan.currency,
+        interval: plan.recurring?.interval,
+      });
+    } catch (error) {
+      console.error('Failed to track PostHog event:', error);
+      // Continue anyway
+    }
+
     return NextResponse.redirect(new URL('/dashboard', request.url));
   } catch (error) {
     console.error('Error handling successful checkout:', error);

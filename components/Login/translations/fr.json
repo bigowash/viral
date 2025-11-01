@@ -1,0 +1,15 @@
+{
+  "signInTitle": "Connectez-vous à votre compte",
+  "signUpTitle": "Créez votre compte",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "emailPlaceholder": "Entrez votre e-mail",
+  "passwordPlaceholder": "Entrez votre mot de passe",
+  "signInButton": "Se connecter",
+  "signUpButton": "S'inscrire",
+  "loading": "Chargement...",
+  "newToPlatform": "Nouveau sur notre plateforme ?",
+  "alreadyHaveAccount": "Vous avez déjà un compte ?",
+  "createAccount": "Créer un compte",
+  "signInToExisting": "Se connecter à un compte existant"
+}

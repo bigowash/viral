@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "team": "Team",
+    "general": "General",
+    "activity": "Activity",
+    "security": "Security",
+    "settings": "Settings"
+  },
+  "teamSettings": {
+    "title": "Team Settings",
+    "subscription": {
+      "title": "Team Subscription",
+      "currentPlan": "Current Plan",
+      "free": "Free",
+      "billedMonthly": "Billed monthly",
+      "trialPeriod": "Trial period",
+      "noActiveSubscription": "No active subscription",
+      "manageSubscription": "Manage Subscription"
+    },
+    "teamMembers": {
+      "title": "Team Members",
+      "noMembers": "No team members yet.",
+      "remove": "Remove",
+      "removing": "Removing...",
+      "unknownUser": "Unknown User"
+    },
+    "inviteMember": {
+      "title": "Invite Team Member",
+      "email": "Email",
+      "emailPlaceholder": "Enter email",
+      "role": "Role",
+      "member": "Member",
+      "owner": "Owner",
+      "inviteButton": "Invite Member",
+      "inviting": "Inviting...",
+      "mustBeOwner": "You must be a team owner to invite new members."
+    }
+  },
+  "generalSettings": {
+    "title": "General Settings",
+    "accountInformation": "Account Information",
+    "name": "Name",
+    "email": "Email",
+    "namePlaceholder": "Enter your name",
+    "emailPlaceholder": "Enter your email",
+    "saveChanges": "Save Changes",
+    "saving": "Saving..."
+  },
+  "securitySettings": {
+    "title": "Security Settings",
+    "password": {
+      "title": "Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "updateButton": "Update Password",
+      "updating": "Updating..."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "warning": "Account deletion is non-reversable. Please proceed with caution.",
+      "confirmPassword": "Confirm Password",
+      "deleteButton": "Delete Account",
+      "deleting": "Deleting..."
+    }
+  },
+  "activity": {
+    "title": "Activity Log",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No activity yet",
+    "noActivityDescription": "When you perform actions like signing in or updating your account, they'll appear here.",
+    "actions": {
+      "signedUp": "You signed up",
+      "signedIn": "You signed in",
+      "signedOut": "You signed out",
+      "changedPassword": "You changed your password",
+      "deletedAccount": "You deleted your account",
+      "updatedAccount": "You updated your account",
+      "createdTeam": "You created a new team",
+      "removedTeamMember": "You removed a team member",
+      "invitedTeamMember": "You invited a team member",
+      "acceptedInvitation": "You accepted an invitation",
+      "unknown": "Unknown action occurred"
+    }
+  }
+}
+

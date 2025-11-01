@@ -1,0 +1,38 @@
+{
+  "eyebrow": "Tarification",
+  "headline": {
+    "leading": "Une tarification simple et ",
+    "accent": "transparente",
+    "trailing": ""
+  },
+  "description": "Choisissez le plan qui vous convient. Aucun frais caché, aucune surprise.",
+  "loading": "Chargement...",
+  "getStarted": "Commencer",
+  "creators": {
+    "name": "Pour les créateurs",
+    "price": "Gratuit",
+    "period": "Pour toujours",
+    "cta": "Commencer",
+    "features": {
+      "freeForever": "Gratuit pour toujours",
+      "postContent": "Publiez votre contenu",
+      "connectBrands": "Connectez-vous avec des marques",
+      "getPaid": "Recevez un paiement pour les collaborations"
+    }
+  },
+  "brands": {
+    "name": "Pour les marques",
+    "price": "Essai gratuit",
+    "subtitle": "Commencez par un essai gratuit",
+    "description": "Puis payez par publication et par impression",
+    "cta": "Commencer",
+    "features": {
+      "freeTrial": "Essai gratuit disponible",
+      "payPerPost": "Payer par publication",
+      "payPerImpression": "Payer par impression",
+      "flexiblePricing": "Modèle de tarification flexible",
+      "noSubscription": "Pas d'abonnement mensuel"
+    }
+  }
+}
+
