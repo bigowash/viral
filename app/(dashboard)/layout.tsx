@@ -1,9 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, Suspense } from 'react';
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Inter } from 'next/font/google';
 import { Home, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const { brand } = landingContent;
 const { palette } = theme;
 
+const navFont = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700']
+});
+
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: user } = useSWR<User>('/api/user', fetcher);
@@ -38,17 +44,17 @@ function UserMenu() {
     return (
       <>
         <Link
-          href={brand.ctas.secondary.href}
-          className="text-sm font-heading uppercase tracking-[0.18em] transition-opacity hover:opacity-75"
+          href="/sign-in"
+          className={`${navFont.className} text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75`}
           style={{ color: palette.textSecondary }}
         >
-          {brand.ctas.secondary.label}
+          Sign in
         </Link>
         <Button
           asChild
-          className="rounded-full px-5 text-sm font-heading uppercase tracking-[0.18em]"
+          className={`${navFont.className} rounded-full px-5 text-sm uppercase tracking-[0.18em]`}
         >
-          <Link href={brand.ctas.primary.href}>{brand.ctas.primary.label}</Link>
+          <Link href="/sign-up">Sign up</Link>
         </Button>
       </>
     );
@@ -68,15 +74,22 @@ function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="flex flex-col gap-1">
-        <DropdownMenuItem className="cursor-pointer">
-          <Link href="/dashboard" className="flex w-full items-center">
+        <DropdownMenuItem className={`${navFont.className} cursor-pointer`}>
+          <Link
+            href="/dashboard"
+            className="flex w-full items-center gap-2 text-sm uppercase tracking-[0.12em]"
+            style={{ color: palette.textSecondary }}
+          >
             <Home className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
         <form action={handleSignOut} className="w-full">
           <button type="submit" className="flex w-full">
-            <DropdownMenuItem className="w-full flex-1 cursor-pointer">
+            <DropdownMenuItem
+              className={`${navFont.className} w-full flex-1 cursor-pointer gap-2 text-sm uppercase tracking-[0.12em]`}
+              style={{ color: palette.textSecondary }}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sign out</span>
             </DropdownMenuItem>
@@ -88,74 +101,65 @@ function UserMenu() {
 }
 
 function Header() {
+  const pricingLink = brand.secondaryLinks.find(
+    (link) => link.label.toLowerCase() === 'pricing'
+  );
+
   return (
     <header
       className="border-b"
       style={{ borderColor: palette.border, backgroundColor: palette.surface }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="text-2xl font-accent italic" style={{ color: palette.textPrimary }}>
-            {brand.name}
-          </span>
-          <span
-            className="hidden text-xs uppercase tracking-[0.24em] text-gray-500 sm:inline-block"
-            style={{ color: palette.textSecondary }}
-          >
-            {brand.tagline}
-          </span>
-        </Link>
-        <nav className="hidden flex-1 items-center justify-center gap-6 text-sm md:flex">
-          {brand.nav.map((item) => (
+      <div className="max-w-7xl mx-auto w-full px-4 py-4 sm:px-6 lg:px-8">
+        <div
+          className={`${navFont.className} flex w-full flex-wrap items-center gap-4 md:flex-nowrap md:gap-6`}
+        >
+          <div className="flex min-w-[96px] flex-1 items-center justify-start">
             <Link
-              key={item.label}
-              href={item.href}
-              className="font-heading tracking-tight transition-opacity hover:opacity-70"
-              style={{ color: palette.textSecondary }}
+              href="/"
+              className="text-2xl uppercase tracking-[0.24em]"
+              style={{ color: palette.textPrimary }}
             >
-              {item.label}
+              8x
             </Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-4 md:justify-end md:flex-1">
-          <div
-            className="hidden items-center gap-4 text-sm md:flex"
-            style={{ color: palette.textSecondary }}
-          >
-            {brand.secondaryLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="font-heading tracking-tight transition-opacity hover:opacity-70"
-              >
-                {link.label}
-              </Link>
-            ))}
           </div>
-          <div
-            className="flex items-center gap-1 rounded-full border px-1 py-1"
-            style={{
-              borderColor: palette.border,
-              backgroundColor: palette.surfaceMuted
-            }}
-          >
-            {brand.toggle.map((option) => (
-              <Link
-                key={option.label}
-                href={option.href}
-                className="rounded-full px-4 py-1 text-xs font-heading uppercase tracking-[0.18em] transition-all"
-                style={{
-                  color: option.active ? palette.textOnAccent : palette.textSecondary,
-                  backgroundColor: option.active ? palette.accent : 'transparent'
-                }}
-              >
-                {option.label}
-              </Link>
-            ))}
+          <div className="flex flex-1 justify-center">
+            <div
+              className="flex items-center gap-1 rounded-full border px-1 py-1"
+              style={{
+                borderColor: palette.border,
+                backgroundColor: palette.surfaceMuted
+              }}
+            >
+              {brand.toggle.map((option) => (
+                <Link
+                  key={option.label}
+                  href={option.href}
+                  className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.18em] transition-all"
+                  style={{
+                    color: option.active ? palette.textOnAccent : palette.textSecondary,
+                    backgroundColor: option.active ? palette.accent : 'transparent'
+                  }}
+                >
+                  {option.label}
+                </Link>
+              ))}
+            </div>
           </div>
-          <Suspense fallback={<div className="h-9" />}>
-            <UserMenu />
-          </Suspense>
+          <div className="flex min-w-[204px] flex-1 items-center justify-end gap-4">
+            {pricingLink ? (
+              <Link
+                href={pricingLink.href}
+                className="text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75"
+                style={{ color: palette.textSecondary }}
+              >
+                {pricingLink.label}
+              </Link>
+            ) : null}
+            <Suspense fallback={<div className="h-9" />}>
+              <UserMenu />
+            </Suspense>
+          </div>
         </div>
       </div>
     </header>

@@ -121,6 +121,16 @@ export const landingContent = {
       }
     ]
   },
+  backers: {
+    title: 'Backed by investors, scientists, and engineers from',
+    logos: [
+      '/assets/logo/cleo_logo.png',
+      '/assets/logo/ef_logo.png',
+      '/assets/logo/ematura_logo.png',
+      '/assets/logo/imperial_logo.png',
+      '/assets/logo/lbs_logo.png'
+    ]
+  },
   callToAction: {
     title: 'Launch your UGC campaign today',
     description:

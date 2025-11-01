@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ const {
   platform,
   workflow,
   testimonials,
+  backers,
   callToAction,
   terminal
 } = landingContent;
@@ -278,6 +280,48 @@ export default function HomePage() {
                   </figcaption>
                 </figure>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="backers"
+        className="py-24"
+        style={{ backgroundColor: palette.background }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-heading sm:text-3xl">
+              {backers.title}
+            </h2>
+            <div className="mt-12 flex flex-nowrap items-center justify-between">
+              {backers.logos.length > 0 ? (
+                backers.logos.map((logo, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center opacity-100 transition-opacity hover:opacity-60"
+                  >
+                    {typeof logo === 'string' ? (
+                      <Image
+                        src={logo}
+                        alt={`Backer logo ${index + 1}`}
+                        width={180}
+                        height={60}
+                        className="h-16 w-auto object-contain"
+                      />
+                    ) : (
+                      <span className="text-sm" style={{ color: palette.textSecondary }}>
+                        Logo {index + 1}
+                      </span>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm" style={{ color: palette.textSecondary }}>
+                  Logos will be displayed here
+                </p>
+              )}
             </div>
           </div>
         </div>
