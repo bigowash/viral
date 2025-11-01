@@ -2,6 +2,7 @@ import { createServiceRoleClient } from '@/lib/db/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/payments/stripe';
 import Stripe from 'stripe';
+import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -90,6 +91,24 @@ export async function GET(request: NextRequest) {
 
     if (updateError) {
       throw new Error(`Failed to update team: ${updateError.message}`);
+    }
+
+    // Track checkout completed event (don't fail if this fails)
+    try {
+      trackPostHogEvent(userId, 'checkout_completed', {
+        team_id: membership.team_id,
+        customer_id: customerId,
+        subscription_id: subscriptionId,
+        plan_name: (plan.product as Stripe.Product).name,
+        subscription_status: subscription.status,
+        price_id: plan.id,
+        amount: plan.unit_amount,
+        currency: plan.currency,
+        interval: plan.recurring?.interval,
+      });
+    } catch (error) {
+      console.error('Failed to track PostHog event:', error);
+      // Continue anyway
     }
 
     return NextResponse.redirect(new URL('/dashboard', request.url));

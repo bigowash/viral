@@ -11,6 +11,7 @@ import {
   validatedActionWithUser
 } from '@/lib/auth/middleware';
 import { Database } from '@/types/supabase';
+import { identifyUser as identifyPostHogUser, trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -95,6 +96,22 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     await logActivity(membership?.team_id || null, profile.id, ActivityType.SIGN_IN);
   } catch (error) {
     console.error('Failed to log activity:', error);
+    // Continue anyway
+  }
+
+  // Track PostHog event (don't fail if this fails)
+  try {
+    identifyPostHogUser(profile.id, {
+      email: profile.primary_email,
+      name: profile.display_name,
+      team_id: membership?.team_id || null,
+    });
+    trackPostHogEvent(profile.id, 'user_signed_in', {
+      team_id: membership?.team_id || null,
+      has_team: !!membership?.team_id,
+    });
+  } catch (error) {
+    console.error('Failed to track PostHog event:', error);
     // Continue anyway
   }
 
@@ -267,6 +284,35 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   }
 
   await logActivity(teamId, profile.id, ActivityType.SIGN_UP);
+
+  // Track PostHog events (don't fail if this fails)
+  try {
+    identifyPostHogUser(profile.id, {
+      email: profile.primary_email,
+      name: profile.display_name,
+      team_id: teamId,
+      role: userRole,
+    });
+    trackPostHogEvent(profile.id, 'user_signed_up', {
+      team_id: teamId,
+      role: userRole,
+      has_invitation: !!inviteId,
+      created_team: !inviteId,
+    });
+    if (!inviteId) {
+      trackPostHogEvent(profile.id, 'team_created', {
+        team_id: teamId,
+      });
+    } else {
+      trackPostHogEvent(profile.id, 'invitation_accepted', {
+        team_id: teamId,
+        role: userRole,
+      });
+    }
+  } catch (error) {
+    console.error('Failed to track PostHog event:', error);
+    // Continue anyway
+  }
 
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
@@ -552,6 +598,18 @@ export const inviteTeamMember = validatedActionWithUser(
       user.id,
       ActivityType.INVITE_TEAM_MEMBER
     );
+
+    // Track PostHog event (don't fail if this fails)
+    try {
+      trackPostHogEvent(user.id, 'team_member_invited', {
+        team_id: userWithTeam.teamId,
+        invited_email: email,
+        role: role,
+      });
+    } catch (error) {
+      console.error('Failed to track PostHog event:', error);
+      // Continue anyway
+    }
 
     // TODO: Send invitation email and include ?inviteId={id} to sign-up URL
     // await sendInvitationEmail(email, userWithTeam.team.name, role)

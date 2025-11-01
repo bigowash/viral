@@ -6,6 +6,7 @@ import '@/lib/localStorage-polyfill';
 import type { Metadata, Viewport } from 'next';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 import { QueryProvider } from '@/lib/query-provider';
+import { PostHogProvider } from '@/lib/analytics/posthog-provider';
 import { fontTheme } from '@/lib/theme/fonts';
 
 const { heading, body, accent } = fontTheme;
@@ -83,10 +84,12 @@ export default async function LocaleLayout({
   };
 
   return (
-    <NextIntlClientProvider locale={locale} messages={{}}>
-      <QueryProvider initialData={initialData}>
-        {children}
-      </QueryProvider>
-    </NextIntlClientProvider>
+    <PostHogProvider>
+      <NextIntlClientProvider locale={locale} messages={{}}>
+        <QueryProvider initialData={initialData}>
+          {children}
+        </QueryProvider>
+      </NextIntlClientProvider>
+    </PostHogProvider>
   );
 }

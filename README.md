@@ -23,7 +23,7 @@ This is a starter template for building a SaaS application using **Next.js** wit
 - **Data Access**: Currently Drizzle ORM (scheduled to be replaced by Supabase clients + SQL migrations)
 - **Auth**: Transitioning from custom JWT cookies to Supabase Auth
 - **Payments**: [Stripe](https://stripe.com/)
-- **Analytics**: PostHog (planned)
+- **Analytics**: [PostHog](https://posthog.com/)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 
 ## Getting Started
@@ -157,6 +157,10 @@ In your Vercel project settings (or during deployment), add all the necessary en
 4. `POSTGRES_URL`: Set this to your production database URL (until Supabase migration lands).
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
 6. `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (new stack; add once the Supabase project is ready).
+7. `NEXT_PUBLIC_POSTHOG_KEY`: Your PostHog project API key.
+8. `NEXT_PUBLIC_POSTHOG_HOST`: Your PostHog host (defaults to `https://us.i.posthog.com`).
+9. `POSTHOG_KEY`: Optional - for server-side tracking (can use `NEXT_PUBLIC_POSTHOG_KEY`).
+10. `POSTHOG_HOST`: Optional - for server-side tracking (can use `NEXT_PUBLIC_POSTHOG_HOST`).
 
 ## Roadmap: Supabase-First Stack
 
@@ -174,7 +178,7 @@ We are actively migrating from the starter stack to a Supabase-first architectur
 4. **Stripe & Integrations**
    - Update checkout/webhook handlers to use Supabase service clients and adapt to UUID IDs.
 5. **Analytics**
-   - Install/configure PostHog in `app/layout.tsx`, instrument core product events.
+   - ✅ PostHog installed and configured in `app/[locale]/layout.tsx` with event tracking for sign-in, sign-up, checkout, and team management.
 
 Track progress and detailed checklists in `PLANNING.md`.
 

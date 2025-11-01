@@ -6,6 +6,7 @@ import {
   getUser,
   updateTeamSubscription
 } from '@/lib/db/queries';
+import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
 type Team = Database['public']['Tables']['teams']['Row'];
 
@@ -44,6 +45,18 @@ export async function createCheckoutSession({
       trial_period_days: 14
     }
   });
+
+  // Track checkout initiated event (don't fail if this fails)
+  try {
+    trackPostHogEvent(user.id, 'checkout_initiated', {
+      team_id: team.id,
+      price_id: priceId,
+      session_id: session.id,
+    });
+  } catch (error) {
+    console.error('Failed to track PostHog event:', error);
+    // Continue anyway
+  }
 
   redirect(session.url!);
 }

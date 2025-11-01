@@ -18,4 +18,4 @@
 
 ## Stripe & Analytics
 - [x] Adjust Stripe checkout/webhook handlers to write/read Supabase UUID IDs and respect RLS.
-- [ ] Install and initialise PostHog in `app/layout.tsx`; instrument sign-in, sign-up, checkout flows.
+- [x] Install and initialise PostHog in `app/[locale]/layout.tsx`; instrument sign-in, sign-up, checkout flows.
