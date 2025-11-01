@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { usePostHogClient } from './posthog';
 import { PostHogEvents } from './events';
@@ -10,7 +10,7 @@ import { locales } from '@/i18n';
  * Tracks page views with route and locale information.
  * This complements PostHog's automatic pageview tracking with additional metadata.
  */
-export function PageViewTracker() {
+function PageViewTrackerContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const posthog = usePostHogClient();
@@ -83,5 +83,13 @@ export function PageViewTracker() {
   }, [pathname, searchParams, locale, posthog]);
 
   return null;
+}
+
+export function PageViewTracker() {
+  return (
+    <Suspense fallback={null}>
+      <PageViewTrackerContent />
+    </Suspense>
+  );
 }
 
