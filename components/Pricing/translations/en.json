@@ -1,0 +1,36 @@
+{
+  "eyebrow": "Pricing",
+  "headline": {
+    "leading": "Simple, ",
+    "accent": "transparent",
+    "trailing": " pricing"
+  },
+  "description": "Choose the plan that works for you. No hidden fees, no surprises.",
+  "loading": "Loading...",
+  "getStarted": "Get Started",
+  "creators": {
+    "name": "For Creators",
+    "price": "Free",
+    "period": "Forever",
+    "features": {
+      "freeForever": "Free Forever",
+      "postContent": "Post your content",
+      "connectBrands": "Connect with brands",
+      "getPaid": "Get paid for collaborations"
+    }
+  },
+  "brands": {
+    "name": "For Brands",
+    "price": "Free Trial",
+    "subtitle": "Start with a free trial",
+    "description": "Then pay per post & impression",
+    "features": {
+      "freeTrial": "Free Trial Available",
+      "payPerPost": "Pay per post",
+      "payPerImpression": "Pay per impression",
+      "flexiblePricing": "Flexible pricing model",
+      "noSubscription": "No monthly subscription"
+    }
+  }
+}
+

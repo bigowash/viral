@@ -1,0 +1,36 @@
+{
+  "eyebrow": "Cenitev",
+  "headline": {
+    "leading": "Enostavna, ",
+    "accent": "transparentna",
+    "trailing": " cenitev"
+  },
+  "description": "Izberite načrt, ki vam ustreza. Brez skritih stroškov, brez presenečenj.",
+  "loading": "Nalaganje...",
+  "getStarted": "Začnite",
+  "creators": {
+    "name": "Za ustvarjalce",
+    "price": "Brezplačno",
+    "period": "Za vedno",
+    "features": {
+      "freeForever": "Za vedno brezplačno",
+      "postContent": "Objavljajte svojo vsebino",
+      "connectBrands": "Povežite se z blagovnimi znamkami",
+      "getPaid": "Prejemajte plačilo za sodelovanja"
+    }
+  },
+  "brands": {
+    "name": "Za blagovne znamke",
+    "price": "Brezplačni preizkus",
+    "subtitle": "Začnite z brezplačnim preizkusom",
+    "description": "Nato plačajte po objavi in vtisih",
+    "features": {
+      "freeTrial": "Na voljo brezplačni preizkus",
+      "payPerPost": "Plačilo po objavi",
+      "payPerImpression": "Plačilo po vtisih",
+      "flexiblePricing": "Prilagodljiv model cenitev",
+      "noSubscription": "Brez mesečne naročnine"
+    }
+  }
+}
+
