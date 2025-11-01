@@ -8,12 +8,14 @@ import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { updateAccount } from '@/app/[locale]/(login)/actions';
 import { User } from '@/lib/db/schema';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-const fetcher = async (url: string): Promise<User | null> => {
+const QUERY_KEY = ['/api/user'] as const;
+
+const fetcher = async (): Promise<User | null> => {
   try {
-    const res = await fetch(url);
+    const res = await fetch('/api/user');
     if (!res.ok) {
       return null;
     }
@@ -78,7 +80,16 @@ function AccountForm({
 }
 
 function AccountFormWithData({ state }: { state: ActionState }) {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
+  const { data: user } = useQuery<User | null>({
+    queryKey: QUERY_KEY,
+    queryFn: fetcher,
+    // Inherits staleTime and other defaults from QueryClient
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    // initialData is set by QueryProvider from server-side prefetching
+  });
+  
   return (
     <AccountForm
       state={state}

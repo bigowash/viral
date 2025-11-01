@@ -13,7 +13,7 @@ import { customerPortalAction } from '@/lib/payments/actions';
 import { useActionState } from 'react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember, inviteTeamMember } from '@/app/[locale]/(login)/actions';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -25,17 +25,32 @@ type ActionState = {
   success?: string;
 };
 
-// Shared fetcher with proper error handling
-const fetcher = async <T,>(url: string): Promise<T | null> => {
+const USER_QUERY_KEY = ['/api/user'] as const;
+const TEAM_QUERY_KEY = ['/api/team'] as const;
+
+// Fetcher functions for React Query
+const fetchUser = async (): Promise<User | null> => {
   try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      return null;
-    }
+    const res = await fetch('/api/user');
+    if (!res.ok) return null;
     const data = await res.json();
-    // Ensure we return a proper object or null, never undefined
     if (data && typeof data === 'object' && !Array.isArray(data)) {
-      return data as T;
+      return data as User;
+    }
+    return null;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+};
+
+const fetchTeam = async (): Promise<TeamDataWithMembers | null> => {
+  try {
+    const res = await fetch('/api/team');
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      return data as TeamDataWithMembers;
     }
     return null;
   } catch (error) {
@@ -55,7 +70,15 @@ function SubscriptionSkeleton() {
 }
 
 function ManageSubscription() {
-  const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
+  const { data: teamData } = useQuery<TeamDataWithMembers | null>({
+    queryKey: TEAM_QUERY_KEY,
+    queryFn: fetchTeam,
+    // Inherits staleTime and other defaults from QueryClient
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    // initialData is set by QueryProvider from server-side prefetching
+  });
 
   return (
     <Card className="mb-8">
@@ -111,7 +134,15 @@ function TeamMembersSkeleton() {
 }
 
 function TeamMembers() {
-  const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
+  const { data: teamData } = useQuery<TeamDataWithMembers | null>({
+    queryKey: TEAM_QUERY_KEY,
+    queryFn: fetchTeam,
+    // Inherits staleTime and other defaults from QueryClient
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    // initialData is set by QueryProvider from server-side prefetching
+  });
   const [removeState, removeAction, isRemovePending] = useActionState<
     ActionState,
     FormData
@@ -205,7 +236,15 @@ function InviteTeamMemberSkeleton() {
 }
 
 function InviteTeamMember() {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
+  const { data: user } = useQuery<User | null>({
+    queryKey: USER_QUERY_KEY,
+    queryFn: fetchUser,
+    // Inherits staleTime and other defaults from QueryClient
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    // initialData is set by QueryProvider from server-side prefetching
+  });
   const isOwner = user?.role === 'owner';
   const [inviteState, inviteAction, isInvitePending] = useActionState<
     ActionState,

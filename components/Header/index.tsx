@@ -16,7 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from '@/app/[locale]/(login)/actions';
 import { User } from '@/lib/db/schema';
-import useSWR, { mutate } from 'swr';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
@@ -46,18 +46,17 @@ function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const locale = useLocale() || 'en';
   const router = useRouter();
+  const queryClient = useQueryClient();
   const t = useComponentTranslations<HeaderTranslations>('Header');
   
-  // SWR key - MUST be a constant string, never undefined or changing
-  // This key is locale-independent since user data doesn't change with locale
-  const SWR_KEY = '/api/user';
+  // Query key - constant string, locale-independent
+  const QUERY_KEY = ['/api/user'] as const;
   
   // Stable fetcher function - memoized to prevent recreation
-  // This ensures SWR always receives a defined function
-  const stableFetcher = useMemo(
-    () => async (url: string): Promise<User | null> => {
+  const fetcher = useMemo(
+    () => async (): Promise<User | null> => {
       try {
-        const res = await fetch(url);
+        const res = await fetch('/api/user');
         if (!res.ok) return null;
         const data = await res.json();
         if (data && typeof data === 'object' && !Array.isArray(data)) {
@@ -72,31 +71,25 @@ function UserMenu() {
     []
   );
   
-  // SWR options - all values explicitly defined to prevent undefined iteration
-  const swrOptions = useMemo(
-    () => ({
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      fallbackData: null as User | null,
-      shouldRetryOnError: false,
-      dedupingInterval: 5000,
-      revalidateOnMount: false,
-    }),
-    []
-  );
-  
-  // Call useSWR - hooks must be called unconditionally
-  // All arguments are guaranteed to be defined (string key, function fetcher, object options)
-  const swrResult = useSWR<User | null>(SWR_KEY, stableFetcher, swrOptions);
-  
-  // Safely extract values - use nullish coalescing to ensure never undefined
-  // Handle case where swrResult itself might be undefined during edge cases
-  const user = swrResult?.data ?? null;
-  const error = swrResult?.error ?? null;
+  // Use React Query - follows best practices for stable locale changes
+  // Query options inherit from QueryClient defaults (staleTime: 60s)
+  // Only override what's specific to this query
+  const { data: user, error, isLoading } = useQuery<User | null>({
+    queryKey: QUERY_KEY,
+    queryFn: fetcher,
+    // Inherits staleTime from QueryClient default (60s)
+    // This ensures data doesn't refetch immediately after SSR
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    // initialData is set by QueryProvider from server-side prefetching
+  });
 
   async function handleSignOut() {
     await signOut();
-    mutate('/api/user');
+    // Invalidate the query cache instead of mutate
+    queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     router.push(`/${locale}`);
   }
 

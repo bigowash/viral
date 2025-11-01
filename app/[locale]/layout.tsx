@@ -5,7 +5,7 @@ import './globals.css';
 import '@/lib/localStorage-polyfill';
 import type { Metadata, Viewport } from 'next';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
-import { SWRProvider } from '@/lib/swr-provider';
+import { QueryProvider } from '@/lib/query-provider';
 import { fontTheme } from '@/lib/theme/fonts';
 
 const { heading, body, accent } = fontTheme;
@@ -69,24 +69,24 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Await promises for SWR fallback - SWR expects resolved values, not promises
+  // Await promises for React Query initial data
   // Ensure values are never undefined - use null instead
   const [userData, teamData] = await Promise.all([
     getUser().catch(() => null),
     getTeamForUser().catch(() => null)
   ]);
 
-  // Ensure fallback values are explicitly defined (never undefined)
-  const fallback = {
+  // Ensure initial data values are explicitly defined (never undefined)
+  const initialData = {
     '/api/user': userData ?? null,
     '/api/team': teamData ?? null
   };
 
   return (
     <NextIntlClientProvider locale={locale} messages={{}}>
-      <SWRProvider fallback={fallback}>
+      <QueryProvider initialData={initialData}>
         {children}
-      </SWRProvider>
+      </QueryProvider>
     </NextIntlClientProvider>
   );
 }
