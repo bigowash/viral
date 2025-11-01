@@ -6,7 +6,6 @@ import { theme } from '@/lib/theme';
 import { SubmitButton } from '@/app/[locale]/(dashboard)/pricing/submit-button';
 import { checkoutAction } from '@/lib/payments/actions';
 import { Link } from '@/i18n/routing';
-import { useLocale } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 const { palette, gradients } = theme;
@@ -49,7 +48,6 @@ interface PricingTranslations {
 
 export function Pricing() {
   const t = useComponentTranslations<PricingTranslations>('Pricing');
-  const locale = useLocale();
 
   if (!t) return null;
 
@@ -97,7 +95,7 @@ export function Pricing() {
               period={t.creators.period}
               isFree={true}
               ctaText={t.creators.cta}
-              ctaHref={`/${locale}/sign-up?type=creator`}
+              ctaHref={`/sign-up?type=creator`}
               features={[
                 t.creators.features.freeForever,
                 t.creators.features.postContent,
@@ -112,7 +110,7 @@ export function Pricing() {
               description={t.brands.description}
               isFreeTrial={true}
               ctaText={t.brands.cta}
-              ctaHref={`/${locale}/sign-up?type=brand`}
+              ctaHref={`/sign-up?type=brand`}
               features={[
                 t.brands.features.freeTrial,
                 t.brands.features.payPerPost,
