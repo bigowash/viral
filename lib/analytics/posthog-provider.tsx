@@ -1,6 +1,7 @@
 'use client';
 
 import { PostHogProvider as PostHogProviderOriginal } from 'posthog-js/react';
+import { PageViewTracker } from './page-view-tracker';
 
 const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
@@ -26,6 +27,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         },
       }}
     >
+      <PageViewTracker />
       {children}
     </PostHogProviderOriginal>
   );

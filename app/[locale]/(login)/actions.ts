@@ -332,6 +332,16 @@ export async function signOut() {
   const userWithTeam = await getUserWithTeam(user.id);
   await logActivity(userWithTeam?.teamId || null, user.id, ActivityType.SIGN_OUT);
 
+  // Track PostHog event (don't fail if this fails)
+  try {
+    trackPostHogEvent(user.id, 'user_signed_out', {
+      team_id: userWithTeam?.teamId || null,
+    });
+  } catch (error) {
+    console.error('Failed to track PostHog event:', error);
+    // Continue anyway
+  }
+
   const supabase = await createServerSupabaseClient();
   await supabase.auth.signOut();
 }

@@ -32,3 +32,5 @@
 - **M2**: Auth + dashboard flows run on Supabase locally (manual QA + smoke tests).
 - **M3**: Stripe integration works end-to-end with Supabase data and PostHog events emitting.
 - **M4**: Deploy to Vercel/Supabase, update documentation, remove Drizzle artefacts.
+
+Ensure dev and prod for everything (supa, ph)

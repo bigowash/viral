@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useLocale } from 'next-intl';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { Check } from 'lucide-react';
 import { theme } from '@/lib/theme';
@@ -7,6 +9,8 @@ import { SubmitButton } from '@/app/[locale]/(dashboard)/pricing/submit-button';
 import { checkoutAction } from '@/lib/payments/actions';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
+import { usePostHogClient } from '@/lib/analytics/posthog';
+import { PostHogEvents } from '@/lib/analytics/events';
 
 const { palette, gradients } = theme;
 
@@ -48,6 +52,15 @@ interface PricingTranslations {
 
 export function Pricing() {
   const t = useComponentTranslations<PricingTranslations>('Pricing');
+  const locale = useLocale();
+  const posthog = usePostHogClient();
+
+  // Track pricing page view on mount
+  useEffect(() => {
+    posthog?.capture(PostHogEvents.PRICING_PAGE_VIEWED, {
+      locale,
+    });
+  }, [posthog, locale]);
 
   if (!t) return null;
 
@@ -158,8 +171,38 @@ function PricingCard({
   ctaText?: string;
   ctaHref?: string;
 }) {
+  const locale = useLocale();
+  const posthog = usePostHogClient();
+
+  // Track when pricing card is viewed (scroll into view)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            posthog?.capture(PostHogEvents.PRICING_PLAN_VIEWED, {
+              plan_name: name,
+              is_free: isFree || false,
+              locale,
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    const card = document.querySelector(`[data-plan="${name}"]`);
+    if (card) {
+      observer.observe(card);
+    }
+
+    return () => observer.disconnect();
+  }, [name, isFree, locale, posthog]);
+
   return (
     <div
+      data-plan={name}
       className="flex h-full flex-col rounded-[32px] border px-6 py-8 shadow-sm transition-transform hover:-translate-y-1"
       style={{
         backgroundColor: palette.surface,
@@ -230,8 +273,36 @@ function PricingCard({
               backgroundColor: palette.accent,
               color: palette.textOnAccent,
             }}
+            onClick={() => {
+              posthog?.capture(PostHogEvents.PRICING_CTA_CLICKED, {
+                plan_name: name,
+                cta_text: ctaText,
+                cta_destination: ctaHref,
+                is_free: isFree || false,
+                locale,
+              });
+              posthog?.capture(PostHogEvents.BUTTON_CLICKED, {
+                button_name: 'pricing_cta',
+                button_text: ctaText,
+                plan_name: name,
+                locale,
+              });
+            }}
           >
-            <Link href={ctaHref}>{ctaText}</Link>
+            <Link 
+              href={ctaHref}
+              onClick={() => {
+                posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                  link_destination: ctaHref,
+                  link_text: ctaText,
+                  link_location: 'pricing_card',
+                  plan_name: name,
+                  locale,
+                });
+              }}
+            >
+              {ctaText}
+            </Link>
           </Button>
         ) : null}
       </div>

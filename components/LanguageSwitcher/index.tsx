@@ -14,6 +14,8 @@ import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { locales, localeNames, type Locale } from '@/i18n';
 import { theme } from '@/lib/theme';
 import { Inter } from 'next/font/google';
+import { usePostHogClient } from '@/lib/analytics/posthog';
+import { PostHogEvents } from '@/lib/analytics/events';
 
 const navFont = Inter({
   subsets: ['latin'],
@@ -34,12 +36,20 @@ export function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const posthog = usePostHogClient();
   const t = useComponentTranslations<LanguageSwitcherTranslations>('LanguageSwitcher');
 
   if (!t) return null;
 
   const handleLanguageChange = (newLocale: Locale) => {
     if (newLocale === locale) return;
+    
+    // Track language change
+    posthog?.capture(PostHogEvents.LANGUAGE_CHANGED, {
+      from_locale: locale,
+      to_locale: newLocale,
+      pathname,
+    });
     
     // Remove current locale from pathname
     let pathnameWithoutLocale = pathname.replace(/^\/[^\/]+/, '');

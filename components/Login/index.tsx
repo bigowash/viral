@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -11,6 +12,8 @@ import { CircleIcon, Loader2 } from 'lucide-react';
 import { signIn, signUp } from '@/app/[locale]/(login)/actions';
 import { ActionState } from '@/lib/auth/middleware';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
+import { usePostHogClient } from '@/lib/analytics/posthog';
+import { PostHogEvents } from '@/lib/analytics/events';
 
 interface LoginTranslations {
   signInTitle: string;
@@ -31,6 +34,7 @@ interface LoginTranslations {
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
   const locale = useLocale();
+  const posthog = usePostHogClient();
   const redirect = searchParams.get('redirect');
   const priceId = searchParams.get('priceId');
   const inviteId = searchParams.get('inviteId');
@@ -39,6 +43,17 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     mode === 'signin' ? signIn : signUp,
     { error: '' }
   );
+
+  // Track form started
+  useEffect(() => {
+    posthog?.capture(PostHogEvents.FORM_STARTED, {
+      form_name: mode === 'signin' ? 'sign_in' : 'sign_up',
+      has_redirect: !!redirect,
+      has_price_id: !!priceId,
+      has_invite_id: !!inviteId,
+      locale,
+    });
+  }, [posthog, mode, redirect, priceId, inviteId, locale]);
 
   if (!t) return null;
 
@@ -54,7 +69,16 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <form className="space-y-6" action={formAction}>
+        <form 
+          className="space-y-6" 
+          action={formAction}
+          onSubmit={() => {
+            posthog?.capture(PostHogEvents.FORM_SUBMITTED, {
+              form_name: mode === 'signin' ? 'sign_in' : 'sign_up',
+              locale,
+            });
+          }}
+        >
           <input type="hidden" name="redirect" value={redirect || ''} />
           <input type="hidden" name="priceId" value={priceId || ''} />
           <input type="hidden" name="inviteId" value={inviteId || ''} />
@@ -147,6 +171,14 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 redirect ? `?redirect=${redirect}` : ''
               }${priceId ? `&priceId=${priceId}` : ''}`}
               className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              onClick={() => {
+                posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                  link_destination: `/${locale}${mode === 'signin' ? '/sign-up' : '/sign-in'}`,
+                  link_text: mode === 'signin' ? t.createAccount : t.signInToExisting,
+                  link_location: 'login_form',
+                  locale,
+                });
+              }}
             >
               {mode === 'signin' ? t.createAccount : t.signInToExisting}
             </Link>

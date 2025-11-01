@@ -23,6 +23,8 @@ import { landingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { usePostHogClient } from '@/lib/analytics/posthog';
+import { PostHogEvents } from '@/lib/analytics/events';
 
 // Fetcher removed - now defined inline in UserMenu to ensure stability
 
@@ -49,6 +51,7 @@ function UserMenu() {
   const locale = useLocale() || 'en';
   const router = useRouter();
   const queryClient = useQueryClient();
+  const posthog = usePostHogClient();
   const t = useComponentTranslations<HeaderTranslations>('Header');
   
   // Query key - constant string, locale-independent
@@ -108,22 +111,67 @@ function UserMenu() {
           href={`/${locale}/sign-in`}
           className={`${navFont.className} text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75`}
           style={{ color: palette.textSecondary }}
+          onClick={() => {
+            posthog?.capture(PostHogEvents.LINK_CLICKED, {
+              link_destination: `/${locale}/sign-in`,
+              link_text: t.signIn,
+              link_location: 'header',
+              locale,
+            });
+          }}
         >
           {t.signIn}
         </Link>
         <Button
           asChild
           className={`${navFont.className} rounded-full px-5 text-sm uppercase tracking-[0.18em]`}
+          onClick={() => {
+            posthog?.capture(PostHogEvents.BUTTON_CLICKED, {
+              button_name: 'sign_up',
+              button_location: 'header',
+              button_text: t.signUp,
+              locale,
+            });
+          }}
         >
-          <Link href={`/${locale}/sign-up`}>{t.signUp}</Link>
+          <Link 
+            href={`/${locale}/sign-up`}
+            onClick={() => {
+              posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                link_destination: `/${locale}/sign-up`,
+                link_text: t.signUp,
+                link_location: 'header',
+                locale,
+              });
+            }}
+          >
+            {t.signUp}
+          </Link>
         </Button>
       </>
     );
   }
 
   return (
-    <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-      <DropdownMenuTrigger>
+    <DropdownMenu 
+      open={isMenuOpen} 
+      onOpenChange={(open) => {
+        setIsMenuOpen(open);
+        if (open) {
+          posthog?.capture(PostHogEvents.USER_MENU_OPENED, {
+            locale,
+          });
+        }
+      }}
+    >
+      <DropdownMenuTrigger
+        onClick={() => {
+          posthog?.capture(PostHogEvents.BUTTON_CLICKED, {
+            button_name: 'user_menu_trigger',
+            locale,
+          });
+        }}
+      >
         <Avatar className="cursor-pointer size-9">
           <AvatarImage alt={user.display_name || ''} />
           <AvatarFallback>
@@ -145,13 +193,39 @@ function UserMenu() {
             href={`/${locale}/dashboard`}
             className="flex w-full items-center gap-2 text-sm uppercase tracking-[0.12em]"
             style={{ color: palette.textSecondary }}
+            onClick={() => {
+              posthog?.capture(PostHogEvents.USER_MENU_CLICKED, {
+                menu_item: 'dashboard',
+                locale,
+              });
+              posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                link_destination: `/${locale}/dashboard`,
+                link_text: t.dashboard,
+                link_location: 'user_menu',
+                locale,
+              });
+            }}
           >
             <Home className="mr-2 h-4 w-4" />
             <span>{t.dashboard}</span>
           </Link>
         </DropdownMenuItem>
         <form action={handleSignOut} className="w-full">
-          <button type="submit" className="flex w-full">
+          <button 
+            type="submit" 
+            className="flex w-full"
+            onClick={() => {
+              posthog?.capture(PostHogEvents.USER_MENU_CLICKED, {
+                menu_item: 'sign_out',
+                locale,
+              });
+              posthog?.capture(PostHogEvents.BUTTON_CLICKED, {
+                button_name: 'sign_out',
+                button_location: 'user_menu',
+                locale,
+              });
+            }}
+          >
             <DropdownMenuItem
               className={`${navFont.className} w-full flex-1 cursor-pointer gap-2 text-sm uppercase tracking-[0.12em]`}
               style={{ color: palette.textSecondary }}
@@ -210,6 +284,19 @@ function Header() {
               color: isActive ? palette.textOnAccent : palette.textSecondary,
               backgroundColor: isActive ? palette.accent : 'transparent'
             }}
+            onClick={() => {
+              posthog?.capture(PostHogEvents.NAVIGATION_TOGGLE, {
+                view: option.label.toLowerCase(),
+                is_active: isActive,
+                locale,
+              });
+              posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                link_destination: `/${locale}${option.href.replace(/^\//, '')}`,
+                link_text: option.label === 'Brands' ? t.brands : option.label === 'Creators' ? t.creators : option.label,
+                link_location: 'header_toggle',
+                locale,
+              });
+            }}
           >
             {option.label === 'Brands'
               ? t.brands
@@ -234,6 +321,14 @@ function Header() {
               href={`/${locale}`}
               className="text-2xl uppercase tracking-[0.24em]"
               style={{ color: palette.textPrimary }}
+              onClick={() => {
+                posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                  link_destination: `/${locale}`,
+                  link_text: '8x',
+                  link_location: 'header_logo',
+                  locale,
+                });
+              }}
             >
               8x
             </Link>
@@ -249,6 +344,14 @@ function Header() {
                 href={`/${locale}/pricing`}
                 className="text-sm uppercase tracking-[0.18em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textSecondary }}
+                onClick={() => {
+                  posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                    link_destination: `/${locale}/pricing`,
+                    link_text: t.pricing,
+                    link_location: 'header',
+                    locale,
+                  });
+                }}
               >
                 {t.pricing}
               </Link>
@@ -265,6 +368,14 @@ function Header() {
             href={`/${locale}`}
             className="text-2xl uppercase tracking-[0.24em]"
             style={{ color: palette.textPrimary }}
+            onClick={() => {
+              posthog?.capture(PostHogEvents.LINK_CLICKED, {
+                link_destination: `/${locale}`,
+                link_text: '8x',
+                link_location: 'header_logo_mobile',
+                locale,
+              });
+            }}
           >
             8x
           </Link>
@@ -278,7 +389,15 @@ function Header() {
             size="icon"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            onClick={() => {
+              setIsMobileMenuOpen((prev) => !prev);
+              posthog?.capture(PostHogEvents.BUTTON_CLICKED, {
+                button_name: 'mobile_menu_toggle',
+                button_location: 'header',
+                is_open: !isMobileMenuOpen,
+                locale,
+              });
+            }}
           >
             <Menu className="size-5" />
           </Button>
