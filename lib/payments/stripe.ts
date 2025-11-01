@@ -10,8 +10,47 @@ import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server'
 
 type Team = Database['public']['Tables']['teams']['Row'];
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-04-30.basil'
+// Lazy initialization to prevent build-time errors when env vars aren't available
+let stripeInstance: Stripe | null = null;
+
+function getStripeInstance(): Stripe {
+  if (!stripeInstance) {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error(
+        'STRIPE_SECRET_KEY environment variable is not set. Please configure it in your environment variables.'
+      );
+    }
+    stripeInstance = new Stripe(secretKey, {
+      apiVersion: '2025-04-30.basil'
+    });
+  }
+  return stripeInstance;
+}
+
+// Proxy to lazy-initialize Stripe instance on first access
+// This prevents build-time errors when environment variables aren't available
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    const instance = getStripeInstance();
+    const value = instance[prop as keyof Stripe];
+    // If the value is an object (like webhooks, checkout, etc.), return it as-is
+    // If it's a function, bind it to maintain proper context
+    if (typeof value === 'function') {
+      return value.bind(instance);
+    }
+    return value;
+  },
+  // Also handle property descriptor access for better compatibility
+  getOwnPropertyDescriptor(_target, prop) {
+    const instance = getStripeInstance();
+    const descriptor = Object.getOwnPropertyDescriptor(instance, prop);
+    return descriptor;
+  },
+  ownKeys(_target) {
+    const instance = getStripeInstance();
+    return Reflect.ownKeys(instance);
+  }
 });
 
 export async function createCheckoutSession({
