@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { use, useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
-import { CircleIcon, Home, LogOut } from 'lucide-react';
+import { Home, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +15,8 @@ import { signOut } from '@/app/(login)/actions';
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/db/schema';
 import useSWR, { mutate } from 'swr';
+import { landingContent } from '@/lib/content/landing';
+import { theme } from '@/lib/theme';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -78,15 +80,70 @@ function UserMenu() {
   );
 }
 
+const { brand } = landingContent;
+const { palette } = theme;
+
 function Header() {
   return (
-    <header className="border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
-          <CircleIcon className="h-6 w-6 text-orange-500" />
-          <span className="ml-2 text-xl font-semibold text-gray-900">ACME</span>
+    <header
+      className="border-b"
+      style={{ borderColor: palette.border, backgroundColor: palette.surface }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <span
+            className="size-10 rounded-full flex items-center justify-center text-sm font-semibold uppercase tracking-[0.25em]"
+            style={{
+              backgroundImage: theme.gradients.accent,
+              color: palette.textPrimary
+            }}
+          >
+            JJ
+          </span>
+          <div className="flex flex-col">
+            <span
+              className="text-xl font-heading font-semibold"
+              style={{ color: palette.textPrimary }}
+            >
+              {brand.name}
+            </span>
+            <span
+              className="text-xs uppercase tracking-[0.25em]"
+              style={{ color: palette.textSecondary }}
+            >
+              {brand.tagline}
+            </span>
+          </div>
         </Link>
-        <div className="flex items-center space-x-4">
+        <nav className="flex flex-1 items-center justify-start gap-6 text-sm md:justify-center">
+          {brand.nav.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="font-heading tracking-tight transition-opacity hover:opacity-70"
+              style={{ color: palette.textSecondary }}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex items-center gap-3 md:justify-end md:flex-1">
+          <Link
+            href={brand.ctas.secondary.href}
+            className="hidden text-sm font-heading uppercase tracking-[0.18em] md:inline-flex"
+            style={{ color: palette.textSecondary }}
+          >
+            {brand.ctas.secondary.label}
+          </Link>
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full px-5 text-sm font-semibold uppercase tracking-[0.18em]"
+          >
+            <Link href={brand.ctas.primary.href}>
+              {brand.ctas.primary.label}
+            </Link>
+          </Button>
           <Suspense fallback={<div className="h-9" />}>
             <UserMenu />
           </Suspense>
