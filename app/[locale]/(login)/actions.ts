@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/db/supabase';
 import { ActivityType } from '@/lib/constants/activity';
-import { redirect } from '@/i18n/routing';
+import { redirect } from 'next/navigation';
 import { createCheckoutSession } from '@/lib/payments/stripe';
 import { getUser, getUserWithTeam, logActivity, getTeamForUser } from '@/lib/db/queries';
 import {
@@ -30,6 +30,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   });
 
   if (authError || !authData.user) {
+    console.error('Sign-in auth error:', authError);
     return {
       error: 'Invalid email or password. Please try again.',
       email,
@@ -38,11 +39,20 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   }
 
   // Get user's profile and team
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', authData.user.id)
-    .single();
+    .maybeSingle();
+
+  if (profileError) {
+    console.error('Profile fetch error:', profileError);
+    return {
+      error: 'Failed to load profile. Please try again.',
+      email,
+      password
+    };
+  }
 
   if (!profile) {
     return {
@@ -52,23 +62,52 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     };
   }
 
-  // Get user's team
-  const { data: membership } = await supabase
+  // Get user's team (use maybeSingle to handle case where user has no team)
+  const { data: membership, error: membershipError } = await supabase
     .from('team_members')
     .select('team_id')
     .eq('profile_id', profile.id)
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  const { data: team } = membership
-    ? await supabase
-        .from('teams')
-        .select('*')
-        .eq('id', membership.team_id)
-        .single()
-    : { data: null, error: null };
+  if (membershipError) {
+    console.error('Team membership fetch error:', membershipError);
+    // Don't fail sign-in if we can't fetch membership, just log it
+  }
 
-  await logActivity(membership?.team_id || null, profile.id, ActivityType.SIGN_IN);
+  let team = null;
+  if (membership?.team_id) {
+    const { data: teamData, error: teamError } = await supabase
+      .from('teams')
+      .select('*')
+      .eq('id', membership.team_id)
+      .maybeSingle();
+    
+    if (teamError) {
+      console.error('Team fetch error:', teamError);
+    } else {
+      team = teamData;
+    }
+  }
+
+  // Log activity (don't fail if this fails)
+  try {
+    await logActivity(membership?.team_id || null, profile.id, ActivityType.SIGN_IN);
+  } catch (error) {
+    console.error('Failed to log activity:', error);
+    // Continue anyway
+  }
+
+  // Verify session is established before redirecting
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError || !session) {
+    console.error('Session not established after sign-in:', sessionError);
+    return {
+      error: 'Failed to establish session. Please try again.',
+      email,
+      password
+    };
+  }
 
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
@@ -76,6 +115,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     return createCheckoutSession({ team: team, priceId });
   }
 
+  // Redirect - middleware will handle locale routing
   redirect('/dashboard');
 });
 
