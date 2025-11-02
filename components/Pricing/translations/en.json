@@ -6,11 +6,8 @@
     "trailing": " pricing"
   },
   "description": "Choose the plan that works for you. No hidden fees, no surprises.",
-  "loading": "Loading...",
-  "getStarted": "Get Started",
   "creators": {
     "name": "For Creators",
-    "price": "Free",
     "period": "Forever",
     "cta": "Get Started",
     "features": {
@@ -22,7 +19,6 @@
   },
   "brands": {
     "name": "For Brands",
-    "price": "Free Trial",
     "subtitle": "Start with a free trial",
     "description": "Then pay per post & impression",
     "cta": "Get Started",

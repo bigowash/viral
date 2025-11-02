@@ -1,13 +1,10 @@
 {
   "signInTitle": "Sign in to your account",
   "signUpTitle": "Create your account",
-  "email": "Email",
-  "password": "Password",
   "emailPlaceholder": "Enter your email",
   "passwordPlaceholder": "Enter your password",
   "signInButton": "Sign in",
   "signUpButton": "Sign up",
-  "loading": "Loading...",
   "newToPlatform": "New to our platform?",
   "alreadyHaveAccount": "Already have an account?",
   "createAccount": "Create an account",

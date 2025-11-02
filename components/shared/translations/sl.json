@@ -1,0 +1,48 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Shrani",
+      "cancel": "Prekliči",
+      "delete": "Izbriši",
+      "remove": "Odstrani",
+      "update": "Posodobi",
+      "submit": "Pošlji",
+      "getStarted": "Začni",
+      "signIn": "Prijavi se",
+      "signUp": "Registriraj se",
+      "signOut": "Odjavi se"
+    },
+    "labels": {
+      "email": "E-pošta",
+      "password": "Geslo",
+      "name": "Ime",
+      "role": "Vloga",
+      "confirmPassword": "Potrdite geslo",
+      "currentPassword": "Trenutno geslo",
+      "newPassword": "Novo geslo"
+    },
+    "placeholders": {
+      "enterEmail": "Vnesite vašo e-pošto",
+      "enterPassword": "Vnesite vaše geslo",
+      "enterName": "Vnesite vaše ime",
+      "enterEmailPlaceholder": "Vnesite e-pošto"
+    },
+    "states": {
+      "loading": "Nalaganje...",
+      "saving": "Shranjevanje...",
+      "updating": "Posodabljanje...",
+      "deleting": "Brisanje...",
+      "removing": "Odstranjevanje...",
+      "inviting": "Vabilo..."
+    },
+    "roles": {
+      "member": "Član",
+      "owner": "Lastnik"
+    },
+    "misc": {
+      "free": "Brezplačno",
+      "unknownUser": "Neznan uporabnik"
+    }
+  }
+}
+

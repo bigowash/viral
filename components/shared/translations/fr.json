@@ -1,0 +1,48 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "remove": "Retirer",
+      "update": "Mettre à jour",
+      "submit": "Soumettre",
+      "getStarted": "Commencer",
+      "signIn": "Se connecter",
+      "signUp": "S'inscrire",
+      "signOut": "Se déconnecter"
+    },
+    "labels": {
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "name": "Nom",
+      "role": "Rôle",
+      "confirmPassword": "Confirmer le mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe"
+    },
+    "placeholders": {
+      "enterEmail": "Entrez votre e-mail",
+      "enterPassword": "Entrez votre mot de passe",
+      "enterName": "Entrez votre nom",
+      "enterEmailPlaceholder": "Entrez l'e-mail"
+    },
+    "states": {
+      "loading": "Chargement...",
+      "saving": "Enregistrement...",
+      "updating": "Mise à jour...",
+      "deleting": "Suppression...",
+      "removing": "Suppression...",
+      "inviting": "Invitation..."
+    },
+    "roles": {
+      "member": "Membre",
+      "owner": "Propriétaire"
+    },
+    "misc": {
+      "free": "Gratuit",
+      "unknownUser": "Utilisateur inconnu"
+    }
+  }
+}
+

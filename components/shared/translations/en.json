@@ -1,0 +1,48 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "remove": "Remove",
+      "update": "Update",
+      "submit": "Submit",
+      "getStarted": "Get Started",
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "signOut": "Sign out"
+    },
+    "labels": {
+      "email": "Email",
+      "password": "Password",
+      "name": "Name",
+      "role": "Role",
+      "confirmPassword": "Confirm Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password"
+    },
+    "placeholders": {
+      "enterEmail": "Enter your email",
+      "enterPassword": "Enter your password",
+      "enterName": "Enter your name",
+      "enterEmailPlaceholder": "Enter email"
+    },
+    "states": {
+      "loading": "Loading...",
+      "saving": "Saving...",
+      "updating": "Updating...",
+      "deleting": "Deleting...",
+      "removing": "Removing...",
+      "inviting": "Inviting..."
+    },
+    "roles": {
+      "member": "Member",
+      "owner": "Owner"
+    },
+    "misc": {
+      "free": "Free",
+      "unknownUser": "Unknown User"
+    }
+  }
+}
+
