@@ -30,12 +30,31 @@ export async function getTeamByStripeCustomerId(customerId: string) {
 }
 
 /**
- * Get team for the current user with all members.
+ * Get team for a user with all members.
+ * 
+ * @param userId - The user ID to get the team for. If not provided, will get the current user.
  */
-export async function getTeamForUser() {
-  const user = await getUser();
-  if (!user) {
-    return null;
+export async function getTeamForUser(userId?: string) {
+  let user;
+  if (userId) {
+    // If userId is provided, fetch that user's profile
+    const supabase = await createServerSupabaseClient();
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    
+    if (error || !profile) {
+      return null;
+    }
+    user = profile;
+  } else {
+    // Otherwise, get the current authenticated user (cached)
+    user = await getUser();
+    if (!user) {
+      return null;
+    }
   }
 
   const supabase = await createServerSupabaseClient();

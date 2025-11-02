@@ -5,19 +5,19 @@ import { getUser } from '@/lib/modules/auth/queries';
 import { getTeamByStripeCustomerId } from '@/lib/modules/team/queries';
 import { updateTeamSubscription } from '@/lib/modules/billing/queries';
 import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
+import { STRIPE_SECRET_KEY, BASE_URL } from '@/lib/env';
 
 // Lazy initialization to prevent build-time errors when env vars aren't available
 let stripeInstance: Stripe | null = null;
 
 function getStripeInstance(): Stripe {
   if (!stripeInstance) {
-    const secretKey = process.env.STRIPE_SECRET_KEY;
-    if (!secretKey) {
+    if (!STRIPE_SECRET_KEY) {
       throw new Error(
         'STRIPE_SECRET_KEY environment variable is not set. Please configure it in your environment variables.'
       );
     }
-    stripeInstance = new Stripe(secretKey, {
+    stripeInstance = new Stripe(STRIPE_SECRET_KEY, {
       apiVersion: '2025-04-30.basil'
     });
   }
@@ -71,8 +71,8 @@ export async function createCheckoutSession({
       }
     ],
     mode: 'subscription',
-    success_url: `${process.env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.BASE_URL}/pricing`,
+    success_url: `${BASE_URL || 'http://localhost:3000'}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${BASE_URL || 'http://localhost:3000'}/pricing`,
     customer: team.stripe_customer_id || undefined,
     client_reference_id: user.id,
     allow_promotion_codes: true,
@@ -173,7 +173,7 @@ export async function createCustomerPortalSession(team: Team) {
 
   return stripe.billingPortal.sessions.create({
     customer: team.stripe_customer_id,
-    return_url: `${process.env.BASE_URL}/dashboard`,
+    return_url: `${BASE_URL || 'http://localhost:3000'}/dashboard`,
     configuration: configuration.id
   });
 }

@@ -3,7 +3,8 @@
 import { z } from 'zod';
 import { createServerSupabaseClient } from '@/lib/db/supabase';
 import { ActivityType } from '@/lib/constants/activity';
-import { getUserWithTeam, logActivity } from '@/lib/db/queries';
+import { getUserWithTeam } from '@/lib/modules/auth/queries';
+import { logActivity } from '@/lib/modules/activity/queries';
 import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 

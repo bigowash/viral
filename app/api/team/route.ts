@@ -1,9 +1,11 @@
 import { getTeamForUser } from '@/lib/db/queries';
+import { getUser } from '@/lib/db/queries';
 import { TeamDataWithMembers } from '@/lib/auth/middleware';
 
 export type TeamApiResponse = TeamDataWithMembers | null;
 
 export async function GET(): Promise<Response> {
-  const team = await getTeamForUser();
+  const user = await getUser();
+  const team = user ? await getTeamForUser(user.id) : null;
   return Response.json(team);
 }

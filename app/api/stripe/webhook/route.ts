@@ -1,8 +1,13 @@
 import Stripe from 'stripe';
 import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe';
 import { NextRequest, NextResponse } from 'next/server';
+import { STRIPE_WEBHOOK_SECRET } from '@/lib/env';
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+if (!STRIPE_WEBHOOK_SECRET) {
+  throw new Error('STRIPE_WEBHOOK_SECRET environment variable is required for webhook verification');
+}
+
+const webhookSecret = STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: NextRequest) {
   const payload = await request.text();

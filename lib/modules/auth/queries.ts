@@ -1,11 +1,15 @@
+import { cache } from 'react';
 import { createServerSupabaseClient } from '@/lib/db/supabase';
 import { Profile } from '@/lib/db/types';
 
 /**
  * Get the current authenticated user's profile.
  * Returns null if no valid session exists.
+ * 
+ * Uses react.cache() to ensure getUser() is only called once per request,
+ * preventing duplicate Supabase auth calls.
  */
-export async function getUser() {
+export const getUser = cache(async function getUser() {
   const supabase = await createServerSupabaseClient();
   
   const {
@@ -28,7 +32,7 @@ export async function getUser() {
   }
 
   return profile;
-}
+});
 
 /**
  * Get user with their team information.

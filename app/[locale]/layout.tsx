@@ -72,10 +72,9 @@ export default async function LocaleLayout({
 
   // Await promises for React Query initial data
   // Ensure values are never undefined - use null instead
-  const [userData, teamData] = await Promise.all([
-    getUser().catch(() => null),
-    getTeamForUser().catch(() => null)
-  ]);
+  // Get user first (cached), then pass user ID to getTeamForUser to avoid duplicate getUser() calls
+  const userData = await getUser().catch(() => null);
+  const teamData = await (userData ? getTeamForUser(userData.id) : Promise.resolve(null)).catch(() => null);
 
   // Ensure initial data values are explicitly defined (never undefined)
   const initialData = {

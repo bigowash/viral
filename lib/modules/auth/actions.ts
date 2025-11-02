@@ -203,7 +203,7 @@ export const signUp = validatedAction<typeof signUpSchema, SignUpResult>(signUpS
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.BASE_URL}/dashboard`
+      emailRedirectTo: `${process.env.BASE_URL || 'http://localhost:3000'}/dashboard`
     }
   });
 
