@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { locales } from '@/i18n';
 import './globals.css';
 import '@/lib/localStorage-polyfill';
@@ -71,6 +72,10 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // Load messages on the server using next-intl's getMessages()
+  // This ensures proper code-splitting per locale without client-side dynamic imports
+  const messages = await getMessages();
+
   // Use request-scoped QueryClient for server-side prefetching
   const queryClient = getQueryClient();
 
@@ -95,7 +100,7 @@ export default async function LocaleLayout({
 
   return (
     <PostHogProvider>
-      <NextIntlClientProvider locale={locale} messages={{}}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         <QueryProvider dehydratedState={dehydratedState}>
           {children}
         </QueryProvider>

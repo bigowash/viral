@@ -1,7 +1,7 @@
 'use client';
 
-import { useLocale } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useLocale, useMessages } from 'next-intl';
+import { useMemo } from 'react';
 
 /**
  * Deep merge two objects, with the second object taking precedence for conflicts.
@@ -21,65 +21,34 @@ function deepMerge<T extends Record<string, any>>(target: T, source: Partial<T>)
 }
 
 /**
- * Hook to load and merge shared translations with component-specific translations.
- * Shared translations are loaded first, then component-specific translations override them.
+ * Hook to access component translations from NextIntl context.
+ * Messages are loaded on the server and passed through NextIntlClientProvider,
+ * avoiding client-side dynamic imports and blocking rendering.
+ * 
+ * This hook reads messages from the NextIntl context, merges shared translations
+ * with component-specific translations, and returns the merged result.
  * 
  * @param componentPath - Path to the component (e.g., "Dashboard", "Login")
- * @returns Merged translations object or null if loading failed
+ * @returns Merged translations object (never null, always returns at least an empty object)
  */
-export function useComponentTranslations<T = any>(componentPath: string): T | null {
+export function useComponentTranslations<T = any>(componentPath: string): T {
   const locale = useLocale();
-  const [translations, setTranslations] = useState<T | null>(null);
+  const messages = useMessages() as Record<string, any> | undefined;
 
-  useEffect(() => {
-    async function loadTranslations() {
-      // Load shared translations first
-      let sharedTranslations = {};
-      try {
-        const sharedMessages = await import(
-          `@/components/shared/translations/${locale}.json`
-        );
-        sharedTranslations = sharedMessages.default;
-      } catch (error) {
-        // Fallback to English if locale not found
-        try {
-          const sharedEn = await import(
-            `@/components/shared/translations/en.json`
-          );
-          sharedTranslations = sharedEn.default;
-        } catch {
-          // If shared translations don't exist, continue without them
-          console.warn('Shared translations not found, continuing without them');
-        }
-      }
-
-      // Load component-specific translations
-      let componentTranslations = {};
-      try {
-        const messages = await import(
-          `@/components/${componentPath}/translations/${locale}.json`
-        );
-        componentTranslations = messages.default;
-      } catch (error) {
-        console.error(`Failed to load translations for ${componentPath}/${locale}`, error);
-        // Fallback to English for component translations
-        try {
-          const fallback = await import(
-            `@/components/${componentPath}/translations/en.json`
-          );
-          componentTranslations = fallback.default;
-        } catch (fallbackError) {
-          console.error('Failed to load fallback translations', fallbackError);
-        }
-      }
-
-      // Merge: shared translations first, then component-specific (which override)
-      const merged = deepMerge(sharedTranslations, componentTranslations);
-      setTranslations(merged as T);
-    }
-
-    loadTranslations();
-  }, [locale, componentPath]);
+  // Access messages from NextIntl context
+  // Messages are structured as: { common: {...}, [componentName]: {...}, shared: {...} }
+  const translations = useMemo(() => {
+    // Get shared translations (fallback to empty object if not available)
+    // messages.shared contains the full shared translations object (which includes 'common')
+    const sharedTranslations = (messages?.shared || messages?.common || {}) as Record<string, any>;
+    
+    // Get component-specific translations
+    const componentTranslations = (messages?.[componentPath] || {}) as Record<string, any>;
+    
+    // Merge: shared translations first, then component-specific (which override)
+    // This ensures components have access to both common.* and component-specific keys
+    return deepMerge(sharedTranslations, componentTranslations) as T;
+  }, [messages, componentPath, locale]);
 
   return translations;
 }
