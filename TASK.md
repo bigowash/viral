@@ -31,3 +31,10 @@
 - [x] Remove Drizzle dependencies from package.json (drizzle-kit, drizzle-orm, postgres)
 - [x] Clean up lib/auth/session.ts (deprecated functions - Supabase handles auth now)
 - [x] Update lib/db/setup.ts to use Supabase instead of Postgres
+
+## Testing & Quality Assurance
+- [x] Add lint script (`next lint`) to package.json (2024-12-XX)
+- [x] Add Vitest for unit testing with React Testing Library support (2024-12-XX)
+- [x] Add Playwright for e2e testing with configuration (2024-12-XX)
+- [x] Create test scripts (`test`, `test:unit`, `test:e2e`) in package.json (2024-12-XX)
+- [x] Set up ESLint configuration for Next.js (2024-12-XX)

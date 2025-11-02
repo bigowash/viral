@@ -1,0 +1,42 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "build-app",
+		"type": "shell",
+		"command": "pnpm build",
+		"problemMatcher": []
+	  },
+	  {
+		"label": "lint",
+		"type": "shell",
+		"command": "pnpm lint",
+		"problemMatcher": []
+	  },
+	  {
+		"label": "test",
+		"type": "shell",
+		"command": "pnpm test",
+		"problemMatcher": []
+	  },
+	  {
+		"label": "test:unit",
+		"type": "shell",
+		"command": "pnpm test:unit",
+		"problemMatcher": []
+	  },
+	  {
+		"label": "test:unit:watch",
+		"type": "shell",
+		"command": "pnpm test:unit:watch",
+		"problemMatcher": [],
+		"isBackground": true
+	  },
+	  {
+		"label": "test:e2e",
+		"type": "shell",
+		"command": "pnpm test:e2e",
+		"problemMatcher": []
+	  }
+	]
+}
