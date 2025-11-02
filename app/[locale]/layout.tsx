@@ -18,9 +18,9 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
   const titles: Record<string, string> = {
     en: 'Jack & Jill AI — The AI Recruiters',
     fr: 'Jack & Jill AI — Les Recruteurs IA',
