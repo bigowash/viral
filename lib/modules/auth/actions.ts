@@ -16,12 +16,48 @@ import { identifyUser as identifyPostHogUser, trackEvent as trackPostHogEvent } 
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
+// Return types for server actions
+// Note: These actions may redirect (never return) when successful
+export type SignInResult = {
+  error?: string;
+  email?: string;
+  password?: string;
+  success?: never;
+} | never;
+
+export type SignUpResult = {
+  error?: string;
+  email?: string;
+  password?: string;
+  success?: never;
+} | never;
+
+export type UpdatePasswordResult = {
+  error?: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+  success?: string;
+};
+
+export type DeleteAccountResult = {
+  error?: string;
+  password?: string;
+  success?: never;
+};
+
+export type UpdateAccountResult = {
+  error?: string;
+  name?: string;
+  success?: string;
+};
+
 const signInSchema = z.object({
   email: z.string().email().min(3).max(255),
   password: z.string().min(8).max(100)
 });
 
-export const signIn = validatedAction(signInSchema, async (data, formData) => {
+export const signIn = validatedAction<typeof signInSchema, SignInResult>(signInSchema, async (data, formData): Promise<SignInResult> => {
   const { email, password } = data;
   const supabase = await createServerSupabaseClient();
 
@@ -130,6 +166,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
     const priceId = formData.get('priceId') as string;
+    // createCheckoutSession redirects, so this never returns
     return createCheckoutSession({ team: team, priceId });
   }
 
@@ -143,7 +180,7 @@ const signUpSchema = z.object({
   inviteId: z.string().optional()
 });
 
-export const signUp = validatedAction(signUpSchema, async (data, formData) => {
+export const signUp = validatedAction<typeof signUpSchema, SignUpResult>(signUpSchema, async (data, formData): Promise<SignUpResult> => {
   const { email, password, inviteId } = data;
   const supabase = await createServerSupabaseClient();
   const serviceSupabase = createServiceRoleClient();
@@ -318,6 +355,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
     const priceId = formData.get('priceId') as string;
+    // createCheckoutSession redirects, so this never returns
     return createCheckoutSession({ team: createdTeam, priceId });
   }
 
@@ -353,9 +391,9 @@ const updatePasswordSchema = z.object({
   confirmPassword: z.string().min(8).max(100)
 });
 
-export const updatePassword = validatedActionWithUser(
+export const updatePassword = validatedActionWithUser<typeof updatePasswordSchema, UpdatePasswordResult>(
   updatePasswordSchema,
-  async (data, _, user) => {
+  async (data, _, user): Promise<UpdatePasswordResult> => {
     const { currentPassword, newPassword, confirmPassword } = data;
 
     if (currentPassword === newPassword) {
@@ -420,9 +458,9 @@ const deleteAccountSchema = z.object({
   password: z.string().min(8).max(100)
 });
 
-export const deleteAccount = validatedActionWithUser(
+export const deleteAccount = validatedActionWithUser<typeof deleteAccountSchema, DeleteAccountResult>(
   deleteAccountSchema,
-  async (data, _, user) => {
+  async (data, _, user): Promise<DeleteAccountResult> => {
     const { password } = data;
     const supabase = await createServerSupabaseClient();
 
@@ -466,9 +504,9 @@ const updateAccountSchema = z.object({
   email: z.string().email('Invalid email address')
 });
 
-export const updateAccount = validatedActionWithUser(
+export const updateAccount = validatedActionWithUser<typeof updateAccountSchema, UpdateAccountResult>(
   updateAccountSchema,
-  async (data, _, user) => {
+  async (data, _, user): Promise<UpdateAccountResult> => {
     const { name, email } = data;
     const supabase = await createServerSupabaseClient();
 

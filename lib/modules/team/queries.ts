@@ -1,5 +1,18 @@
 import { createServerSupabaseClient } from '@/lib/db/supabase';
 import { getUser } from '@/lib/modules/auth/queries';
+import { Database } from '@/types/supabase';
+import { TeamDataWithMembers } from '@/lib/auth/middleware';
+
+type Team = Database['public']['Tables']['teams']['Row'];
+type TeamMember = Database['public']['Tables']['team_members']['Row'];
+type Profile = Database['public']['Tables']['profiles']['Row'];
+
+// Type for Supabase query result with nested relations
+type TeamWithMembersQuery = Team & {
+  team_members: (TeamMember & {
+    profiles: Pick<Profile, 'id' | 'display_name' | 'primary_email'> | null;
+  })[];
+};
 
 /**
  * Get team by Stripe customer ID.
@@ -69,17 +82,20 @@ export async function getTeamForUser() {
     return null;
   }
 
+  // Type assertion for Supabase query result
+  const teamWithMembers = team as unknown as TeamWithMembersQuery;
+
   // Transform to match expected format
   return {
-    ...team,
-    teamMembers: (team.team_members || []).map((tm: any) => ({
+    ...teamWithMembers,
+    teamMembers: (teamWithMembers.team_members || []).map((tm) => ({
       ...tm,
       user: tm.profiles && !Array.isArray(tm.profiles) ? {
         id: tm.profiles.id,
-        name: tm.profiles.display_name,
-        email: tm.profiles.primary_email,
+        display_name: tm.profiles.display_name,
+        primary_email: tm.profiles.primary_email,
       } : null,
     })),
-  };
+  } as TeamDataWithMembers;
 }
 

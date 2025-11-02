@@ -1,20 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { TeamDataWithMembers } from '@/lib/auth/middleware';
+import { TeamApiResponse } from '@/app/api/team/route';
 
 const TEAM_QUERY_KEY = ['/api/team'] as const;
 
 /**
  * Fetcher function for team data.
+ * Uses the exported type from the API route to ensure type safety.
  */
-async function fetchTeam(): Promise<TeamDataWithMembers | null> {
+async function fetchTeam(): Promise<TeamApiResponse> {
   try {
     const res = await fetch('/api/team');
     if (!res.ok) return null;
-    const data = await res.json();
-    if (data && typeof data === 'object' && !Array.isArray(data)) {
-      return data as TeamDataWithMembers;
-    }
-    return null;
+    const data: TeamApiResponse = await res.json();
+    return data;
   } catch (error) {
     console.error('Fetch error:', error);
     return null;
@@ -26,7 +24,7 @@ async function fetchTeam(): Promise<TeamDataWithMembers | null> {
  * Uses React Query for caching and automatic refetching.
  */
 export function useTeam() {
-  return useQuery<TeamDataWithMembers | null>({
+  return useQuery<TeamApiResponse>({
     queryKey: TEAM_QUERY_KEY,
     queryFn: fetchTeam,
     retry: false,

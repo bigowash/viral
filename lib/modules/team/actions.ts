@@ -7,13 +7,24 @@ import { getUserWithTeam, logActivity } from '@/lib/db/queries';
 import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
+// Return types for server actions
+export type RemoveTeamMemberResult = {
+  error?: string;
+  success?: string;
+};
+
+export type InviteTeamMemberResult = {
+  error?: string;
+  success?: string;
+};
+
 const removeTeamMemberSchema = z.object({
   memberId: z.string()
 });
 
-export const removeTeamMember = validatedActionWithUser(
+export const removeTeamMember = validatedActionWithUser<typeof removeTeamMemberSchema, RemoveTeamMemberResult>(
   removeTeamMemberSchema,
-  async (data, _, user) => {
+  async (data, _, user): Promise<RemoveTeamMemberResult> => {
     const { memberId } = data;
     const userWithTeam = await getUserWithTeam(user.id);
 
@@ -48,9 +59,9 @@ const inviteTeamMemberSchema = z.object({
   role: z.enum(['member', 'admin', 'owner'])
 });
 
-export const inviteTeamMember = validatedActionWithUser(
+export const inviteTeamMember = validatedActionWithUser<typeof inviteTeamMemberSchema, InviteTeamMemberResult>(
   inviteTeamMemberSchema,
-  async (data, _, user) => {
+  async (data, _, user): Promise<InviteTeamMemberResult> => {
     const { email, role } = data;
     const userWithTeam = await getUserWithTeam(user.id);
 

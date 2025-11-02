@@ -57,7 +57,7 @@ export async function createCheckoutSession({
 }: {
   team: Team | null;
   priceId: string;
-}) {
+}): Promise<never> {
   const user = await getUser();
 
   if (!team || !user) {
