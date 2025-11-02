@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { ActivityType } from '@/lib/constants/activity';
-import { getActivityLogs } from '@/lib/db/queries';
+import { getActivityLogs } from '@/lib/modules/activity/queries';
 import { getComponentTranslations } from '@/lib/i18n/getComponentTranslations';
 import { getLocale } from 'next-intl/server';
 

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CircleIcon, Loader2 } from 'lucide-react';
-import { signIn, signUp } from '@/app/[locale]/(login)/actions';
+import { signIn, signUp } from '@/lib/modules/auth/actions';
 import { ActionState } from '@/lib/auth/middleware';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { usePostHogClient } from '@/lib/analytics/posthog';

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { signOut } from '@/app/[locale]/(login)/actions';
+import { signOut } from '@/lib/actions/session';
 import { Database } from '@/types/supabase';
 
 type User = Database['public']['Tables']['profiles']['Row'];

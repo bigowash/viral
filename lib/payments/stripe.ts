@@ -1,11 +1,9 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
 import { Database } from '@/types/supabase';
-import {
-  getTeamByStripeCustomerId,
-  getUser,
-  updateTeamSubscription
-} from '@/lib/db/queries';
+import { getUser } from '@/lib/modules/auth/queries';
+import { getTeamByStripeCustomerId } from '@/lib/modules/team/queries';
+import { updateTeamSubscription } from '@/lib/modules/billing/queries';
 import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
 
 type Team = Database['public']['Tables']['teams']['Row'];

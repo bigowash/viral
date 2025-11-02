@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
-import { updateAccount } from '@/app/[locale]/(login)/actions';
+import { updateAccount } from '@/lib/modules/auth/actions';
 import { Database } from '@/types/supabase';
 
 type User = Database['public']['Tables']['profiles']['Row'];
