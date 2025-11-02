@@ -8,7 +8,7 @@ const USER_QUERY_KEY = ['/api/user'] as const;
  */
 async function fetchUser(): Promise<User | null> {
   try {
-    const res = await fetch('/api/user');
+    const res = await fetch('/api/user', { cache: 'no-store' });
     if (!res.ok) return null;
     const data = await res.json();
     if (data && typeof data === 'object' && !Array.isArray(data)) {

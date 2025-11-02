@@ -9,7 +9,7 @@ const TEAM_QUERY_KEY = ['/api/team'] as const;
  */
 async function fetchTeam(): Promise<TeamApiResponse> {
   try {
-    const res = await fetch('/api/team');
+    const res = await fetch('/api/team', { cache: 'no-store' });
     if (!res.ok) return null;
     const data: TeamApiResponse = await res.json();
     return data;

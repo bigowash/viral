@@ -6,6 +6,7 @@ import '@/lib/localStorage-polyfill';
 import type { Metadata, Viewport } from 'next';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 import { QueryProvider } from '@/lib/query-provider';
+import { getQueryClient, dehydrate } from '@/lib/query-provider-server';
 import { PostHogProvider } from '@/lib/analytics/posthog-provider';
 import { fontTheme } from '@/lib/theme/fonts';
 
@@ -70,22 +71,32 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Await promises for React Query initial data
-  // Ensure values are never undefined - use null instead
-  // Get user first (cached), then pass user ID to getTeamForUser to avoid duplicate getUser() calls
+  // Use request-scoped QueryClient for server-side prefetching
+  const queryClient = getQueryClient();
+
+  // Prefetch user and team data with proper query keys
   const userData = await getUser().catch(() => null);
   const teamData = await (userData ? getTeamForUser(userData.id) : Promise.resolve(null)).catch(() => null);
 
-  // Ensure initial data values are explicitly defined (never undefined)
-  const initialData = {
-    '/api/user': userData ?? null,
-    '/api/team': teamData ?? null
-  };
+  // Prefetch queries using the proper query keys that match client-side usage
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['/api/user'],
+      queryFn: async () => userData ?? null,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['/api/team'],
+      queryFn: async () => teamData ?? null,
+    }),
+  ]);
+
+  // Dehydrate the query client to get the state for rehydration
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <PostHogProvider>
       <NextIntlClientProvider locale={locale} messages={{}}>
-        <QueryProvider initialData={initialData}>
+        <QueryProvider dehydratedState={dehydratedState}>
           {children}
         </QueryProvider>
       </NextIntlClientProvider>

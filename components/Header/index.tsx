@@ -57,10 +57,11 @@ function UserMenu() {
   const QUERY_KEY = ['/api/user'] as const;
   
   // Stable fetcher function - memoized to prevent recreation
+  // Uses cache: 'no-store' to ensure we get fresh session data per request
   const fetcher = useMemo(
     () => async (): Promise<User | null> => {
       try {
-        const res = await fetch('/api/user');
+        const res = await fetch('/api/user', { cache: 'no-store' });
         if (!res.ok) return null;
         const data = await res.json();
         if (data && typeof data === 'object' && !Array.isArray(data)) {
@@ -92,8 +93,9 @@ function UserMenu() {
 
   async function handleSignOut() {
     await signOut();
-    // Invalidate the query cache instead of mutate
-    queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    // Invalidate the query cache and wait for completion before redirecting
+    // This ensures the landing page reads fresh session state
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     router.push(`/${locale}`);
   }
 
