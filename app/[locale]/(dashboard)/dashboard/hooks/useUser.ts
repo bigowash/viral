@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Database } from '@/types/supabase';
-
-type User = Database['public']['Tables']['profiles']['Row'];
+import { User } from '@/lib/db/types';
 
 const USER_QUERY_KEY = ['/api/user'] as const;
 

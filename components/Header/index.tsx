@@ -16,9 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from '@/lib/actions/session';
-import { Database } from '@/types/supabase';
-
-type User = Database['public']['Tables']['profiles']['Row'];
+import { User } from '@/lib/db/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { landingContent, type LandingContent } from '@/lib/content/landing';
 import { theme } from '@/lib/theme';

@@ -1,12 +1,10 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
-import { Database } from '@/types/supabase';
+import { Team } from '@/lib/db/types';
 import { getUser } from '@/lib/modules/auth/queries';
 import { getTeamByStripeCustomerId } from '@/lib/modules/team/queries';
 import { updateTeamSubscription } from '@/lib/modules/billing/queries';
 import { trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
-
-type Team = Database['public']['Tables']['teams']['Row'];
 
 // Lazy initialization to prevent build-time errors when env vars aren't available
 let stripeInstance: Stripe | null = null;

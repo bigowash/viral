@@ -12,9 +12,7 @@ import { removeTeamMember } from '@/lib/modules/team/actions';
 import { useTeam } from '../hooks/useTeam';
 import { useActionState } from 'react';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
-import { Database } from '@/types/supabase';
-
-type User = Database['public']['Tables']['profiles']['Row'];
+import { User } from '@/lib/db/types';
 
 interface DashboardTranslations {
   teamSettings: {

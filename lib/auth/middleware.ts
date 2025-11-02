@@ -1,11 +1,7 @@
 import { z } from 'zod';
 import { getTeamForUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
-import { Database } from '@/types/supabase';
-
-type Profile = Database['public']['Tables']['profiles']['Row'];
-type Team = Database['public']['Tables']['teams']['Row'];
-type TeamMember = Database['public']['Tables']['team_members']['Row'];
+import { Profile, Team, TeamMember } from '@/lib/db/types';
 
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {

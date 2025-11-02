@@ -11,10 +11,8 @@ import {
   validatedAction,
   validatedActionWithUser
 } from '@/lib/auth/middleware';
-import { Database } from '@/types/supabase';
 import { identifyUser as identifyPostHogUser, trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
-
-type Profile = Database['public']['Tables']['profiles']['Row'];
+import { Profile, Team } from '@/lib/db/types';
 
 // Return types for server actions
 // Note: These actions may redirect (never return) when successful
@@ -240,7 +238,7 @@ export const signUp = validatedAction<typeof signUpSchema, SignUpResult>(signUpS
 
   let teamId: string;
   let userRole: string;
-  let createdTeam: Database['public']['Tables']['teams']['Row'] | null = null;
+  let createdTeam: Team | null = null;
 
   if (inviteId) {
     // Check if there's a valid invitation

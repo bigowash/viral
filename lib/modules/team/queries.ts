@@ -1,11 +1,7 @@
 import { createServerSupabaseClient } from '@/lib/db/supabase';
 import { getUser } from '@/lib/modules/auth/queries';
-import { Database } from '@/types/supabase';
 import { TeamDataWithMembers } from '@/lib/auth/middleware';
-
-type Team = Database['public']['Tables']['teams']['Row'];
-type TeamMember = Database['public']['Tables']['team_members']['Row'];
-type Profile = Database['public']['Tables']['profiles']['Row'];
+import { Team, TeamMember, Profile } from '@/lib/db/types';
 
 // Type for Supabase query result with nested relations
 type TeamWithMembersQuery = Team & {

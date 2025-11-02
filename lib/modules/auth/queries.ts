@@ -1,7 +1,5 @@
 import { createServerSupabaseClient } from '@/lib/db/supabase';
-import { Database } from '@/types/supabase';
-
-type Profile = Database['public']['Tables']['profiles']['Row'];
+import { Profile } from '@/lib/db/types';
 
 /**
  * Get the current authenticated user's profile.
