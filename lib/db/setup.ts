@@ -77,75 +77,21 @@ async function checkStripeCLI() {
   }
 }
 
-async function getPostgresURL(): Promise<string> {
-  console.log('Step 2: Setting up Postgres');
-  const dbChoice = await question(
-    'Do you want to use a local Postgres instance with Docker (L) or a remote Postgres instance (R)? (L/R): '
-  );
-
-  if (dbChoice.toLowerCase() === 'l') {
-    console.log('Setting up local Postgres instance with Docker...');
-    await setupLocalPostgres();
-    return 'postgres://postgres:postgres@localhost:54322/postgres';
-  } else {
-    console.log(
-      'You can find Postgres databases at: https://vercel.com/marketplace?category=databases'
-    );
-    return await question('Enter your POSTGRES_URL: ');
-  }
+async function getSupabaseConfig(): Promise<{ url: string; anonKey: string; serviceRoleKey: string }> {
+  console.log('Step 2: Setting up Supabase');
+  console.log('Note: You should use Supabase local development or a remote Supabase project.');
+  console.log('For local development: Run `supabase start` to start local Supabase instance.');
+  console.log('For remote project: Get credentials from https://supabase.com/dashboard/project/<your-project>/settings/api');
+  
+  const url = await question('Enter your NEXT_PUBLIC_SUPABASE_URL: ');
+  const anonKey = await question('Enter your NEXT_PUBLIC_SUPABASE_ANON_KEY: ');
+  const serviceRoleKey = await question('Enter your SUPABASE_SERVICE_ROLE_KEY: ');
+  
+  return { url, anonKey, serviceRoleKey };
 }
 
-async function setupLocalPostgres() {
-  console.log('Checking if Docker is installed...');
-  try {
-    await execAsync('docker --version');
-    console.log('Docker is installed.');
-  } catch (error) {
-    console.error(
-      'Docker is not installed. Please install Docker and try again.'
-    );
-    console.log(
-      'To install Docker, visit: https://docs.docker.com/get-docker/'
-    );
-    process.exit(1);
-  }
-
-  console.log('Creating docker-compose.yml file...');
-  const dockerComposeContent = `
-services:
-  postgres:
-    image: postgres:16.4-alpine
-    container_name: next_saas_starter_postgres
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "54322:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
-`;
-
-  await fs.writeFile(
-    path.join(process.cwd(), 'docker-compose.yml'),
-    dockerComposeContent
-  );
-  console.log('docker-compose.yml file created.');
-
-  console.log('Starting Docker container with `docker compose up -d`...');
-  try {
-    await execAsync('docker compose up -d');
-    console.log('Docker container started successfully.');
-  } catch (error) {
-    console.error(
-      'Failed to start Docker container. Please check your Docker installation and try again.'
-    );
-    process.exit(1);
-  }
-}
+// Note: Local Supabase setup is handled by Supabase CLI (`supabase start`)
+// This script focuses on setting up environment variables for remote Supabase projects
 
 async function getStripeSecretKey(): Promise<string> {
   console.log('Step 3: Getting Stripe Secret Key');
@@ -196,14 +142,16 @@ async function writeEnvFile(envVars: Record<string, string>) {
 async function main() {
   await checkStripeCLI();
 
-  const POSTGRES_URL = await getPostgresURL();
+  const { url: supabaseUrl, anonKey, serviceRoleKey } = await getSupabaseConfig();
   const STRIPE_SECRET_KEY = await getStripeSecretKey();
   const STRIPE_WEBHOOK_SECRET = await createStripeWebhook();
   const BASE_URL = 'http://localhost:3000';
   const AUTH_SECRET = generateAuthSecret();
 
   await writeEnvFile({
-    POSTGRES_URL,
+    NEXT_PUBLIC_SUPABASE_URL: supabaseUrl,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey,
+    SUPABASE_SERVICE_ROLE_KEY: serviceRoleKey,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
     BASE_URL,
@@ -211,6 +159,10 @@ async function main() {
   });
 
   console.log('🎉 Setup completed successfully!');
+  console.log('Next steps:');
+  console.log('1. Run `supabase db push` to apply migrations');
+  console.log('2. Run `pnpm types:generate` to generate TypeScript types');
+  console.log('3. Run `pnpm dev` to start the development server');
 }
 
 main().catch(console.error);

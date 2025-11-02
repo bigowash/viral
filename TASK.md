@@ -25,3 +25,9 @@
 - [x] Apply all database migrations to remote Supabase project
 - [x] Generate TypeScript types from remote database schema
 - [x] Fix security advisor warnings (function search_path)
+
+## Cleanup & Migration Complete
+- [x] Remove all Drizzle code (schema.ts, drizzle.ts, drizzle.config.ts, migrations directory, seed.ts)
+- [x] Remove Drizzle dependencies from package.json (drizzle-kit, drizzle-orm, postgres)
+- [x] Clean up lib/auth/session.ts (deprecated functions - Supabase handles auth now)
+- [x] Update lib/db/setup.ts to use Supabase instead of Postgres
