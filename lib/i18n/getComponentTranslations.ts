@@ -1,16 +1,16 @@
-import { locales, type Locale } from '@/i18n';
+// Locale type imported but not used directly in this function
 
 /**
  * Deep merge two objects, with the second object taking precedence for conflicts.
  */
-function deepMerge<T extends Record<string, any>>(target: T, source: Partial<T>): T {
+function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
   const result = { ...target };
   
   for (const key in source) {
     if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-      result[key] = deepMerge((result[key] || {}) as Record<string, any>, source[key] as Record<string, any>) as T[Extract<keyof T, string>];
+      result[key] = deepMerge((result[key] || {}) as Record<string, unknown>, source[key] as Record<string, unknown>) as T[Extract<keyof T, string>];
     } else {
-      result[key] = source[key] as any;
+      result[key] = source[key] as T[Extract<keyof T, string>];
     }
   }
   
@@ -25,7 +25,7 @@ function deepMerge<T extends Record<string, any>>(target: T, source: Partial<T>)
  * @param locale - Locale code (e.g., "en", "fr", "sl")
  * @returns Merged translations object
  */
-export async function getComponentTranslations<T = any>(
+export async function getComponentTranslations<T = Record<string, unknown>>(
   componentPath: string,
   locale: string
 ): Promise<T> {
@@ -36,7 +36,7 @@ export async function getComponentTranslations<T = any>(
       `@/components/shared/translations/${locale}.json`
     );
     sharedTranslations = sharedMessages.default;
-  } catch (error) {
+  } catch {
     // Fallback to English if locale not found
     try {
       const sharedEn = await import(

@@ -12,7 +12,7 @@ import {
   validatedActionWithUser
 } from '@/lib/auth/middleware';
 import { identifyUser as identifyPostHogUser, trackEvent as trackPostHogEvent } from '@/lib/analytics/posthog-server';
-import { Profile, Team } from '@/lib/db/types';
+import { Team } from '@/lib/db/types';
 
 // Return types for server actions
 // Note: These actions may redirect (never return) when successful

@@ -12,6 +12,7 @@ import { theme } from '@/lib/theme';
 import { withLocale } from '@/lib/i18n/locale-link';
 import { useComponentTranslations } from '@/lib/i18n/useComponentTranslations';
 import { landingContent } from '@/lib/content/landing';
+import { type Locale } from '@/i18n';
 
 const { palette, gradients } = theme;
 
@@ -164,7 +165,7 @@ function LandingPageContent() {
   const workflow = isCreatorView ? t.workflow.creator : t.workflow.brand;
   const testimonials = isCreatorView ? t.testimonials.creator : t.testimonials.brand;
   const callToAction = isCreatorView ? t.callToAction.creator : t.callToAction.brand;
-  const { backers, terminal } = landingContent;
+  const { backers } = landingContent;
 
   // Map stats for brand view
   const brandStats = [
@@ -267,12 +268,12 @@ function LandingPageContent() {
                 size="lg"
                 className="rounded-full px-10 py-3 text-sm font-heading font-semibold uppercase tracking-[0.2em]"
               >
-                <Link href={withLocale(isCreatorView ? '/sign-up?type=creator' : '/sign-up?type=brand', locale as any)}>
+                <Link href={withLocale(isCreatorView ? '/sign-up?type=creator' : '/sign-up?type=brand', locale as Locale)}>
                   {hero.primaryCta}
                 </Link>
               </Button>
               <Link
-                href={withLocale('/case-studies', locale as any)}
+                href={withLocale('/case-studies', locale as Locale)}
                 className="flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >
@@ -394,7 +395,7 @@ function LandingPageContent() {
             </p>
             {workflow.supportingCta && (
               <Link
-                href={withLocale(isCreatorView ? '/campaigns' : '/contact', locale as any)}
+                href={withLocale(isCreatorView ? '/campaigns' : '/contact', locale as Locale)}
                 className="inline-flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >
@@ -475,7 +476,7 @@ function LandingPageContent() {
                     className="text-base leading-relaxed"
                     style={{ color: palette.textPrimary }}
                   >
-                    "{quote.quote}"
+                    &ldquo;{quote.quote}&rdquo;
                   </blockquote>
                   <figcaption
                     className="mt-4 text-xs font-heading uppercase tracking-[0.2em]"
@@ -560,12 +561,12 @@ function LandingPageContent() {
                 size="lg"
                 className="rounded-full px-8 py-3 text-sm font-heading font-semibold uppercase tracking-[0.2em]"
               >
-                <Link href={withLocale(isCreatorView ? '/sign-up?type=creator' : '/sign-up?type=brand', locale as any)}>
+                <Link href={withLocale(isCreatorView ? '/sign-up?type=creator' : '/sign-up?type=brand', locale as Locale)}>
                   {callToAction.primaryCta}
                 </Link>
               </Button>
               <Link
-                href={withLocale(isCreatorView ? '/how-it-works' : '/sign-up?type=creator', locale as any)}
+                href={withLocale(isCreatorView ? '/how-it-works' : '/sign-up?type=creator', locale as Locale)}
                 className="flex items-center gap-2 text-sm font-heading uppercase tracking-[0.2em] transition-opacity hover:opacity-75"
                 style={{ color: palette.textPrimary }}
               >

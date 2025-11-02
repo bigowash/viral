@@ -15,9 +15,9 @@ if (typeof window === 'undefined') {
 
   // Try to mock localStorage on globalThis if it doesn't exist
   try {
-    // @ts-ignore
-    globalThis.localStorage = noopStorage;
-  } catch (e) {
+    // Type assertion needed because localStorage doesn't exist on globalThis in Node.js
+    (globalThis as typeof globalThis & { localStorage: typeof noopStorage }).localStorage = noopStorage;
+  } catch {
     // Ignore if we can't set it
   }
 }

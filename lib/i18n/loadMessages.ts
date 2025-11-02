@@ -7,7 +7,7 @@ import { type Locale } from '@/i18n';
  * This function should only be used on the server (in getMessages()).
  * Client components should read messages from NextIntlClientProvider context.
  */
-export async function loadMessages(locale: Locale): Promise<Record<string, any>> {
+export async function loadMessages(locale: Locale): Promise<Record<string, unknown>> {
   // Import shared translations for the locale
   const sharedTranslations = await import(
     `@/components/shared/translations/${locale}.json`
@@ -15,7 +15,7 @@ export async function loadMessages(locale: Locale): Promise<Record<string, any>>
 
   // Import all component translations for the locale
   // Using a mapping approach to ensure webpack can statically analyze these imports
-  const componentTranslations: Record<string, Promise<any>> = {
+  const componentTranslations: Record<string, Promise<{ default: unknown }>> = {
     Dashboard: import(
       `@/components/Dashboard/translations/${locale}.json`
     ).catch(() => import(`@/components/Dashboard/translations/en.json`)),
@@ -46,7 +46,7 @@ export async function loadMessages(locale: Locale): Promise<Record<string, any>>
   
   // Merge all translations
   // Start with shared translations as the base (includes common, etc.)
-  const messages: Record<string, any> = {
+  const messages: Record<string, unknown> = {
     ...sharedTranslationsData, // This includes 'common' and any other shared keys
   };
 

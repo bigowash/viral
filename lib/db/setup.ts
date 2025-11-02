@@ -34,7 +34,7 @@ async function checkStripeCLI() {
     try {
       await execAsync('stripe config --list');
       console.log('Stripe CLI is authenticated.');
-    } catch (error) {
+    } catch {
       console.log(
         'Stripe CLI is not authenticated or the authentication has expired.'
       );
@@ -53,14 +53,14 @@ async function checkStripeCLI() {
       try {
         await execAsync('stripe config --list');
         console.log('Stripe CLI authentication confirmed.');
-      } catch (error) {
+      } catch {
         console.error(
           'Failed to verify Stripe CLI authentication. Please try again.'
         );
         process.exit(1);
       }
     }
-  } catch (error) {
+  } catch {
     console.error(
       'Stripe CLI is not installed. Please install it and try again.'
     );

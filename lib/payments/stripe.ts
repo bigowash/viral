@@ -27,7 +27,7 @@ function getStripeInstance(): Stripe {
 // Proxy to lazy-initialize Stripe instance on first access
 // This prevents build-time errors when environment variables aren't available
 export const stripe = new Proxy({} as Stripe, {
-  get(_target, prop) {
+  get(_, prop) {
     const instance = getStripeInstance();
     const value = instance[prop as keyof Stripe];
     // If the value is an object (like webhooks, checkout, etc.), return it as-is
@@ -38,12 +38,12 @@ export const stripe = new Proxy({} as Stripe, {
     return value;
   },
   // Also handle property descriptor access for better compatibility
-  getOwnPropertyDescriptor(_target, prop) {
+  getOwnPropertyDescriptor(_, prop) {
     const instance = getStripeInstance();
     const descriptor = Object.getOwnPropertyDescriptor(instance, prop);
     return descriptor;
   },
-  ownKeys(_target) {
+  ownKeys() {
     const instance = getStripeInstance();
     return Reflect.ownKeys(instance);
   }

@@ -4,7 +4,7 @@ import { Suspense, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { usePostHogClient } from './posthog';
 import { PostHogEvents } from './events';
-import { locales } from '@/i18n';
+import { locales, type Locale } from '@/i18n';
 
 /**
  * Tracks page views with route and locale information.
@@ -19,7 +19,7 @@ function PageViewTrackerContent() {
   const locale = (() => {
     const segments = pathname?.split('/').filter(Boolean) || [];
     const firstSegment = segments[0];
-    return locales.includes(firstSegment as any) ? firstSegment : 'en';
+    return locales.includes(firstSegment as Locale) ? firstSegment : 'en';
   })();
 
   // Derive search string to stabilize dependency

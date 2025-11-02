@@ -1,12 +1,18 @@
 {
 	"version": "2.0.0",
 	"tasks": [
-	  {
-		"label": "build-app",
-		"type": "shell",
-		"command": "pnpm build",
-		"problemMatcher": []
-	  },
+		{
+		  "label": "build-app",
+		  "type": "shell",
+		  "command": "pnpm run build",
+		  "problemMatcher": []
+		},
+		{
+		  "label": "build-app",
+		  "type": "shell",
+		  "command": "npm run build",
+		  "problemMatcher": []
+		},
 	  {
 		"label": "lint",
 		"type": "shell",

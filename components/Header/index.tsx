@@ -79,7 +79,7 @@ function UserMenu() {
   // Use React Query - follows best practices for stable locale changes
   // Query options inherit from QueryClient defaults (staleTime: 60s)
   // Only override what's specific to this query
-  const { data: user, error, isLoading } = useQuery<User | null>({
+  const { data: user, error } = useQuery<User | null>({
     queryKey: QUERY_KEY,
     queryFn: fetcher,
     // Inherits staleTime from QueryClient default (60s)

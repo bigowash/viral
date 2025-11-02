@@ -1,6 +1,5 @@
 import { cache } from 'react';
 import { createServerSupabaseClient } from '@/lib/db/supabase';
-import { Profile } from '@/lib/db/types';
 
 /**
  * Get the current authenticated user's profile.

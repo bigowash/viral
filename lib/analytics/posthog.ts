@@ -27,7 +27,7 @@ export function usePostHogClient() {
  * @param userId - The unique identifier for the user
  * @param properties - Optional user properties to set
  */
-export function identifyUser(userId: string, properties?: Record<string, any>) {
+export function identifyUser(userId: string, properties?: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
   
   if (!posthog) {
@@ -47,7 +47,7 @@ export function identifyUser(userId: string, properties?: Record<string, any>) {
  * @param eventName - The name of the event to track
  * @param properties - Optional event properties
  */
-export function trackEvent(eventName: string, properties?: Record<string, any>) {
+export function trackEvent(eventName: string, properties?: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
   
   if (!posthog) {

@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@/lib/db/supabase';
 import { getUser } from '@/lib/modules/auth/queries';
 import { ActivityType } from '@/lib/constants/activity';
+import type { Json } from '@/types/supabase';
 
 /**
  * Get activity logs for the current user.
@@ -72,7 +73,7 @@ export async function logActivity(
   teamId: string | null | undefined,
   actorProfileId: string,
   action: ActivityType,
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ) {
   if (!teamId) {
     return;
@@ -84,7 +85,7 @@ export async function logActivity(
     team_id: teamId,
     actor_profile_id: actorProfileId,
     action: action,
-    metadata: metadata || null,
+    metadata: (metadata as Json | undefined) || null,
   });
 
   if (error) {

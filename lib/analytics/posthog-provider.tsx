@@ -20,7 +20,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         capture_pageview: true,
         capture_pageleave: true,
         autocapture: true,
-        loaded: (posthog) => {
+        loaded: () => {
           if (process.env.NODE_ENV === 'development') {
             console.log('PostHog loaded');
           }

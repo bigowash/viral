@@ -6,15 +6,20 @@ import path from 'path';
  * Get all keys from a nested object recursively.
  * Returns an array of dot-notation paths (e.g., ['hero.brand.headline.leading'])
  */
-function getAllKeys(obj: any, prefix = ''): string[] {
+function getAllKeys(obj: unknown, prefix = ''): string[] {
   const keys: string[] = [];
+  
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+    return keys;
+  }
   
   for (const key in obj) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
+    const value = (obj as Record<string, unknown>)[key];
     
-    if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
       // Recursively get keys from nested objects
-      keys.push(...getAllKeys(obj[key], fullKey));
+      keys.push(...getAllKeys(value, fullKey));
     } else {
       // This is a leaf node (actual translation value)
       keys.push(fullKey);
@@ -56,7 +61,7 @@ export function validateComponentTranslations(
   const warnings: string[] = [];
   
   // Load all translation files for this component
-  const translationsByLocale: Record<Locale, any> = {} as Record<Locale, any>;
+  const translationsByLocale: Record<Locale, unknown> = {} as Record<Locale, unknown>;
   
   for (const locale of locales) {
     const filePath = path.join(
