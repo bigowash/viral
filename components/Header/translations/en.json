@@ -1,5 +1,8 @@
 {
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
   "dashboard": "Dashboard",
+  "signOut": "Sign Out",
   "pricing": "Pricing",
   "brands": "Brands",
   "creators": "Creators"

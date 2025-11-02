@@ -20,11 +20,17 @@
     "teamMembers": {
       "title": "Team Members",
       "noMembers": "No team members yet.",
-      "removing": "Removing..."
+      "remove": "Remove",
+      "removing": "Removing...",
+      "unknownUser": "Unknown user"
     },
     "inviteMember": {
       "title": "Invite Team Member",
+      "email": "Email",
       "emailPlaceholder": "Enter email",
+      "role": "Role",
+      "member": "Member",
+      "owner": "Owner",
       "inviteButton": "Invite Member",
       "inviting": "Inviting...",
       "mustBeOwner": "You must be a team owner to invite new members."
@@ -33,6 +39,8 @@
   "generalSettings": {
     "title": "General Settings",
     "accountInformation": "Account Information",
+    "name": "Name",
+    "email": "Email",
     "namePlaceholder": "Enter your name",
     "emailPlaceholder": "Enter your email",
     "saveChanges": "Save Changes",
@@ -42,6 +50,8 @@
     "title": "Security Settings",
     "password": {
       "title": "Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
       "confirmPassword": "Confirm New Password",
       "updateButton": "Update Password",
       "updating": "Updating..."
@@ -49,6 +59,7 @@
     "deleteAccount": {
       "title": "Delete Account",
       "warning": "Account deletion is non-reversable. Please proceed with caution.",
+      "confirmPassword": "Confirm Password",
       "deleteButton": "Delete Account",
       "deleting": "Deleting..."
     }

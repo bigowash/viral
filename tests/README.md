@@ -15,6 +15,7 @@ This directory contains all test files for the project.
 - `pnpm test:unit:watch` - Run unit tests in watch mode
 - `pnpm test:e2e` - Run e2e tests
 - `pnpm test:e2e:ui` - Run e2e tests with Playwright UI
+- `pnpm validate:translations` - Validate that all translation files have matching keys across all locales
 
 ## Writing Tests
 
@@ -47,4 +48,35 @@ test('homepage loads', async ({ page }) => {
   await expect(page).toHaveTitle(/Viral/);
 });
 ```
+
+### Translation Validation Tests
+
+The project includes automated validation to ensure all translation files have matching keys across all locales (en, fr, sl). This catches missing translations before they cause UI issues.
+
+The validation tests are in `tests/i18n/validate-translations.test.ts` and can be run with:
+```bash
+pnpm validate:translations
+```
+
+This will:
+- Check all component translation files (Header, LandingPage, Dashboard, etc.)
+- Compare keys across all locales
+- Report any missing keys or extra keys
+- Fail the test suite if any discrepancies are found
+
+**Example error output:**
+```
+❌ Translation validation errors:
+
+  Component: Header
+  Locale: fr
+  ❌ Missing keys (2):
+     - signIn
+     - signUp
+```
+
+To add a new translation:
+1. Add the key to the English (`en.json`) file first (this is the reference)
+2. Add the same key to all other locale files (fr.json, sl.json)
+3. Run `pnpm validate:translations` to verify
 
