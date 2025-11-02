@@ -22,12 +22,13 @@ function PageViewTrackerContent() {
     return locales.includes(firstSegment as any) ? firstSegment : 'en';
   })();
 
+  // Derive search string to stabilize dependency
+  const search = searchParams.toString();
+
   useEffect(() => {
     if (!posthog) return;
 
     const route = pathname || '/';
-    const queryString = searchParams.toString();
-    const fullPath = queryString ? `${route}?${queryString}` : route;
 
     // Extract page type from route
     let pageType = 'unknown';
@@ -50,14 +51,9 @@ function PageViewTrackerContent() {
       pageType = 'landing';
     }
 
-    // Track page view with metadata
-    posthog.capture(PostHogEvents.PAGE_VIEWED, {
-      route,
-      full_path: fullPath,
-      locale,
-      page_type: pageType,
-      has_query_params: queryString.length > 0,
-    });
+    // Note: We don't capture PAGE_VIEWED here to avoid double-counting with PostHog's
+    // automatic pageview capture (enabled in posthog-provider.tsx).
+    // Only track structured page-specific events below.
 
     // Track specific page types
     if (pageType === 'pricing') {
@@ -80,7 +76,7 @@ function PageViewTrackerContent() {
         });
       }
     }
-  }, [pathname, searchParams, locale, posthog]);
+  }, [pathname, search, locale, posthog]);
 
   return null;
 }
